@@ -8,10 +8,21 @@ Follow the Lab 1 guide on Canvas. The short version:
 
 1. Click **Use this template** (top right) → **Create a new repository**. Name it after your archive.
 2. Go to [vercel.com](https://vercel.com), sign in with GitHub, **Add New → Project**, import your new repository, and click **Deploy**.
-3. Edit `collection.config.js` (that's the only file you touch today), commit, and watch your live site update itself.
-4. Submit your live URL to the Lab 1 assignment on Canvas.
+3. Clone your repo, open it in VS Code, edit `collection.config.js` (the only file you touch today), then commit and push:
 
-## Running it on your own machine (week 2, not today)
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/YOUR-REPO-NAME.git
+   cd YOUR-REPO-NAME
+   code .
+   # edit collection.config.js, then:
+   git add .
+   git commit -m "make it mine"
+   git push
+   ```
+
+4. Watch Vercel redeploy on its own, then submit your live URL to the Lab 1 assignment on Canvas.
+
+## Running it locally (optional today, needed from week 2)
 
 ```bash
 npm install
