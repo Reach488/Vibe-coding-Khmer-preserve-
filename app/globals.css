@@ -20,7 +20,12 @@
   color: #b5502f;
 }
 
+.search-button:hover {
+  background-color: #93401f;
+}
+
 .search-input:focus-visible,
+.search-button:focus-visible,
 .nav-link:focus-visible,
 a:focus-visible {
   outline: 2px solid #b5502f;

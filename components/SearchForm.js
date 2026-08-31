@@ -1,5 +1,3 @@
-"use client";
-
 import { colors, radii } from "../lib/theme.js";
 
 const styles = {
@@ -19,20 +17,33 @@ const styles = {
     border: `1px solid ${colors.border}`,
     borderRadius: radii.sm,
   },
+  button: {
+    padding: "12px 24px",
+    fontSize: 15,
+    fontWeight: 600,
+    color: "#FFFFFF",
+    backgroundColor: colors.brand,
+    border: "none",
+    borderRadius: radii.sm,
+    cursor: "pointer",
+  },
 };
 
-export default function SearchForm({ value, onChange }) {
+export default function SearchForm({ defaultValue }) {
   return (
-    <div style={styles.form}>
+    <form action="/browse" method="GET" style={styles.form}>
       <input
         type="text"
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
+        name="q"
+        defaultValue={defaultValue}
         placeholder="Search prahok, kroeung, palm sugar…"
         style={styles.input}
         className="search-input"
         aria-label="Search the archive"
       />
-    </div>
+      <button type="submit" style={styles.button} className="search-button">
+        Search
+      </button>
+    </form>
   );
 }
