@@ -1,0 +1,39 @@
+* {
+  box-sizing: border-box;
+}
+
+.entry-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.entry-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(43, 31, 20, 0.1);
+  border-color: #b5502f;
+}
+
+.nav-link {
+  transition: color 0.15s ease;
+}
+
+.nav-link:hover {
+  color: #b5502f;
+}
+
+.search-button:hover {
+  background-color: #93401f;
+}
+
+.search-input:focus-visible,
+.search-button:focus-visible,
+.nav-link:focus-visible,
+a:focus-visible {
+  outline: 2px solid #b5502f;
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .entry-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

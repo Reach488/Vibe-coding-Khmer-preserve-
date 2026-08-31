@@ -1,65 +1,73 @@
 import collection from "../collection.config.js";
+import entries from "../lib/entries.js";
 
 const styles = {
   wrap: {
     maxWidth: 720,
     margin: "0 auto",
-    padding: "80px 24px",
-  },
-  kicker: {
-    fontFamily: "'Courier New', monospace",
-    color: "#2EE6A8",
-    fontSize: 14,
-    letterSpacing: 1,
+    padding: "72px 24px 80px",
   },
   title: {
-    fontSize: 48,
+    fontFamily: "Georgia, 'Iowan Old Style', 'Times New Roman', serif",
+    fontSize: "clamp(32px, 6vw, 48px)",
     fontWeight: 700,
-    margin: "16px 0 12px",
-    lineHeight: 1.1,
+    margin: "0 0 12px",
+    lineHeight: 1.15,
+    color: "#2A1F17",
   },
   description: {
     fontSize: 18,
-    color: "#97A1B3",
-    lineHeight: 1.6,
+    color: "#6B5B4D",
+    lineHeight: 1.7,
     margin: 0,
   },
   card: {
-    marginTop: 48,
+    marginTop: 32,
     padding: 24,
-    backgroundColor: "#1C222C",
-    border: "1px solid #2E3644",
+    backgroundColor: "#FFFCF7",
+    border: "1px solid #E4D6C3",
     borderRadius: 10,
   },
   cardLabel: {
     fontFamily: "'Courier New', monospace",
     fontSize: 12,
-    color: "#97A1B3",
+    color: "#8A5E14",
     margin: 0,
   },
   cardValue: {
     fontSize: 16,
     margin: "6px 0 0",
+    color: "#2A1F17",
   },
   count: {
     fontFamily: "'Courier New', monospace",
     fontSize: 14,
-    color: "#2EE6A8",
-    marginTop: 48,
+    color: "#B5502F",
+    marginTop: 40,
+  },
+  browseLink: {
+    display: "inline-block",
+    marginTop: 24,
+    fontSize: 15,
+    fontWeight: 600,
+    color: "#FFFFFF",
+    backgroundColor: "#B5502F",
+    padding: "12px 24px",
+    borderRadius: 8,
+    textDecoration: "none",
   },
   footer: {
     marginTop: 64,
     paddingTop: 24,
-    borderTop: "1px solid #2E3644",
+    borderTop: "1px solid #E4D6C3",
     fontSize: 13,
-    color: "#5A6373",
+    color: "#8A7A69",
   },
 };
 
 export default function Home() {
   return (
     <main style={styles.wrap}>
-      <p style={styles.kicker}>KHMER LIVING ARCHIVE</p>
       <h1 style={styles.title}>{collection.name}</h1>
       <p style={styles.description}>{collection.description}</p>
 
@@ -72,7 +80,11 @@ export default function Home() {
         <p style={styles.cardValue}>{collection.source}</p>
       </div>
 
-      <p style={styles.count}>entries in the archive: 0 (for now)</p>
+      <p style={styles.count}>entries in the archive: {entries.length}</p>
+
+      <a href="/browse" style={styles.browseLink}>
+        Browse the Archive →
+      </a>
 
       <footer style={styles.footer}>
         Built in ICT 340 — Vibe Coding, American University of Phnom Penh, Fall
