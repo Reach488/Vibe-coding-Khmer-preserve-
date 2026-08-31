@@ -1,3 +1,5 @@
+import { colors, radii } from "../lib/theme.js";
+
 const styles = {
   form: {
     display: "flex",
@@ -10,19 +12,19 @@ const styles = {
     flex: "1 1 240px",
     padding: "12px 16px",
     fontSize: 16,
-    color: "#2A1F17",
+    color: colors.ink,
     backgroundColor: "#FFFFFF",
-    border: "1px solid #E4D6C3",
-    borderRadius: 8,
+    border: `1px solid ${colors.border}`,
+    borderRadius: radii.sm,
   },
   button: {
     padding: "12px 24px",
     fontSize: 15,
     fontWeight: 600,
     color: "#FFFFFF",
-    backgroundColor: "#B5502F",
+    backgroundColor: colors.brand,
     border: "none",
-    borderRadius: 8,
+    borderRadius: radii.sm,
     cursor: "pointer",
   },
 };

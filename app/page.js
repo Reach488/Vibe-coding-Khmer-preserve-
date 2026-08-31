@@ -1,48 +1,49 @@
 import collection from "../collection.config.js";
 import entries from "../lib/entries.js";
+import { colors, fonts, radii, maxWidth } from "../lib/theme.js";
 
 const styles = {
   wrap: {
-    maxWidth: 720,
+    maxWidth: maxWidth.narrow,
     margin: "0 auto",
     padding: "72px 24px 80px",
   },
   title: {
-    fontFamily: "Georgia, 'Iowan Old Style', 'Times New Roman', serif",
+    fontFamily: fonts.serif,
     fontSize: "clamp(32px, 6vw, 48px)",
     fontWeight: 700,
     margin: "0 0 12px",
     lineHeight: 1.15,
-    color: "#2A1F17",
+    color: colors.ink,
   },
   description: {
     fontSize: 18,
-    color: "#6B5B4D",
+    color: colors.inkMuted,
     lineHeight: 1.7,
     margin: 0,
   },
   card: {
     marginTop: 32,
     padding: 24,
-    backgroundColor: "#FFFCF7",
-    border: "1px solid #E4D6C3",
-    borderRadius: 10,
+    backgroundColor: colors.surface,
+    border: `1px solid ${colors.border}`,
+    borderRadius: radii.md,
   },
   cardLabel: {
-    fontFamily: "'Courier New', monospace",
+    fontFamily: fonts.mono,
     fontSize: 12,
-    color: "#8A5E14",
+    color: colors.accent,
     margin: 0,
   },
   cardValue: {
     fontSize: 16,
     margin: "6px 0 0",
-    color: "#2A1F17",
+    color: colors.ink,
   },
   count: {
-    fontFamily: "'Courier New', monospace",
+    fontFamily: fonts.mono,
     fontSize: 14,
-    color: "#B5502F",
+    color: colors.brand,
     marginTop: 40,
   },
   browseLink: {
@@ -51,17 +52,17 @@ const styles = {
     fontSize: 15,
     fontWeight: 600,
     color: "#FFFFFF",
-    backgroundColor: "#B5502F",
+    backgroundColor: colors.brand,
     padding: "12px 24px",
-    borderRadius: 8,
+    borderRadius: radii.sm,
     textDecoration: "none",
   },
   footer: {
     marginTop: 64,
     paddingTop: 24,
-    borderTop: "1px solid #E4D6C3",
+    borderTop: `1px solid ${colors.border}`,
     fontSize: 13,
-    color: "#8A7A69",
+    color: colors.inkFaint,
   },
 };
 

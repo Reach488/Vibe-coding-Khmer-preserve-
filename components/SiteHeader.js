@@ -1,20 +1,23 @@
 import Link from "next/link";
+import { colors, fonts, maxWidth } from "../lib/theme.js";
 
 const styles = {
   bar: {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    maxWidth: 1000,
+    flexWrap: "wrap",
+    gap: 12,
+    maxWidth: maxWidth.wide,
     margin: "0 auto",
     padding: "20px 24px",
-    borderBottom: "1px solid #E4D6C3",
+    borderBottom: `1px solid ${colors.border}`,
   },
   brand: {
-    fontFamily: "'Courier New', monospace",
+    fontFamily: fonts.mono,
     fontSize: 13,
     letterSpacing: 1,
-    color: "#8A5E14",
+    color: colors.accent,
     textDecoration: "none",
   },
   nav: {
@@ -23,7 +26,7 @@ const styles = {
   },
   link: {
     fontSize: 15,
-    color: "#2A1F17",
+    color: colors.ink,
     textDecoration: "none",
   },
 };

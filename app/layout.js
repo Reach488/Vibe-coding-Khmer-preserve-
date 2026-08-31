@@ -1,6 +1,7 @@
 import "./globals.css";
 import collection from "../collection.config.js";
 import SiteHeader from "../components/SiteHeader.js";
+import { colors, fonts } from "../lib/theme.js";
 
 export const metadata = {
   title: `${collection.name} — Khmer Living Archive`,
@@ -13,10 +14,9 @@ export default function RootLayout({ children }) {
       <body
         style={{
           margin: 0,
-          backgroundColor: "#FBF5EC",
-          color: "#2A1F17",
-          fontFamily:
-            "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans Khmer', sans-serif",
+          backgroundColor: colors.bg,
+          color: colors.ink,
+          fontFamily: fonts.sans,
           minHeight: "100vh",
         }}
       >
