@@ -23,6 +23,13 @@ const styles = {
     padding: 12,
     textAlign: "center",
   },
+  photo: {
+    height: 140,
+    width: "100%",
+    objectFit: "cover",
+    borderRadius: radii.sm,
+    border: `1px solid ${colors.border}`,
+  },
   photoLabel: {
     fontFamily: fonts.mono,
     fontSize: 11,
@@ -53,6 +60,7 @@ const styles = {
     color: colors.ink,
   },
   khmer: {
+    fontFamily: fonts.khmer,
     fontSize: 17,
     fontWeight: 400,
     color: colors.inkMuted,
@@ -82,11 +90,13 @@ const styles = {
 };
 
 export default function EntryCard({ entry }) {
-  const { title, khmerTerm, description, category, photoNote, sourceCredit, status } = entry;
+  const { title, khmerTerm, description, category, photo, photoNote, sourceCredit, status } = entry;
 
   return (
     <article style={styles.card} className="entry-card">
-      {photoNote ? (
+      {photo ? (
+        <img src={photo} alt={title} style={styles.photo} />
+      ) : photoNote ? (
         <div style={styles.photoPlaceholder}>
           <p style={styles.photoLabel}>Photo placeholder</p>
           <p style={styles.photoNote}>{photoNote}</p>
