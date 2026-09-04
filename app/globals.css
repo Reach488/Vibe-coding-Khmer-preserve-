@@ -105,12 +105,12 @@ a:focus-visible {
 
 .photo-strip::before {
   left: 0;
-  background: linear-gradient(to right, #FCF9F2, transparent);
+  background: linear-gradient(to right, #F7F0E4, transparent);
 }
 
 .photo-strip::after {
   right: 0;
-  background: linear-gradient(to left, #FCF9F2, transparent);
+  background: linear-gradient(to left, #F7F0E4, transparent);
 }
 
 .photo-strip-track {
