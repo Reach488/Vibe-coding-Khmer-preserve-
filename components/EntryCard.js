@@ -82,6 +82,7 @@ const styles = {
     marginLeft: 8,
   },
   description: {
+    fontFamily: fonts.serif,
     fontSize: 15,
     lineHeight: 1.65,
     color: "#4A3F35",
@@ -95,22 +96,13 @@ const styles = {
     fontSize: 12,
     color: colors.inkFaint,
     margin: "auto 0 0",
-    borderTop: `1px solid ${colors.border}`,
     paddingTop: 8,
     fontStyle: "italic",
-  },
-  status: {
-    fontFamily: fonts.mono,
-    fontSize: 10,
-    letterSpacing: 0.8,
-    textTransform: "uppercase",
-    color: colors.brand,
-    margin: 0,
   },
 };
 
 export default function EntryCard({ entry }) {
-  const { title, khmerTerm, description, category, photo, photoNote, sourceCredit, status } = entry;
+  const { title, khmerTerm, description, category, photo, photoNote, sourceCredit } = entry;
 
   return (
     <article style={styles.card} className="entry-card">
@@ -136,7 +128,6 @@ export default function EntryCard({ entry }) {
         <p style={styles.description}>{description}</p>
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto" }}>
-          {status ? <p style={styles.status}>{status}</p> : <span />}
           {sourceCredit ? <p style={styles.source}>Source: {sourceCredit}</p> : null}
         </div>
       </div>
