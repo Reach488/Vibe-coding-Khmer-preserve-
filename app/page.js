@@ -10,29 +10,29 @@ const s = {
   wrap: {
     maxWidth: maxWidth.narrow,
     margin: "0 auto",
-    padding: "80px 24px 96px",
+    padding: "48px 24px 64px",
   },
-  hero: { textAlign: "center", padding: "64px 0 40px" },
+  hero: { textAlign: "center", padding: "32px 0 24px" },
   kicker: {
-    fontFamily: fonts.mono, fontSize: 12, letterSpacing: 2.5,
-    textTransform: "uppercase", color: colors.accent, margin: "0 0 28px",
+    fontFamily: fonts.mono, fontSize: 13, letterSpacing: 2.5,
+    textTransform: "uppercase", color: colors.accent, margin: "0 0 20px",
   },
   title: {
-    fontFamily: fonts.serif, fontSize: "clamp(38px, 7vw, 56px)",
+    fontFamily: fonts.serif, fontSize: "clamp(40px, 8vw, 60px)",
     fontWeight: 700, margin: "0", lineHeight: 1.15, color: colors.ink,
     letterSpacing: "-0.01em",
   },
   titleKhmer: {
     display: "block", fontFamily: fonts.khmer, fontSize: "0.45em",
-    fontWeight: 400, color: colors.accent, marginTop: 20, lineHeight: 1.4,
+    fontWeight: 400, color: colors.accent, marginTop: 16, lineHeight: 1.4,
   },
   description: {
-    fontSize: 17, color: colors.inkMuted, lineHeight: 1.8,
-    margin: "24px auto 0", maxWidth: 540,
+    fontSize: 18, color: colors.inkMuted, lineHeight: 1.7,
+    margin: "16px auto 0", maxWidth: 540,
   },
   heroCta: {
     display: "flex", flexWrap: "wrap", gap: 12,
-    justifyContent: "center", marginTop: 32,
+    justifyContent: "center", marginTop: 24,
   },
   btnPrimary: {
     display: "inline-block", fontSize: 15, fontWeight: 600,
@@ -43,48 +43,48 @@ const s = {
   },
   strip: {
     display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
-    gap: 16, margin: "56px 0 64px", padding: "24px 0",
+    gap: 16, margin: "32px 0 40px", padding: "20px 0",
     borderTop: `1px solid ${colors.border}`,
     borderBottom: `1px solid ${colors.border}`,
     textAlign: "center",
   },
   val: {
-    fontFamily: fonts.serif, fontSize: 32, fontWeight: 700,
+    fontFamily: fonts.serif, fontSize: 30, fontWeight: 700,
     color: colors.brand, margin: 0,
   },
   lab: {
     fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1,
     textTransform: "uppercase", color: colors.inkMuted, margin: "4px 0 0",
   },
-  section: { marginTop: 64 },
+  section: { marginTop: 48 },
   st2: {
-    fontFamily: fonts.serif, fontSize: 26, fontWeight: 700,
-    margin: "0 0 12px", color: colors.ink,
+    fontFamily: fonts.serif, fontSize: 28, fontWeight: 700,
+    margin: "0 0 10px", color: colors.ink,
   },
   stxt: {
-    fontSize: 16, lineHeight: 1.8, color: colors.inkMuted, margin: "0 0 18px",
+    fontSize: 17, lineHeight: 1.7, color: colors.inkMuted, margin: "0 0 14px",
   },
-  chips: { display: "flex", flexWrap: "wrap", gap: 10, marginTop: 12 },
+  chips: { display: "flex", flexWrap: "wrap", gap: 10, marginTop: 10 },
   chip: {
     fontFamily: fonts.mono, fontSize: 12, color: colors.accent,
     backgroundColor: colors.accentBg, border: `1px solid ${colors.border}`,
     borderRadius: radii.pill, padding: "8px 16px",
   },
   introBox: {
-    marginTop: 64, padding: "40px", backgroundColor: colors.bgAlt,
+    marginTop: 48, padding: "32px", backgroundColor: colors.bgAlt,
     border: `1px solid ${colors.border}`, borderRadius: radii.lg,
   },
   susadei: {
-    fontFamily: fonts.khmer, fontSize: 44, textAlign: "center",
-    color: colors.brand, margin: "0 0 8px", lineHeight: 1.2,
+    fontFamily: fonts.khmer, fontSize: 40, textAlign: "center",
+    color: colors.brand, margin: "0 0 6px", lineHeight: 1.2,
   },
   noteLabel: {
     fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1.5,
     textTransform: "uppercase", textAlign: "center",
-    color: colors.inkFaint, margin: "0 0 20px",
+    color: colors.inkFaint, margin: "0 0 16px",
   },
   card: {
-    padding: 24, backgroundColor: colors.surface,
+    padding: 20, backgroundColor: colors.surface,
     border: `1px solid ${colors.border}`,
     borderRadius: radii.md, boxShadow: shadows.sm,
   },
@@ -93,21 +93,21 @@ const s = {
     color: colors.accent, margin: 0, textTransform: "uppercase",
   },
   cardV: {
-    fontFamily: fonts.serif, fontSize: 20, margin: "8px 0 0", color: colors.ink,
+    fontFamily: fonts.serif, fontSize: 20, margin: "6px 0 0", color: colors.ink,
   },
   count: {
     fontFamily: fonts.mono, fontSize: 13, color: colors.inkFaint,
-    marginTop: 48, textAlign: "center", letterSpacing: 1,
+    marginTop: 32, textAlign: "center", letterSpacing: 1,
     textTransform: "uppercase",
   },
   source: {
     display: "flex", alignItems: "center", justifyContent: "center",
-    gap: 16, marginTop: 48, color: colors.inkFaint,
+    gap: 16, marginTop: 32, color: colors.inkFaint,
     fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1,
     textTransform: "uppercase",
   },
   footer: {
-    marginTop: 64, paddingTop: 24, borderTop: `1px solid ${colors.border}`,
+    marginTop: 48, paddingTop: 20, borderTop: `1px solid ${colors.border}`,
     fontSize: 13, textAlign: "center", color: colors.inkFaint,
   },
 };
@@ -175,7 +175,7 @@ export default function Home() {
       </section>
 
       {/* Motif divider */}
-      <div className="archive-motif" style={{ margin: "48px 0" }}>
+      <div className="archive-motif" style={{ margin: "32px 0" }}>
         <span style={{ color: colors.brand, fontSize: 18 }}>✷</span>
       </div>
 

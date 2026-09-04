@@ -82,7 +82,7 @@ const styles = {
     marginLeft: 8,
   },
   description: {
-    fontSize: 14,
+    fontSize: 15,
     lineHeight: 1.65,
     color: "#4A3F35",
     margin: 0,
