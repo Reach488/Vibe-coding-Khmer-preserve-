@@ -1,7 +1,7 @@
 import Link from "next/link";
 import entries from "../../../lib/entries.js";
 import collection from "../../../collection.config.js";
-import { colors, fonts, radii, maxWidth, shadows } from "../../../lib/theme.js";
+import { colors, fonts, radii, maxWidth } from "../../../lib/theme.js";
 
 const s = {
   wrap: {
@@ -54,23 +54,25 @@ const s = {
     fontFamily: fonts.mono,
     fontSize: 12,
     color: colors.inkFaint,
-    margin: "0 0 32px",
+    margin: "0 0 40px",
     letterSpacing: 0.5,
   },
-  description: {
+  section: {
+    marginTop: 40,
+  },
+  heading: {
+    fontFamily: fonts.serif,
+    fontSize: 22,
+    fontWeight: 700,
+    color: colors.ink,
+    margin: "0 0 10px",
+  },
+  text: {
     fontSize: 17,
     lineHeight: 1.8,
     color: colors.inkMuted,
-    margin: "0 0 24px",
     fontFamily: fonts.serif,
-  },
-  source: {
-    fontSize: 14,
-    fontStyle: "italic",
-    color: colors.inkFaint,
-    padding: "16px 0",
-    borderTop: `1px solid ${colors.border}`,
-    borderBottom: `1px solid ${colors.border}`,
+    margin: 0,
   },
 };
 
@@ -88,7 +90,7 @@ export default async function EntryPage({ params }) {
     );
   }
 
-  const { title, khmerTerm, description, category, photo, photoNote, sourceCredit } = entry;
+  const { title, khmerTerm, category, photo, photoNote, howMade, whatUsedFor, howRecipesVary } = entry;
 
   return (
     <main style={s.wrap}>
@@ -109,9 +111,26 @@ export default async function EntryPage({ params }) {
 
       <p style={s.meta}>{collection.name} — {collection.curator}</p>
 
-      <p style={s.description}>{description}</p>
+      {howMade && (
+        <section style={s.section}>
+          <h2 style={s.heading}>How it&rsquo;s made</h2>
+          <p style={s.text}>{howMade}</p>
+        </section>
+      )}
 
-      {sourceCredit ? <p style={s.source}>Source: {sourceCredit}</p> : null}
+      {whatUsedFor && (
+        <section style={s.section}>
+          <h2 style={s.heading}>What it&rsquo;s used for</h2>
+          <p style={s.text}>{whatUsedFor}</p>
+        </section>
+      )}
+
+      {howRecipesVary && (
+        <section style={s.section}>
+          <h2 style={s.heading}>How recipes vary by family &amp; region</h2>
+          <p style={s.text}>{howRecipesVary}</p>
+        </section>
+      )}
     </main>
   );
 }
