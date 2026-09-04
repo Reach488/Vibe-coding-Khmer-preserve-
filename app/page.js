@@ -12,23 +12,23 @@ const s = {
     margin: "0 auto",
     padding: "80px 24px 96px",
   },
-  hero: { textAlign: "center", padding: "48px 0 56px" },
+  hero: { textAlign: "center", padding: "64px 0 40px" },
   kicker: {
-    fontFamily: fonts.mono, fontSize: 13, letterSpacing: 2,
-    textTransform: "uppercase", color: colors.accent, margin: "0 0 20px",
+    fontFamily: fonts.mono, fontSize: 12, letterSpacing: 2.5,
+    textTransform: "uppercase", color: colors.accent, margin: "0 0 28px",
   },
   title: {
-    fontFamily: fonts.serif, fontSize: "clamp(36px, 7vw, 56px)",
-    fontWeight: 700, margin: "0", lineHeight: 1.1, color: colors.ink,
+    fontFamily: fonts.serif, fontSize: "clamp(38px, 7vw, 56px)",
+    fontWeight: 700, margin: "0", lineHeight: 1.15, color: colors.ink,
     letterSpacing: "-0.01em",
   },
   titleKhmer: {
-    display: "block", fontFamily: fonts.khmer, fontSize: "0.5em",
-    fontWeight: 400, color: colors.accent, marginTop: 16,
+    display: "block", fontFamily: fonts.khmer, fontSize: "0.45em",
+    fontWeight: 400, color: colors.accent, marginTop: 20, lineHeight: 1.4,
   },
   description: {
-    fontSize: 18, color: colors.inkMuted, lineHeight: 1.8,
-    margin: "0 auto", maxWidth: 520,
+    fontSize: 17, color: colors.inkMuted, lineHeight: 1.8,
+    margin: "24px auto 0", maxWidth: 540,
   },
   heroCta: {
     display: "flex", flexWrap: "wrap", gap: 12,
@@ -37,16 +37,9 @@ const s = {
   btnPrimary: {
     display: "inline-block", fontSize: 15, fontWeight: 600,
     color: "#FFF", backgroundColor: colors.brand,
-    padding: "14px 28px", borderRadius: radii.pill,
+    padding: "14px 32px", borderRadius: radii.pill,
     textDecoration: "none", boxShadow: shadows.md,
-    transition: "background-color 0.2s ease",
-  },
-  btnOutline: {
-    display: "inline-block", fontSize: 14, fontWeight: 600,
-    color: colors.ink, backgroundColor: colors.surface,
-    border: `1px solid ${colors.border}`,
-    padding: "14px 24px", borderRadius: radii.pill,
-    textDecoration: "none", transition: "border-color 0.2s",
+    transition: "background-color 0.2s ease, transform 0.15s ease",
   },
   heroGrid: {
     display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
@@ -142,9 +135,6 @@ export default function Home() {
         <div style={s.heroCta}>
           <a href="/browse" style={s.btnPrimary} className="nav-link">
             Browse the Archive
-          </a>
-          <a href="/browse" style={s.btnOutline} className="nav-link">
-            Search Recipes →
           </a>
         </div>
         {entryPhotos.length > 0 && (
