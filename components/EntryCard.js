@@ -92,17 +92,10 @@ const styles = {
     WebkitBoxOrient: "vertical",
     overflow: "hidden",
   },
-  source: {
-    fontSize: 12,
-    color: colors.inkFaint,
-    margin: "auto 0 0",
-    paddingTop: 8,
-    fontStyle: "italic",
-  },
-};
+  };
 
 export default function EntryCard({ entry }) {
-  const { title, khmerTerm, description, category, photo, photoNote, sourceCredit } = entry;
+  const { title, khmerTerm, description, category, photo, photoNote } = entry;
 
   return (
     <article style={styles.card} className="entry-card">
@@ -126,10 +119,6 @@ export default function EntryCard({ entry }) {
         </h3>
 
         <p style={styles.description}>{description}</p>
-
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto" }}>
-          {sourceCredit ? <p style={styles.source}>Source: {sourceCredit}</p> : null}
-        </div>
       </div>
     </article>
   );
