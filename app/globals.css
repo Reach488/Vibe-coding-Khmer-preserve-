@@ -89,7 +89,7 @@ a:focus-visible {
   position: relative;
   width: 100%;
   overflow: hidden;
-  margin-top: 48px;
+  margin-top: 32px;
 }
 
 .photo-strip::before,
@@ -105,12 +105,12 @@ a:focus-visible {
 
 .photo-strip::before {
   left: 0;
-  background: linear-gradient(to right, #ffffff, transparent);
+  background: linear-gradient(to right, #FCF9F2, transparent);
 }
 
 .photo-strip::after {
   right: 0;
-  background: linear-gradient(to left, #ffffff, transparent);
+  background: linear-gradient(to left, #FCF9F2, transparent);
 }
 
 .photo-strip-track {

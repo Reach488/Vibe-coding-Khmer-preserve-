@@ -8,8 +8,8 @@ const styles = {
   form: {
     display: "flex",
     gap: 12,
-    marginTop: 32,
-    marginBottom: 40,
+    marginTop: 24,
+    marginBottom: 24,
     flexWrap: "wrap",
   },
   input: {
@@ -24,12 +24,12 @@ const styles = {
   count: {
     fontSize: 14,
     color: colors.inkFaint,
-    margin: "0 0 8px",
+    margin: "0 0 6px",
   },
   empty: {
-    fontSize: 15,
+    fontSize: 16,
     color: colors.inkMuted,
-    padding: "40px 0",
+    padding: "48px 0",
   },
   grid: {
     display: "grid",
