@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { colors, fonts, radii, shadows } from "../lib/theme.js";
 
 const styles = {
@@ -98,7 +99,8 @@ export default function EntryCard({ entry }) {
   const { title, khmerTerm, description, category, photo, photoNote } = entry;
 
   return (
-    <article style={styles.card} className="entry-card">
+    <Link href={`/browse/${entry.id}`} style={{ textDecoration: "none", color: "inherit", display: "block" }}>
+      <article style={styles.card} className="entry-card">
       {photo ? (
         <div className="card-image" style={styles.imgWrap}>
           <img src={photo} alt={title} style={styles.photo} />
@@ -121,5 +123,6 @@ export default function EntryCard({ entry }) {
         <p style={styles.description}>{description}</p>
       </div>
     </article>
+    </Link>
   );
 }
