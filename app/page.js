@@ -41,14 +41,6 @@ const s = {
     textDecoration: "none", boxShadow: shadows.md,
     transition: "background-color 0.2s ease, transform 0.15s ease",
   },
-  heroGrid: {
-    display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
-    gap: 10, marginTop: 48,
-  },
-  heroImg: {
-    height: 160, objectFit: "cover",
-    borderRadius: radii.md, border: `1px solid ${colors.border}`,
-  },
   strip: {
     display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
     gap: 16, margin: "56px 0 64px", padding: "24px 0",
@@ -138,10 +130,12 @@ export default function Home() {
           </a>
         </div>
         {entryPhotos.length > 0 && (
-          <div style={s.heroGrid}>
-            {entryPhotos.slice(0, 3).map((entry) => (
-              <img key={entry.id} src={entry.photo} alt={entry.title} style={s.heroImg} />
-            ))}
+          <div className="photo-strip">
+            <div className="photo-strip-track">
+              {[...entryPhotos, ...entryPhotos].map((entry, i) => (
+                <img key={`${entry.id}-${i}`} src={entry.photo} alt={entry.title} />
+              ))}
+            </div>
           </div>
         )}
       </section>
