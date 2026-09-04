@@ -1,34 +1,39 @@
-import { colors, fonts, radii } from "../lib/theme.js";
+import { colors, fonts, radii, shadows } from "../lib/theme.js";
 
 const styles = {
   card: {
     backgroundColor: colors.surface,
     border: `1px solid ${colors.border}`,
     borderRadius: radii.md,
-    padding: 20,
+    padding: 0,
     display: "flex",
     flexDirection: "column",
-    gap: 12,
+    boxShadow: shadows.sm,
+    overflow: "hidden",
+  },
+  imgWrap: {
+    height: 160,
+    overflow: "hidden",
+    backgroundColor: colors.surfaceMuted,
+    borderBottom: `1px solid ${colors.border}`,
+  },
+  photo: {
+    height: "100%",
+    width: "100%",
+    objectFit: "cover",
+    display: "block",
   },
   photoPlaceholder: {
-    height: 140,
-    borderRadius: radii.sm,
-    border: `1px dashed ${colors.borderDashed}`,
-    backgroundColor: colors.surfaceMuted,
+    height: 160,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     gap: 6,
-    padding: 12,
+    padding: 20,
     textAlign: "center",
-  },
-  photo: {
-    height: 140,
-    width: "100%",
-    objectFit: "cover",
-    borderRadius: radii.sm,
-    border: `1px solid ${colors.border}`,
+    backgroundColor: colors.surfaceMuted,
+    borderBottom: `1px dashed ${colors.borderDashed}`,
   },
   photoLabel: {
     fontFamily: fonts.mono,
@@ -45,44 +50,59 @@ const styles = {
     margin: 0,
     lineHeight: 1.5,
   },
+  body: {
+    padding: 16,
+    display: "flex",
+    flexDirection: "column",
+    gap: 8,
+    flex: 1,
+  },
   category: {
     alignSelf: "flex-start",
     fontFamily: fonts.mono,
-    fontSize: 12,
+    fontSize: 11,
+    letterSpacing: 0.8,
     color: colors.accent,
     margin: 0,
+    textTransform: "uppercase",
   },
   title: {
     fontFamily: fonts.serif,
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 700,
     margin: 0,
     color: colors.ink,
+    lineHeight: 1.25,
   },
   khmer: {
     fontFamily: fonts.khmer,
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: 400,
     color: colors.inkMuted,
-    marginLeft: 10,
+    marginLeft: 8,
   },
   description: {
-    fontSize: 15,
-    lineHeight: 1.7,
+    fontSize: 14,
+    lineHeight: 1.65,
     color: "#4A3F35",
     margin: 0,
+    display: "-webkit-box",
+    WebkitLineClamp: 4,
+    WebkitBoxOrient: "vertical",
+    overflow: "hidden",
   },
   source: {
-    fontSize: 13,
+    fontSize: 12,
     color: colors.inkFaint,
-    margin: 0,
+    margin: "auto 0 0",
     borderTop: `1px solid ${colors.border}`,
-    paddingTop: 10,
+    paddingTop: 8,
+    fontStyle: "italic",
   },
   status: {
     fontFamily: fonts.mono,
-    fontSize: 11,
-    letterSpacing: 0.5,
+    fontSize: 10,
+    letterSpacing: 0.8,
     textTransform: "uppercase",
     color: colors.brand,
     margin: 0,
@@ -95,7 +115,9 @@ export default function EntryCard({ entry }) {
   return (
     <article style={styles.card} className="entry-card">
       {photo ? (
-        <img src={photo} alt={title} style={styles.photo} />
+        <div className="card-image" style={styles.imgWrap}>
+          <img src={photo} alt={title} style={styles.photo} />
+        </div>
       ) : photoNote ? (
         <div style={styles.photoPlaceholder}>
           <p style={styles.photoLabel}>Photo placeholder</p>
@@ -103,18 +125,21 @@ export default function EntryCard({ entry }) {
         </div>
       ) : null}
 
-      {category ? <p style={styles.category}>{category}</p> : null}
+      <div style={styles.body}>
+        {category ? <p style={styles.category}>{category}</p> : null}
 
-      <h3 style={styles.title}>
-        {title}
-        {khmerTerm ? <span style={styles.khmer}>{khmerTerm}</span> : null}
-      </h3>
+        <h3 style={styles.title}>
+          {title}
+          {khmerTerm ? <span style={styles.khmer}>{khmerTerm}</span> : null}
+        </h3>
 
-      <p style={styles.description}>{description}</p>
+        <p style={styles.description}>{description}</p>
 
-      {status ? <p style={styles.status}>{status}</p> : null}
-
-      {sourceCredit ? <p style={styles.source}>Source: {sourceCredit}</p> : null}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto" }}>
+          {status ? <p style={styles.status}>{status}</p> : <span />}
+          {sourceCredit ? <p style={styles.source}>Source: {sourceCredit}</p> : null}
+        </div>
+      </div>
     </article>
   );
 }

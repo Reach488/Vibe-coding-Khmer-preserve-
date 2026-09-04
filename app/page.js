@@ -1,121 +1,181 @@
 import collection from "../collection.config.js";
 import entries from "../lib/entries.js";
-import { colors, fonts, radii, maxWidth } from "../lib/theme.js";
+import { colors, fonts, radii, maxWidth, shadows } from "../lib/theme.js";
 
 const categories = [...new Set(entries.map((entry) => entry.category))];
 
-const styles = {
+const entryPhotos = entries.filter((e) => e.photo);
+
+const s = {
   wrap: {
     maxWidth: maxWidth.narrow,
     margin: "0 auto",
-    padding: "72px 24px 80px",
+    padding: "80px 24px 96px",
   },
+  hero: { textAlign: "center", padding: "48px 0 56px" },
   kicker: {
-    fontFamily: fonts.mono,
-    fontSize: 13,
-    letterSpacing: 1,
-    color: colors.accent,
-    margin: "0 0 12px",
+    fontFamily: fonts.mono, fontSize: 13, letterSpacing: 2,
+    textTransform: "uppercase", color: colors.accent, margin: "0 0 20px",
   },
   title: {
-    fontFamily: fonts.serif,
-    fontSize: "clamp(32px, 6vw, 48px)",
-    fontWeight: 700,
-    margin: "0 0 12px",
-    lineHeight: 1.15,
-    color: colors.ink,
+    fontFamily: fonts.serif, fontSize: "clamp(36px, 7vw, 56px)",
+    fontWeight: 700, margin: "0", lineHeight: 1.1, color: colors.ink,
+    letterSpacing: "-0.01em",
+  },
+  titleKhmer: {
+    display: "block", fontFamily: fonts.khmer, fontSize: "0.5em",
+    fontWeight: 400, color: colors.accent, marginTop: 16,
   },
   description: {
-    fontSize: 18,
-    color: colors.inkMuted,
-    lineHeight: 1.7,
-    margin: 0,
+    fontSize: 18, color: colors.inkMuted, lineHeight: 1.8,
+    margin: "0 auto", maxWidth: 520,
   },
-  section: {
-    marginTop: 56,
+  heroCta: {
+    display: "flex", flexWrap: "wrap", gap: 12,
+    justifyContent: "center", marginTop: 32,
   },
-  sectionTitle: {
-    fontFamily: fonts.serif,
-    fontSize: 24,
-    fontWeight: 700,
-    margin: "0 0 12px",
-    color: colors.ink,
+  btnPrimary: {
+    display: "inline-block", fontSize: 15, fontWeight: 600,
+    color: "#FFF", backgroundColor: colors.brand,
+    padding: "14px 28px", borderRadius: radii.pill,
+    textDecoration: "none", boxShadow: shadows.md,
+    transition: "background-color 0.2s ease",
   },
-  sectionText: {
-    fontSize: 16,
-    lineHeight: 1.75,
-    color: colors.inkMuted,
-    margin: "0 0 14px",
-  },
-  categoryList: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: 10,
-    marginTop: 8,
-  },
-  categoryChip: {
-    fontFamily: fonts.mono,
-    fontSize: 12,
-    color: colors.accent,
-    backgroundColor: colors.accentBg,
+  btnOutline: {
+    display: "inline-block", fontSize: 14, fontWeight: 600,
+    color: colors.ink, backgroundColor: colors.surface,
     border: `1px solid ${colors.border}`,
-    borderRadius: radii.pill,
-    padding: "6px 14px",
+    padding: "14px 24px", borderRadius: radii.pill,
+    textDecoration: "none", transition: "border-color 0.2s",
+  },
+  heroGrid: {
+    display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
+    gap: 10, marginTop: 48,
+  },
+  heroImg: {
+    height: 160, objectFit: "cover",
+    borderRadius: radii.md, border: `1px solid ${colors.border}`,
+  },
+  strip: {
+    display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
+    gap: 16, margin: "56px 0 64px", padding: "24px 0",
+    borderTop: `1px solid ${colors.border}`,
+    borderBottom: `1px solid ${colors.border}`,
+    textAlign: "center",
+  },
+  val: {
+    fontFamily: fonts.serif, fontSize: 32, fontWeight: 700,
+    color: colors.brand, margin: 0,
+  },
+  lab: {
+    fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1,
+    textTransform: "uppercase", color: colors.inkMuted, margin: "4px 0 0",
+  },
+  section: { marginTop: 64 },
+  st2: {
+    fontFamily: fonts.serif, fontSize: 26, fontWeight: 700,
+    margin: "0 0 12px", color: colors.ink,
+  },
+  stxt: {
+    fontSize: 16, lineHeight: 1.8, color: colors.inkMuted, margin: "0 0 18px",
+  },
+  chips: { display: "flex", flexWrap: "wrap", gap: 10, marginTop: 12 },
+  chip: {
+    fontFamily: fonts.mono, fontSize: 12, color: colors.accent,
+    backgroundColor: colors.accentBg, border: `1px solid ${colors.border}`,
+    borderRadius: radii.pill, padding: "8px 16px",
+  },
+  introBox: {
+    marginTop: 64, padding: "40px", backgroundColor: colors.bgAlt,
+    border: `1px solid ${colors.border}`, borderRadius: radii.lg,
+  },
+  susadei: {
+    fontFamily: fonts.khmer, fontSize: 44, textAlign: "center",
+    color: colors.brand, margin: "0 0 8px", lineHeight: 1.2,
+  },
+  noteLabel: {
+    fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1.5,
+    textTransform: "uppercase", textAlign: "center",
+    color: colors.inkFaint, margin: "0 0 20px",
   },
   card: {
-    marginTop: 24,
-    padding: 24,
-    backgroundColor: colors.surface,
+    padding: 24, backgroundColor: colors.surface,
     border: `1px solid ${colors.border}`,
-    borderRadius: radii.md,
+    borderRadius: radii.md, boxShadow: shadows.sm,
   },
-  cardLabel: {
-    fontFamily: fonts.mono,
-    fontSize: 12,
-    color: colors.accent,
-    margin: 0,
+  cardL: {
+    fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1.5,
+    color: colors.accent, margin: 0, textTransform: "uppercase",
   },
-  cardValue: {
-    fontSize: 16,
-    margin: "6px 0 0",
-    color: colors.ink,
+  cardV: {
+    fontFamily: fonts.serif, fontSize: 20, margin: "8px 0 0", color: colors.ink,
   },
   count: {
-    fontFamily: fonts.mono,
-    fontSize: 14,
-    color: colors.brand,
-    marginTop: 40,
+    fontFamily: fonts.mono, fontSize: 13, color: colors.inkFaint,
+    marginTop: 48, textAlign: "center", letterSpacing: 1,
+    textTransform: "uppercase",
   },
-  browseLink: {
-    display: "inline-block",
-    marginTop: 24,
-    fontSize: 15,
-    fontWeight: 600,
-    color: "#FFFFFF",
-    backgroundColor: colors.brand,
-    padding: "12px 24px",
-    borderRadius: radii.sm,
-    textDecoration: "none",
+  source: {
+    display: "flex", alignItems: "center", justifyContent: "center",
+    gap: 16, marginTop: 48, color: colors.inkFaint,
+    fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1,
+    textTransform: "uppercase",
   },
   footer: {
-    marginTop: 64,
-    paddingTop: 24,
-    borderTop: `1px solid ${colors.border}`,
-    fontSize: 13,
-    color: colors.inkFaint,
+    marginTop: 64, paddingTop: 24, borderTop: `1px solid ${colors.border}`,
+    fontSize: 13, textAlign: "center", color: colors.inkFaint,
   },
 };
 
 export default function Home() {
   return (
-    <main style={styles.wrap}>
-      <p style={styles.kicker}>THE KHMER LIVING ARCHIVE</p>
-      <h1 style={styles.title}>{collection.name}</h1>
-      <p style={styles.description}>{collection.description}</p>
+    <main style={s.wrap}>
+      {/* Hero */}
+      <section style={s.hero}>
+        <p style={s.kicker}>THE KHMER LIVING ARCHIVE</p>
+        <h1 style={s.title}>
+          {collection.name}
+          <span style={s.titleKhmer}>អាហារសម្ងួត និង គ្រឿងផ្សំ</span>
+        </h1>
+        <p style={s.description}>{collection.description}</p>
+        <div className="hero-divider" style={{ margin: "24px auto" }} />
+        <div style={s.heroCta}>
+          <a href="/browse" style={s.btnPrimary} className="nav-link">
+            Browse the Archive
+          </a>
+          <a href="/browse" style={s.btnOutline} className="nav-link">
+            Search Recipes →
+          </a>
+        </div>
+        {entryPhotos.length > 0 && (
+          <div style={s.heroGrid}>
+            {entryPhotos.slice(0, 3).map((entry) => (
+              <img key={entry.id} src={entry.photo} alt={entry.title} style={s.heroImg} />
+            ))}
+          </div>
+        )}
+      </section>
 
-      <section style={styles.section}>
-        <h2 style={styles.sectionTitle}>Why this archive exists</h2>
-        <p style={styles.sectionText}>
+      {/* Stats strip */}
+      <section style={s.strip}>
+        <div>
+          <p style={s.val}>{entries.length}</p>
+          <p style={s.lab}>Preserves</p>
+        </div>
+        <div>
+          <p style={s.val}>{categories.length}</p>
+          <p style={s.lab}>Techniques</p>
+        </div>
+        <div>
+          <p style={s.val}>100%</p>
+          <p style={s.lab}>Real Knowledge</p>
+        </div>
+      </section>
+
+      {/* Why this archive exists */}
+      <section style={s.section}>
+        <h2 style={s.st2}>Why this archive exists</h2>
+        <p style={s.stxt}>
           Long before refrigeration, Khmer households relied on salting,
           fermenting, and sun-drying to carry a harvest through the dry
           season — turning fish, herbs, and palm sap into pastes and syrups
@@ -123,41 +183,58 @@ export default function Home() {
           hand, not by recipe card, which means it survives only as long as
           someone keeps making it and someone else keeps asking how.
         </p>
-        <p style={styles.sectionText}>
+        <p style={s.stxt}>
           This archive records that knowledge while it's still spoken
           knowledge: what an ingredient is called, how it's made, what it's
           used for, and whose kitchen it came from.
         </p>
       </section>
 
-      <section style={styles.section}>
-        <h2 style={styles.sectionTitle}>What's preserved here</h2>
-        <p style={styles.sectionText}>
+      {/* Motif divider */}
+      <div className="archive-motif" style={{ margin: "48px 0" }}>
+        <span style={{ color: colors.brand, fontSize: 18 }}>✷</span>
+      </div>
+
+      {/* What's preserved here */}
+      <section style={s.section}>
+        <h2 style={s.st2}>What&rsquo;s preserved here</h2>
+        <p style={s.stxt}>
           Every entry documents one traditional paste or preserve —
           ingredients, method, and regional variation. The archive currently
           spans:
         </p>
-        <div style={styles.categoryList}>
+        <div style={s.chips}>
           {categories.map((category) => (
-            <span key={category} style={styles.categoryChip}>
+            <span key={category} style={s.chip} className="category-chip">
               {category}
             </span>
           ))}
         </div>
       </section>
 
-      <div style={styles.card}>
-        <p style={styles.cardLabel}>CURATED BY</p>
-        <p style={styles.cardValue}>{collection.curator}</p>
-      </div>
+      {/* Curator intro feature */}
+      <section style={s.introBox}>
+        <p style={s.susadei}>សួស្តី</p>
+        <p style={s.noteLabel}>A note from the curator</p>
+        <div style={s.card}>
+          <p style={s.cardL}>CURATED BY</p>
+          <p style={s.cardV}>{collection.curator}</p>
+          <p style={{ ...s.stxt, margin: "12px 0 0" }}>
+            Knowledge gathered from {collection.source} and the kitchens
+            of families across the country, recorded to be passed on.
+          </p>
+        </div>
+      </section>
 
-      <p style={styles.count}>entries in the archive: {entries.length}</p>
+      <p style={s.count}>
+        {entries.length} entries preserved in this archive
+      </p>
 
-      <a href="/browse" style={styles.browseLink}>
-        Browse the Archive →
-      </a>
+      <p style={s.source}>
+        <span>✦</span> Source: {collection.source} <span>✦</span>
+      </p>
 
-      <footer style={styles.footer}>
+      <footer style={s.footer}>
         Built in ICT 340 — Vibe Coding, American University of Phnom Penh, Fall
         2026. This archive is under construction all semester. Come back in
         December.
