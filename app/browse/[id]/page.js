@@ -74,6 +74,28 @@ const s = {
     fontFamily: fonts.serif,
     margin: 0,
   },
+  flavorLabel: {
+    fontFamily: fonts.mono,
+    fontSize: 12,
+    letterSpacing: 1,
+    textTransform: "uppercase",
+    color: colors.inkFaint,
+    margin: "0 0 10px",
+  },
+  flavorChips: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  flavorChip: {
+    fontFamily: fonts.mono,
+    fontSize: 12,
+    color: colors.accent,
+    backgroundColor: colors.accentBg,
+    border: `1px solid ${colors.border}`,
+    borderRadius: radii.pill,
+    padding: "6px 14px",
+  },
 };
 
 export default async function EntryPage({ params }) {
@@ -90,7 +112,7 @@ export default async function EntryPage({ params }) {
     );
   }
 
-  const { title, khmerTerm, category, photo, photoNote, howMade, whatUsedFor, howRecipesVary } = entry;
+  const { title, khmerTerm, category, photo, photoNote, howMade, whatUsedFor, howRecipesVary, flavorProfile } = entry;
 
   return (
     <main style={s.wrap}>
@@ -110,6 +132,19 @@ export default async function EntryPage({ params }) {
       </h1>
 
       <p style={s.meta}>{collection.name} — {collection.curator}</p>
+
+      {flavorProfile && flavorProfile.length > 0 && (
+        <div>
+          <p style={s.flavorLabel}>Flavor profile</p>
+          <div style={s.flavorChips}>
+            {flavorProfile.map((note) => (
+              <span key={note} style={s.flavorChip} className="category-chip">
+                {note}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       {howMade && (
         <section style={s.section}>
