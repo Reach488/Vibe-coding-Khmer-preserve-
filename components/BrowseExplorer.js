@@ -1,35 +1,33 @@
 "use client";
 
 import { useState } from "react";
+import ArchiveSearchBar from "./ArchiveSearchBar.js";
 import EntryCard from "./EntryCard.js";
-import { colors, fonts, radii } from "../lib/theme.js";
+import { filterEntries, normalizeText } from "../lib/search.js";
+import { colors, fonts } from "../lib/theme.js";
 
 const styles = {
-  form: {
-    display: "flex",
-    gap: 12,
-    marginTop: 24,
-    marginBottom: 24,
-    flexWrap: "wrap",
-  },
-  input: {
-    flex: "1 1 240px",
-    padding: "12px 16px",
-    fontSize: 16,
-    color: colors.ink,
-    backgroundColor: "#FFFFFF",
-    border: `1px solid ${colors.border}`,
-    borderRadius: radii.sm,
-  },
   count: {
     fontSize: 14,
     color: colors.inkFaint,
     margin: "0 0 6px",
   },
   empty: {
-    fontSize: 16,
-    color: colors.inkMuted,
     padding: "48px 0",
+  },
+  emptyTitle: {
+    fontFamily: fonts.serif,
+    fontSize: 20,
+    fontWeight: 700,
+    color: colors.ink,
+    margin: "0 0 8px",
+  },
+  emptyText: {
+    fontSize: 16,
+    lineHeight: 1.7,
+    color: colors.inkMuted,
+    margin: 0,
+    maxWidth: 540,
   },
   grid: {
     display: "grid",
@@ -39,42 +37,53 @@ const styles = {
 };
 
 export default function BrowseExplorer({ entries }) {
+  // searchInput = what the user sees in the box; query = the value actually
+  // being matched. Typing updates both so live search keeps working, and the
+  // Search button re-commits the input. Either way the results below come from
+  // one single call to filterEntries() — never a second algorithm.
+  const [searchInput, setSearchInput] = useState("");
   const [query, setQuery] = useState("");
-  const trimmed = query.trim();
 
-  const results = trimmed
-    ? entries.filter(
-        (entry) =>
-          entry.title.toLowerCase().includes(trimmed.toLowerCase()) ||
-          entry.khmerTerm.includes(query) ||
-          entry.description.toLowerCase().includes(trimmed.toLowerCase())
-      )
-    : entries;
+  const results = filterEntries(entries, query);
+  const hasQuery = normalizeText(query).length > 0;
+
+  const handleChange = (next) => {
+    setSearchInput(next);
+    setQuery(next);
+  };
+
+  const handleSearch = () => {
+    setQuery(searchInput);
+  };
+
+  const handleClear = () => {
+    setSearchInput("");
+    setQuery("");
+  };
 
   return (
     <>
-      <div style={styles.form}>
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search prahok, kroeung, palm sugar…"
-          style={styles.input}
-          className="search-input"
-          aria-label="Search the archive"
-        />
-      </div>
+      <ArchiveSearchBar
+        value={searchInput}
+        onChange={handleChange}
+        onSearch={handleSearch}
+        onClear={handleClear}
+      />
 
       <p style={styles.count}>
-        {trimmed
-          ? `${results.length} ${results.length === 1 ? "entry" : "entries"} match "${query}"`
+        {hasQuery
+          ? `${results.length} ${results.length === 1 ? "entry" : "entries"} found`
           : `${results.length} entries in the archive`}
       </p>
 
       {results.length === 0 ? (
-        <p style={styles.empty}>
-          No entries match &ldquo;{query}&rdquo;. Try a different search term.
-        </p>
+        <div style={styles.empty}>
+          <p style={styles.emptyTitle}>No entries found</p>
+          <p style={styles.emptyText}>
+            We couldn&rsquo;t find anything in the archive matching &ldquo;{searchInput}&rdquo;.
+            Try a different spelling, Khmer name, English name, or broader keyword.
+          </p>
+        </div>
       ) : (
         <div className="entry-grid" style={styles.grid}>
           {results.map((entry) => (
