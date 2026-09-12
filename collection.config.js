@@ -12,7 +12,7 @@ const collection = {
 
   // One sentence: what is this archive, and why does it matter?
   description:
-    "A living archive of Cambodia's traditional pastes and preserves — prahok, kapi, kroeung, tnot skor, and paok — documenting how each is made, what it's used for, and how recipes vary by family and region.",
+    "A living archive of Cambodia's traditional pastes and preserves — prahok, kroeung, tnot skor, trey ngeat, phaok, sach ko ngeat, chaipov, spey jruk, trey chaar, and kwa ko — documenting how each is made, what it's used for, and how recipes vary by family and region.",
 
   // Who is building this archive? Your name, as you want it shown.
   curator: "Sitheareach Phann",
