@@ -22,7 +22,6 @@ export default function RootLayout({ children }) {
       <body
         style={{
           margin: 0,
-          backgroundColor: colors.bg,
           color: colors.ink,
           fontFamily: fonts.sans,
           minHeight: "100vh",

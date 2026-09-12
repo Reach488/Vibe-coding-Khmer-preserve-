@@ -1,6 +1,33 @@
 * {
   box-sizing: border-box;
 }
+/* Paper ground. Set here rather than inline in layout.js so the grain overlay
+   and the radial warm-tint can layer on top of the base cream. */
+body {
+  background-color: #F7F0E4;
+  background-image: radial-gradient(
+    1100px 560px at 50% -140px,
+    #FDF8EE 0%,
+    rgba(253, 248, 238, 0) 70%
+  );
+  background-repeat: no-repeat;
+}
+
+/* Fine grain over the whole page. Fixed so it reads as the texture of the
+   paper rather than something that scrolls with the content. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+
 
 .entry-card {
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
