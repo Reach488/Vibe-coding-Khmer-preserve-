@@ -2,7 +2,7 @@
 
 import useLang from "../lib/useLang.js";
 import T from "./T.js";
-import { colors, fonts, radii, maxWidth } from "../lib/theme.js";
+import { colors, fonts, radii, space, maxWidth } from "../lib/theme.js";
 
 // Attributes cannot be swapped by CSS the way <T> swaps text nodes, so the
 // placeholder and the labels come from here instead.
@@ -26,8 +26,8 @@ const styles = {
     display: "flex",
     alignItems: "stretch",
     maxWidth: maxWidth.field,
-    marginTop: 24,
-    marginBottom: 20,
+    marginTop: space.md,
+    marginBottom: space.md,
     backgroundColor: colors.surface,
     border: `1px solid ${colors.border}`,
     borderRadius: radii.sm,

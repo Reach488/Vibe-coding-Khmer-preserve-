@@ -1,48 +1,39 @@
 import Link from "next/link";
 import SiteFooter from "../components/SiteFooter.js";
 import T from "../components/T.js";
-import { colors, fonts, radii, maxWidth, lineHeights } from "../lib/theme.js";
+import { colors, fonts, space, type, maxWidth, lineHeights } from "../lib/theme.js";
 
 // Without this file a bad URL fell through to Next's default black-on-white
-// 404, which breaks the archive's identity completely.
+// 404, which breaks the archive identity completely.
+//
+// It used to open with a mono kicker saying "Page not found" above a heading
+// that says the same thing, and close with two buttons — a filled one and an
+// outlined one — for a page whose only job is to send you back. One heading,
+// one line, one link.
 const s = {
-  wrap: { maxWidth: maxWidth.narrow, margin: "0 auto", padding: "64px 24px 56px" },
-  kicker: {
-    fontFamily: fonts.mono, fontSize: 12, letterSpacing: 2.5,
-    textTransform: "uppercase", color: colors.accent, margin: "0 0 16px",
-  },
+  wrap: { maxWidth: maxWidth.prose, margin: "0 auto", padding: `${space.xxl}px ${space.md}px ${space.xl}px` },
   title: {
-    fontFamily: fonts.serif, fontSize: "clamp(32px, 6vw, 46px)", fontWeight: 600,
-    margin: "0 0 8px", color: colors.ink, lineHeight: 1.15,
-    letterSpacing: "-0.01em",
+    fontFamily: fonts.serif, fontSize: "clamp(32px, 6vw, 44px)", fontWeight: 600,
+    margin: 0, color: colors.ink, lineHeight: 1.15,
+    letterSpacing: "-0.02em",
   },
   khmer: {
     display: "block", fontFamily: fonts.khmer, fontSize: 20, fontWeight: 400,
-    color: colors.accent, marginTop: 12, lineHeight: lineHeights.khmer,
+    color: colors.inkMuted, marginTop: space.xs, lineHeight: lineHeights.khmer,
   },
   text: {
-    fontFamily: fonts.serif, fontSize: 17, lineHeight: 1.75,
-    color: colors.inkMuted, margin: "20px 0 0", maxWidth: 520,
+    fontFamily: fonts.serif, fontSize: 19, lineHeight: 1.75,
+    color: colors.inkMuted, margin: `${space.md}px 0 0`,
   },
-  cta: { display: "flex", flexWrap: "wrap", gap: 12, marginTop: 28 },
-  btn: {
-    display: "inline-block", fontFamily: fonts.sans, fontSize: 15, fontWeight: 600,
-    color: colors.onBrand, backgroundColor: colors.brand,
-    border: `1px solid ${colors.brand}`, padding: "13px 28px",
-    borderRadius: radii.sm, textDecoration: "none",
-  },
-  btnQuiet: {
-    display: "inline-block", fontFamily: fonts.sans, fontSize: 15, fontWeight: 600,
-    color: colors.inkMuted, backgroundColor: "transparent",
-    border: `1px solid ${colors.border}`, padding: "13px 28px",
-    borderRadius: radii.sm, textDecoration: "none",
+  cta: {
+    display: "inline-block", fontFamily: fonts.sans, fontSize: type.small,
+    fontWeight: 600, color: colors.brand, marginTop: space.lg,
   },
 };
 
 export default function NotFound() {
   return (
     <main style={s.wrap}>
-      <p style={s.kicker}><T en="Page not found" km="រកមិនឃើញទំព័រ" /></p>
       <h1 style={s.title}>
         Nothing is kept here
         <span style={s.khmer}>រកមិនឃើញទេ</span>
@@ -51,14 +42,9 @@ export default function NotFound() {
         This shelf is empty — the page you asked for isn&rsquo;t part of the
         archive. The collection itself is still where you left it.
       </p>
-      <div style={s.cta}>
-        <Link href="/browse" style={s.btn} className="btn-primary">
-          <T en="Browse the Archive" km="រុករកបណ្ណសារ" />
-        </Link>
-        <Link href="/" style={s.btnQuiet}>
-          <T en="Back to Home" km="ត្រឡប់ទៅទំព័រដើម" />
-        </Link>
-      </div>
+      <Link href="/browse" style={s.cta} className="text-link">
+        <T en="Browse the archive" km="រុករកបណ្ណសារ" />
+      </Link>
       <SiteFooter />
     </main>
   );

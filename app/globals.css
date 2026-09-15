@@ -27,21 +27,11 @@
 
   --color-accent: #8f5c0e;
   --color-accent-bg: #f3e7d1;
-  --color-gold: #e49b0f;
 
   --color-border: #dacbb2;
   --color-border-soft: #eadfcd;
 
-  /* The exact value the hero region resolves to once the radial glow is
-     painted. The marquee fades read from the same token so they can never
-     drift out of step with the background again. */
-  --color-glow: #fdfaf3;
-  --color-fade: #fbf7ef;
-
   --color-focus-ring: rgba(168, 67, 42, 0.18);
-
-  --grain-blend: multiply;
-  --grain-opacity: 0.035;
 }
 
 :root[data-theme="dark"] {
@@ -66,51 +56,26 @@
 
   --color-accent: #d9a34a;
   --color-accent-bg: #2e2418;
-  --color-gold: #e49b0f;
 
   --color-border: #463a2e;
   --color-border-soft: #2f261e;
 
-  --color-glow: #241c15;
-  --color-fade: #1d1712;
-
-  /* Multiply is invisible over near-black, so the grain switches to screen
-     and reads as film grain instead of paper tooth. */
   --color-focus-ring: rgba(224, 122, 86, 0.3);
-
-  --grain-blend: screen;
-  --grain-opacity: 0.05;
 }
 
 * {
   box-sizing: border-box;
 }
 
-/* Paper ground. Set here rather than inline in layout.js so the grain overlay
-   and the radial warm-tint can layer on top of the base colour. */
+/* Flat paper ground. The radial warm-tint that used to sit here was only
+   ever visible as a seam where it met the flat page colour, which is why
+   the photo marquee needed gradient masks to hide it and why --color-glow
+   and --color-fade existed at all. All three are gone together. The fixed
+   film-grain overlay went with them: a full-viewport blend-mode layer at
+   z-index 9999 over every page, for a texture no one was reading. */
 body {
   background-color: var(--color-bg);
-  background-image: radial-gradient(
-    1100px 560px at 50% -140px,
-    var(--color-glow) 0%,
-    transparent 70%
-  );
-  background-repeat: no-repeat;
   transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-/* Fine grain over the whole page. Fixed so it reads as the texture of the
-   paper rather than something that scrolls with the content. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-  opacity: var(--grain-opacity);
-  mix-blend-mode: var(--grain-blend);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
 }
 
 /* ---------------------------------------------------------------
@@ -134,27 +99,28 @@ body::before {
 }
 
 /* ---------------------------------------------------------------
-   Cards
-   Archives read as documents: depth comes from a hairline border and a
-   small lift, never from a drop shadow.
+   Entry cards
+   A museum catalogue plate: photograph, then the name under it. No
+   surface fill, no border box, no radius, no drop shadow, and no hover
+   lift — the card used to rise 2px while its photo scaled to 1.03, two
+   animations for one hover. The photograph is the card; hovering only
+   names it in terracotta.
    --------------------------------------------------------------- */
-.entry-card {
-  transition: transform 0.2s ease, border-color 0.2s ease,
-    background-color 0.2s ease;
-  cursor: pointer;
+.entry-card-title {
+  transition: color 0.15s ease;
 }
 
-.entry-card:hover {
-  transform: translateY(-2px);
-  border-color: var(--color-brand);
+.entry-card:hover .entry-card-title,
+.entry-card:focus-visible .entry-card-title {
+  color: var(--color-brand);
 }
 
-.entry-card .card-image {
-  transition: transform 0.3s ease;
+.entry-card-image {
+  transition: opacity 0.2s ease;
 }
 
-.entry-card:hover .card-image {
-  transform: scale(1.03);
+.entry-card:hover .entry-card-image {
+  opacity: 0.88;
 }
 
 /* ---------------------------------------------------------------
@@ -190,6 +156,19 @@ body::before {
 
 .nav-link[aria-current="page"] {
   color: var(--color-brand);
+}
+
+/* The hero call to action and the back link: terracotta text on a rule,
+   not a filled pill. An archive sends you onward with a link. */
+.text-link {
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+  transition: color 0.15s ease;
+}
+
+.text-link:hover {
+  color: var(--color-brand-hover);
 }
 
 /* ---------------------------------------------------------------
@@ -297,158 +276,29 @@ button:focus-visible {
 }
 
 /* ---------------------------------------------------------------
-   Rules and marks
-   --------------------------------------------------------------- */
-.hero-divider {
-  width: 48px;
-  height: 2px;
-  background: var(--color-brand);
-}
-
-/* This class was referenced by the homepage but never defined, so the motif
-   rendered as a stray left-aligned glyph. */
-.archive-motif {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  color: var(--color-accent);
-}
-
-.archive-motif::before,
-.archive-motif::after {
-  content: "";
-  flex: 1 1 0;
-  height: 1px;
-  max-width: 160px;
-  background: var(--color-border);
-}
-
-.category-chip {
-  transition: background-color 0.2s ease, color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-/* Only chips that actually go somewhere get a hover state. Static tags
-   (flavour notes, the homepage category list) must not imply a click. */
-a > .category-chip:hover,
-.category-chip-interactive:hover {
-  background-color: var(--color-brand);
-  border-color: var(--color-brand);
-  color: var(--color-on-brand);
-}
-
-/* ---------------------------------------------------------------
    Grids
+   One grid rule for the homepage plates and the browse results, so an
+   entry is the same size and shape wherever you meet it. The row gap is
+   wider than the column gap: it is what separates one plate from the one
+   below it now that the cards have no border to do that job.
    --------------------------------------------------------------- */
+.entry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 40px 24px;
+}
+
 @media (max-width: 560px) {
   .entry-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-/* Three stats in a two-column grid leaves the third stranded half-width.
-   Below the breakpoint, run them as one row of three narrow columns. */
-@media (max-width: 460px) {
-  .stat-strip {
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 8px !important;
-  }
-}
-
-/* ---------------------------------------------------------------
-   Photo marquee
-   --------------------------------------------------------------- */
-.photo-strip {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  margin-top: 32px;
-}
-
-.photo-strip::before,
-.photo-strip::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 120px;
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* The hero sits under a radial warm-tint, so these fades match that lighter
-   value rather than the flat page colour — otherwise they paint a band. */
-.photo-strip::before {
-  left: 0;
-  background: linear-gradient(to right, var(--color-fade), transparent);
-}
-
-.photo-strip::after {
-  right: 0;
-  background: linear-gradient(to left, var(--color-fade), transparent);
-}
-
-.photo-strip-track {
-  display: flex;
-  gap: 8px;
-  width: max-content;
-  /* 20 tiles at 248px each means the track travels ~4960px per cycle.
-     The old 20s duration was set when there were four photos; at ten it
-     smeared past. 90s puts it back to a readable ~55px/s. */
-  animation: marquee 90s linear infinite;
-}
-
-.photo-strip-track img {
-  height: 180px;
-  width: 240px;
-  object-fit: cover;
-  flex-shrink: 0;
-  display: block;
-  background-color: var(--color-surface-muted);
-}
-
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-@media (max-width: 600px) {
-  .photo-strip::before,
-  .photo-strip::after {
-    width: 48px;
-  }
-
-  .photo-strip-track img {
-    height: 120px;
-    width: 160px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 16px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .photo-strip-track {
-    animation: none;
-    /* Without the animation the doubled track would overflow silently;
-       let it scroll by hand instead. */
-    width: auto;
-    overflow-x: auto;
-  }
-
-  .entry-card,
-  .entry-card .card-image,
+  .entry-card-title,
+  .entry-card-image,
   .nav-link::after {
     transition: none;
-  }
-
-  .entry-card:hover {
-    transform: none;
-  }
-
-  .entry-card:hover .card-image {
-    transform: none;
   }
 }
