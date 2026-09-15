@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ThemeToggle from "./ThemeToggle.js";
 import { colors, fonts, maxWidth } from "../lib/theme.js";
 
 const styles = {
@@ -25,6 +26,9 @@ const styles = {
     color: colors.accent,
     textDecoration: "none",
   },
+  // The nav links and the theme control sit in one group so the row stays a
+  // clean two-part header once the language toggle joins them.
+  right: { display: "flex", alignItems: "center", gap: 20 },
   nav: { display: "flex", gap: 24 },
   link: {
     fontFamily: fonts.sans,
@@ -57,19 +61,22 @@ export default function SiteHeader() {
         >
           KHMER LIVING ARCHIVE
         </Link>
-        <nav style={styles.nav}>
-          {links.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              style={styles.link}
-              className="nav-link"
-              aria-current={isCurrent(href) ? "page" : undefined}
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
+        <div style={styles.right}>
+          <nav style={styles.nav}>
+            {links.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                style={styles.link}
+                className="nav-link"
+                aria-current={isCurrent(href) ? "page" : undefined}
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

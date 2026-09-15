@@ -39,12 +39,26 @@ export const metadata = {
   description: collection.description,
 };
 
+// Runs before the browser paints anything, so a visitor on the dark theme
+// never sees a flash of the cream page first. It resolves the stored choice,
+// falling back to the OS preference, and writes the attribute the token
+// blocks in globals.css key off. Because this always sets a concrete value,
+// each palette only has to be written once in CSS.
+const noFlashTheme = `(function(){try{var s=localStorage.getItem('kla-theme');var t=(s==='dark'||s==='light')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`;
+
 export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
+      // The script above sets data-theme before React hydrates, so the server
+      // markup and the live document differ by design.
+      suppressHydrationWarning
       className={`${fraunces.variable} ${kantumruyPro.variable} ${courierPrime.variable}`}
     >
+      <head>
+        <meta name="theme-color" content="#F7F3EA" />
+        <script dangerouslySetInnerHTML={{ __html: noFlashTheme }} />
+      </head>
       <body
         style={{
           margin: 0,

@@ -55,7 +55,7 @@ const styles = {
     fontFamily: fonts.sans,
     fontSize: 15,
     fontWeight: 600,
-    color: "#FFFFFF",
+    color: colors.onBrand,
     backgroundColor: colors.brand,
     border: "none",
     borderLeft: `1px solid ${colors.brand}`,

@@ -26,7 +26,7 @@ const s = {
   cta: { display: "flex", flexWrap: "wrap", gap: 12, marginTop: 28 },
   btn: {
     display: "inline-block", fontFamily: fonts.sans, fontSize: 15, fontWeight: 600,
-    color: "#FFFFFF", backgroundColor: colors.brand,
+    color: colors.onBrand, backgroundColor: colors.brand,
     border: `1px solid ${colors.brand}`, padding: "13px 28px",
     borderRadius: radii.sm, textDecoration: "none",
   },
