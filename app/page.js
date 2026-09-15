@@ -2,7 +2,7 @@ import Link from "next/link";
 import collection from "../collection.config.js";
 import entries from "../lib/entries.js";
 import { toKhmerDigits } from "../lib/lang.js";
-import PhotoLoop from "../components/PhotoLoop.js";
+import EntryCard from "../components/EntryCard.js";
 import SiteFooter from "../components/SiteFooter.js";
 import T from "../components/T.js";
 import { colors, fonts, space, type, maxWidth, lineHeights } from "../lib/theme.js";
@@ -10,13 +10,11 @@ import { colors, fonts, space, type, maxWidth, lineHeights } from "../lib/theme.
 const s = {
   wrap: { maxWidth: maxWidth.page, margin: "0 auto", padding: `${space.xl}px ${space.md}px ${space.xl}px` },
 
-  // The hero used to stack seven things — kicker, title, Khmer subtitle, a
-  // 40-word description, a red rule, a button, and an auto-scrolling photo
-  // marquee — then hand over to a strip of statistics. Four of those are
-  // gone. What is left is the title, the Khmer title, one sentence, and one
-  // link, left-aligned so the eye starts in the same place it does on every
-  // other page rather than being re-centred once per section.
-  hero: { maxWidth: maxWidth.prose, marginBottom: space.xxl },
+  // --------------- Hero ---------------
+  // The title, Khmer subtitle, one sentence, and one link. Tightened from
+  // space.xxl to space.lg so the hero feels more balanced before the
+  // featured section below it.
+  hero: { maxWidth: maxWidth.prose, marginBottom: space.lg },
   title: {
     fontFamily: fonts.serif,
     fontSize: type.display,
@@ -51,19 +49,33 @@ const s = {
     marginTop: space.lg,
   },
 
-  loopFoot: {
+  // --------------- Featured Archive ---------------
+  sectionHeading: {
+    fontFamily: fonts.serif,
+    fontSize: type.h2,
+    fontWeight: 600,
+    margin: `0 0 ${space.md}px`,
+    color: colors.ink,
+    lineHeight: 1.2,
+  },
+  featuredSection: {
+    marginBottom: space.xl,
+  },
+  viewAll: {
     fontFamily: fonts.sans,
     fontSize: type.small,
+    fontWeight: 600,
     color: colors.brand,
     display: "inline-block",
     marginTop: space.md,
   },
 
-  // No heading over this. It is the only prose on the page, and a heading
-  // that says "why this archive exists" above a paragraph explaining why the
-  // archive exists is a label for something already plain.
-  note: { maxWidth: maxWidth.prose },
-  noteText: {
+  // --------------- History & Preservation ---------------
+  historySection: {
+    maxWidth: maxWidth.prose,
+    marginBottom: space.xl,
+  },
+  historyText: {
     fontFamily: fonts.serif,
     fontSize: 19,
     lineHeight: 1.75,
@@ -75,6 +87,7 @@ const s = {
 export default function Home() {
   return (
     <main style={s.wrap}>
+      {/* --------------- Hero --------------- */}
       <section style={s.hero}>
         <h1 style={s.title}>
           {collection.name}
@@ -91,25 +104,42 @@ export default function Home() {
         </Link>
       </section>
 
-      {/* The strip keeps running, but every tile is now a way into an entry
-          and the loop stops the moment you reach for one. */}
-      <PhotoLoop entries={entries}>
-        <Link href="/browse" style={s.loopFoot} className="text-link">
+      {/* --------------- Featured Archive ---------------
+          A curated selection of archive entries — enough to show the
+          range without overwhelming the visitor. The grid layout is
+          controlled entirely by the .featured-grid CSS class so the
+          responsive breakpoints (4 → 2 → 1 columns) cannot be
+          overridden by inline styles. */}
+      <section style={s.featuredSection}>
+        <h2 style={s.sectionHeading}>
+          <T en="Featured Archive" km="បណ្ណសារពិសេស" />
+        </h2>
+        <div className="featured-grid">
+          {entries.slice(0, 4).map((entry) => (
+            <EntryCard key={entry.id} entry={entry} />
+          ))}
+        </div>
+        <Link href="/browse" style={s.viewAll} className="text-link">
           <T
-            en={`All ${entries.length} entries`}
-            km={`ធាតុទាំង ${toKhmerDigits(entries.length)}`}
+            en={`View all ${entries.length} entries →`}
+            km={`មើលធាតុទាំង ${toKhmerDigits(entries.length)} →`}
           />
         </Link>
-      </PhotoLoop>
+      </section>
 
-      <section style={s.note}>
-        <p style={s.noteText}>
-          Long before refrigeration, Khmer households salted, fermented and
-          sun-dried a harvest to carry it through the dry season. Each
-          technique was passed down by hand rather than by recipe card, which
-          means it survives only as long as someone keeps making it and
-          someone else keeps asking how. This archive records that knowledge
-          while it is still spoken knowledge.
+      {/* --------------- History & Preservation ---------------
+          A short preview rather than the full article. The dedicated
+          History & Preservation page (/history) does not exist yet —
+          the link is intentionally omitted until that route is created. */}
+      <section style={s.historySection}>
+        <h2 style={s.sectionHeading}>
+          <T en="History & Preservation" km="ប្រវត្តិសាស្រ្ត និង ការអភិរក្ស" />
+        </h2>
+        <p style={s.historyText}>
+          <T
+            en="Long before refrigeration, Khmer households preserved food through salting, fermenting, and sun-drying — techniques passed down by hand through families and communities rather than written down. This living knowledge survives only as long as someone keeps making it and someone else keeps asking how."
+            km="តាំងពីមុនគ្មានទូរទឹកកក គ្រួសារខ្មែរបានរក្សាទុកអាហារតាមរយៈការស្ងួត ការធ្វើប្រហុក និងការហាលថ្ងៃ — បច្ចេកទេសដែលត្រូវបានបន្តពីមាត់មួយទៅមាត់មួយតាមរយៈគ្រួសារ និងសហគមន៍ មិនមែនសរសេរជារូបមន្តទេ។ ចំណេះដឹងផ្ទាល់នេះនៅតែមានដរាបណាមាននរណាម្នាក់បន្តធ្វើ ហើយមាននរណាម្នាក់បន្តសួរ។"
+          />
         </p>
       </section>
 
