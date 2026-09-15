@@ -1,17 +1,102 @@
+/* ---------------------------------------------------------------
+   Design tokens
+   lib/theme.js points every inline style at these variables, which is
+   what lets the inline style objects follow the theme at all.
+
+   The no-flash script in app/layout.js always resolves a concrete
+   data-theme before first paint, so the system preference is handled in
+   JS and each palette is written out exactly once here. With JavaScript
+   off the page stays on the light palette, which is the designed default.
+   --------------------------------------------------------------- */
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --color-bg: #f7f3ea;
+  --color-bg-alt: #f1eadc;
+  --color-surface: #fffdf8;
+  --color-surface-muted: #f1eadc;
+
+  --color-ink: #241c14;
+  --color-ink-muted: #5c4e41;
+  --color-ink-faint: #7a6a58;
+
+  --color-brand: #a8432a;
+  --color-brand-hover: #8a3520;
+  --color-on-brand: #ffffff;
+
+  --color-accent: #8f5c0e;
+  --color-accent-bg: #f3e7d1;
+  --color-gold: #e49b0f;
+
+  --color-border: #dacbb2;
+  --color-border-soft: #eadfcd;
+
+  /* The exact value the hero region resolves to once the radial glow is
+     painted. The marquee fades read from the same token so they can never
+     drift out of step with the background again. */
+  --color-glow: #fdfaf3;
+  --color-fade: #fbf7ef;
+
+  --color-focus-ring: rgba(168, 67, 42, 0.18);
+
+  --grain-blend: multiply;
+  --grain-opacity: 0.035;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Warm brown-black rather than a neutral slate: the archive keeps its
+     paper-and-lacquer character with the lights off. */
+  --color-bg: #17120e;
+  --color-bg-alt: #1f1914;
+  --color-surface: #221b15;
+  --color-surface-muted: #2a221b;
+
+  --color-ink: #f2eadf;
+  --color-ink-muted: #c8b9a7;
+  --color-ink-faint: #9e8f7c;
+
+  /* Lac red and gamboge both lift on a dark ground, and the button
+     foreground flips to near-black to stay legible against them. */
+  --color-brand: #e07a56;
+  --color-brand-hover: #ee9075;
+  --color-on-brand: #1a1410;
+
+  --color-accent: #d9a34a;
+  --color-accent-bg: #2e2418;
+  --color-gold: #e49b0f;
+
+  --color-border: #463a2e;
+  --color-border-soft: #2f261e;
+
+  --color-glow: #241c15;
+  --color-fade: #1d1712;
+
+  /* Multiply is invisible over near-black, so the grain switches to screen
+     and reads as film grain instead of paper tooth. */
+  --color-focus-ring: rgba(224, 122, 86, 0.3);
+
+  --grain-blend: screen;
+  --grain-opacity: 0.05;
+}
+
 * {
   box-sizing: border-box;
 }
 
 /* Paper ground. Set here rather than inline in layout.js so the grain overlay
-   and the radial warm-tint can layer on top of the base cream. */
+   and the radial warm-tint can layer on top of the base colour. */
 body {
-  background-color: #f7f3ea;
+  background-color: var(--color-bg);
   background-image: radial-gradient(
     1100px 560px at 50% -140px,
-    #fdfaf3 0%,
-    rgba(253, 250, 243, 0) 70%
+    var(--color-glow) 0%,
+    transparent 70%
   );
   background-repeat: no-repeat;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Fine grain over the whole page. Fixed so it reads as the texture of the
@@ -22,8 +107,8 @@ body::before {
   inset: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.035;
-  mix-blend-mode: multiply;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 200px 200px;
 }
@@ -34,7 +119,7 @@ body::before {
    full viewport — a divider that stops at 1000px reads as a stray line.
    --------------------------------------------------------------- */
 .site-header {
-  border-bottom: 1px solid #e0d5c2;
+  border-bottom: 1px solid var(--color-border);
 }
 
 @media (max-width: 380px) {
@@ -61,7 +146,7 @@ body::before {
 
 .entry-card:hover {
   transform: translateY(-2px);
-  border-color: #a8432a;
+  border-color: var(--color-brand);
 }
 
 .entry-card .card-image {
@@ -82,7 +167,7 @@ body::before {
 }
 
 .nav-link:hover {
-  color: #a8432a;
+  color: var(--color-brand);
 }
 
 /* Absolute so the rule never adds height to the link box. The old version
@@ -94,7 +179,7 @@ body::before {
   bottom: -4px;
   width: 0;
   height: 2px;
-  background: #a8432a;
+  background: var(--color-brand);
   transition: width 0.2s ease;
 }
 
@@ -104,7 +189,7 @@ body::before {
 }
 
 .nav-link[aria-current="page"] {
-  color: #a8432a;
+  color: var(--color-brand);
 }
 
 /* ---------------------------------------------------------------
@@ -115,8 +200,8 @@ body::before {
 }
 
 .btn-primary:hover {
-  background-color: #8a3520;
-  border-color: #8a3520;
+  background-color: var(--color-brand-hover);
+  border-color: var(--color-brand-hover);
 }
 
 .search-button {
@@ -125,8 +210,8 @@ body::before {
 }
 
 .search-button-primary:hover {
-  background-color: #8a3520;
-  border-color: #8a3520;
+  background-color: var(--color-brand-hover);
+  border-color: var(--color-brand-hover);
 }
 
 /* Clear sits inside the field, so it only needs a quiet colour shift. */
@@ -135,15 +220,15 @@ body::before {
 }
 
 .search-clear:hover {
-  color: #a8432a;
-  background-color: #f3e7d1;
+  color: var(--color-brand);
+  background-color: var(--color-accent-bg);
 }
 
 /* The field and its submit share one border box; focus lights the whole
    group rather than drawing a ring around half of it. */
 .search-field:focus-within {
-  border-color: #a8432a;
-  box-shadow: 0 0 0 2px rgba(168, 67, 42, 0.18);
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
 }
 
 .search-input:focus,
@@ -155,8 +240,19 @@ body::before {
 .search-clear:focus-visible,
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid #a8432a;
+  outline: 2px solid var(--color-brand);
   outline-offset: 2px;
+}
+
+.theme-toggle {
+  transition: color 0.15s ease, border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.theme-toggle:hover {
+  color: var(--color-brand);
+  border-color: var(--color-brand);
+  background-color: var(--color-accent-bg);
 }
 
 /* ---------------------------------------------------------------
@@ -165,7 +261,7 @@ button:focus-visible {
 .hero-divider {
   width: 48px;
   height: 2px;
-  background: #a8432a;
+  background: var(--color-brand);
 }
 
 /* This class was referenced by the homepage but never defined, so the motif
@@ -175,7 +271,7 @@ button:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 16px;
-  color: #8f5c0e;
+  color: var(--color-accent);
 }
 
 .archive-motif::before,
@@ -184,7 +280,7 @@ button:focus-visible {
   flex: 1 1 0;
   height: 1px;
   max-width: 160px;
-  background: #e0d5c2;
+  background: var(--color-border);
 }
 
 .category-chip {
@@ -196,9 +292,9 @@ button:focus-visible {
    (flavour notes, the homepage category list) must not imply a click. */
 a > .category-chip:hover,
 .category-chip-interactive:hover {
-  background-color: #a8432a;
-  border-color: #a8432a;
-  color: #fffdf8;
+  background-color: var(--color-brand);
+  border-color: var(--color-brand);
+  color: var(--color-on-brand);
 }
 
 /* ---------------------------------------------------------------
@@ -244,12 +340,12 @@ a > .category-chip:hover,
    value rather than the flat page colour — otherwise they paint a band. */
 .photo-strip::before {
   left: 0;
-  background: linear-gradient(to right, #fbf7ef, rgba(251, 247, 239, 0));
+  background: linear-gradient(to right, var(--color-fade), transparent);
 }
 
 .photo-strip::after {
   right: 0;
-  background: linear-gradient(to left, #fbf7ef, rgba(251, 247, 239, 0));
+  background: linear-gradient(to left, var(--color-fade), transparent);
 }
 
 .photo-strip-track {
@@ -268,7 +364,7 @@ a > .category-chip:hover,
   object-fit: cover;
   flex-shrink: 0;
   display: block;
-  background-color: #f1eadc;
+  background-color: var(--color-surface-muted);
 }
 
 @keyframes marquee {
