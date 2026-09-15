@@ -422,3 +422,37 @@ button:focus-visible {
   opacity: 0.6;
   cursor: default;
 }
+
+/* ---------------------------------------------------------------
+   Header auth state
+   Email truncates rather than wrapping the header to a second line or
+   pushing Language/Theme off the edge on a narrow phone.
+   --------------------------------------------------------------- */
+.site-header-email {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.signout-button {
+  transition: color 0.15s ease, border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.signout-button:hover {
+  color: var(--color-brand);
+  border-color: var(--color-brand);
+  background-color: var(--color-accent-bg);
+}
+
+.signout-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+@media (max-width: 480px) {
+  .site-header-email {
+    max-width: 96px;
+  }
+}

@@ -1,10 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle.js";
 import LanguageToggle from "./LanguageToggle.js";
 import T from "./T.js";
+import useSession from "../lib/useSession.js";
+import getSupabaseClient from "../lib/supabase.js";
 import { colors, fonts, space, type, maxWidth } from "../lib/theme.js";
 
 const styles = {
@@ -31,16 +34,32 @@ const styles = {
     color: colors.ink,
     textDecoration: "none",
   },
-  // Links on one side, the two controls bound together on the other, so the
-  // header reads as three groups rather than five loose items.
+  // Links on one side, account state and controls bound together on the
+  // other, so the header reads as three groups rather than a scattered row.
   right: { display: "flex", alignItems: "center", gap: space.md, flexWrap: "wrap" },
   nav: { display: "flex", alignItems: "center", gap: space.md },
+  account: { display: "flex", alignItems: "center", gap: space.xs },
   controls: { display: "flex", alignItems: "center", gap: space.xs },
   link: {
     fontFamily: fonts.sans,
     fontSize: type.small,
     color: colors.ink,
     textDecoration: "none",
+  },
+  email: {
+    fontFamily: fonts.sans,
+    fontSize: type.small,
+    color: colors.inkMuted,
+  },
+  signOut: {
+    padding: "6px 10px",
+    fontFamily: fonts.sans,
+    fontSize: type.small,
+    color: colors.ink,
+    backgroundColor: "transparent",
+    border: `1px solid ${colors.border}`,
+    borderRadius: 2,
+    cursor: "pointer",
   },
 };
 
@@ -49,13 +68,39 @@ const links = [
   { href: "/browse", en: "Browse", km: "រុករក" },
 ];
 
+// Kept here rather than in lib/authCopy.js — that file is the two auth
+// pages' form copy; this is header chrome, same as the `links` array above.
+const authLinks = {
+  signIn: { en: "Sign In", km: "ចូលគណនី" },
+  createAccount: { en: "Create Account", km: "បង្កើតគណនី" },
+  signOut: { en: "Sign Out", km: "ចេញពីគណនី" },
+};
+
 export default function SiteHeader() {
   const pathname = usePathname();
+  const user = useSession();
+  const [signingOut, setSigningOut] = useState(false);
 
   // /browse and /browse/[id] both belong to Browse, so the entry pages keep
   // showing where you are in the archive.
   const isCurrent = (href) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  // signingOut flips the header to its logged-out view the instant the
+  // button is clicked, rather than waiting on the network round-trip to
+  // Supabase — the old, signed-in view must never linger on screen.
+  const isSignedIn = Boolean(user) && !signingOut;
+
+  const handleSignOut = async () => {
+    setSigningOut(true);
+    try {
+      await getSupabaseClient().auth.signOut();
+    } catch {
+      // No raw error is ever surfaced; the header already reads as signed
+      // out regardless of whether the network round-trip succeeded.
+    }
+    setSigningOut(false);
+  };
 
   return (
     <header className="site-header" style={styles.outer}>
@@ -80,7 +125,36 @@ export default function SiteHeader() {
                 <T en={en} km={km} />
               </Link>
             ))}
+            {user === undefined ? null : isSignedIn ? null : (
+              <>
+                <Link href="/login" style={styles.link} className="nav-link">
+                  <T en={authLinks.signIn.en} km={authLinks.signIn.km} />
+                </Link>
+                <Link href="/signup" style={styles.link} className="nav-link">
+                  <T
+                    en={authLinks.createAccount.en}
+                    km={authLinks.createAccount.km}
+                  />
+                </Link>
+              </>
+            )}
           </nav>
+          {isSignedIn ? (
+            <div style={styles.account}>
+              <span style={styles.email} className="site-header-email" title={user.email}>
+                {user.email}
+              </span>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                disabled={signingOut}
+                style={styles.signOut}
+                className="signout-button"
+              >
+                <T en={authLinks.signOut.en} km={authLinks.signOut.km} />
+              </button>
+            </div>
+          ) : null}
           <div style={styles.controls}>
             <LanguageToggle />
             <ThemeToggle />
