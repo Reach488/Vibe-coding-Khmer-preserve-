@@ -44,7 +44,9 @@ export const metadata = {
 // falling back to the OS preference, and writes the attribute the token
 // blocks in globals.css key off. Because this always sets a concrete value,
 // each palette only has to be written once in CSS.
-const noFlashTheme = `(function(){try{var s=localStorage.getItem('kla-theme');var t=(s==='dark'||s==='light')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`;
+// Language is resolved in the same pass. Without it the page would paint in
+// English and then visibly swap for a visitor who chose Khmer.
+const noFlashTheme = `(function(){var d=document.documentElement;try{var s=localStorage.getItem('kla-theme');var t=(s==='dark'||s==='light')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');d.setAttribute('data-theme',t);}catch(e){d.setAttribute('data-theme','light');}try{var l=localStorage.getItem('kla-lang');l=(l==='en'||l==='km')?l:'en';d.setAttribute('data-lang',l);d.lang=l;}catch(e){d.setAttribute('data-lang','en');}})();`;
 
 export default function RootLayout({ children }) {
   return (

@@ -2,6 +2,7 @@ import entries from "../../lib/entries.js";
 import collection from "../../collection.config.js";
 import BrowseExplorer from "../../components/BrowseExplorer.js";
 import SiteFooter from "../../components/SiteFooter.js";
+import T from "../../components/T.js";
 import { colors, fonts, maxWidth } from "../../lib/theme.js";
 
 const styles = {
@@ -27,7 +28,9 @@ const styles = {
 export default function BrowsePage() {
   return (
     <main style={styles.wrap}>
-      <p style={styles.kicker}>Browse the Archive</p>
+      <p style={styles.kicker}>
+        <T en="Browse the Archive" km="រុករកបណ្ណសារ" />
+      </p>
       <h1 style={styles.title}>{collection.name}</h1>
       <p style={styles.intro}>
         Search by name, Khmer term, or category — in either script. Every

@@ -244,6 +244,47 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
+/* ---------------------------------------------------------------
+   Language
+   <T> renders both languages and one is hidden here, which is what lets
+   the pages stay server components. display:none also takes the hidden
+   half out of the accessibility tree, so screen readers announce one.
+
+   Default to English when no data-lang is set yet (JavaScript disabled),
+   otherwise both languages would show at once.
+   --------------------------------------------------------------- */
+[data-lang-km] {
+  display: none;
+}
+
+:root[data-lang="km"] [data-lang-km] {
+  display: inline;
+}
+
+:root[data-lang="km"] [data-lang-en] {
+  display: none;
+}
+
+.lang-toggle {
+  transition: border-color 0.15s ease;
+}
+
+.lang-option {
+  color: var(--color-ink-faint);
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.lang-option:hover {
+  color: var(--color-brand);
+}
+
+/* The active language is filled rather than merely coloured, so the pair
+   reads as one control with a current state instead of two buttons. */
+.lang-option[aria-pressed="true"] {
+  color: var(--color-on-brand);
+  background-color: var(--color-brand);
+}
+
 .theme-toggle {
   transition: color 0.15s ease, border-color 0.15s ease,
     background-color 0.15s ease;

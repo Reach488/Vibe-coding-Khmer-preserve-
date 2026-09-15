@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SiteFooter from "../components/SiteFooter.js";
+import T from "../components/T.js";
 import { colors, fonts, radii, maxWidth, lineHeights } from "../lib/theme.js";
 
 // Without this file a bad URL fell through to Next's default black-on-white
@@ -41,7 +42,7 @@ const s = {
 export default function NotFound() {
   return (
     <main style={s.wrap}>
-      <p style={s.kicker}>Page not found</p>
+      <p style={s.kicker}><T en="Page not found" km="រកមិនឃើញទំព័រ" /></p>
       <h1 style={s.title}>
         Nothing is kept here
         <span style={s.khmer}>រកមិនឃើញទេ</span>
@@ -52,10 +53,10 @@ export default function NotFound() {
       </p>
       <div style={s.cta}>
         <Link href="/browse" style={s.btn} className="btn-primary">
-          Browse the Archive
+          <T en="Browse the Archive" km="រុករកបណ្ណសារ" />
         </Link>
         <Link href="/" style={s.btnQuiet}>
-          Back to Home
+          <T en="Back to Home" km="ត្រឡប់ទៅទំព័រដើម" />
         </Link>
       </div>
       <SiteFooter />

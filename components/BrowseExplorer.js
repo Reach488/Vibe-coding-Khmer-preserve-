@@ -4,6 +4,7 @@ import { useState } from "react";
 import ArchiveSearchBar from "./ArchiveSearchBar.js";
 import EntryCard from "./EntryCard.js";
 import { filterEntries, normalizeText } from "../lib/search.js";
+import useLang from "../lib/useLang.js";
 import { colors, fonts } from "../lib/theme.js";
 
 const styles = {
@@ -54,6 +55,17 @@ export default function BrowseExplorer({ entries }) {
   const results = filterEntries(entries, query);
   const hasQuery = normalizeText(query).length > 0;
 
+  // These strings interpolate a count, so they are built here rather than
+  // handed to <T> as two fixed halves.
+  const isKm = useLang() === "km";
+  const count = hasQuery
+    ? isKm
+      ? `រកឃើញ ${results.length} ធាតុ`
+      : `${results.length} ${results.length === 1 ? "entry" : "entries"} found`
+    : isKm
+      ? `${results.length} ធាតុក្នុងបណ្ណសារ`
+      : `${results.length} entries in the archive`;
+
   const handleChange = (next) => {
     setSearchInput(next);
     setQuery(next);
@@ -77,11 +89,7 @@ export default function BrowseExplorer({ entries }) {
         onClear={handleClear}
       />
 
-      <p style={styles.count}>
-        {hasQuery
-          ? `${results.length} ${results.length === 1 ? "entry" : "entries"} found`
-          : `${results.length} entries in the archive`}
-      </p>
+      <p style={styles.count}>{count}</p>
 
       {results.length === 0 ? (
         <div style={styles.empty}>

@@ -1,6 +1,23 @@
 "use client";
 
+import useLang from "../lib/useLang.js";
+import T from "./T.js";
 import { colors, fonts, radii, maxWidth } from "../lib/theme.js";
+
+// Attributes cannot be swapped by CSS the way <T> swaps text nodes, so the
+// placeholder and the labels come from here instead.
+const copy = {
+  en: {
+    placeholder: "Search prahok, kroeung, palm sugar…",
+    search: "Search the archive",
+    clear: "Clear search",
+  },
+  km: {
+    placeholder: "ស្វែងរក ប្រហុក គ្រឿង ស្ករត្នោត…",
+    search: "ស្វែងរកក្នុងបណ្ណសារ",
+    clear: "សម្អាតការស្វែងរក",
+  },
+};
 
 const styles = {
   // Input, clear and submit share one border box, the way archive search
@@ -64,6 +81,8 @@ const styles = {
 };
 
 export default function ArchiveSearchBar({ value, onChange, onSearch, onClear }) {
+  const t = copy[useLang()] || copy.en;
+
   // Enter inside the field submits the form, which lands here. The search runs
   // locally against the archive; the page never reloads or navigates away.
   const handleSubmit = (event) => {
@@ -87,10 +106,10 @@ export default function ArchiveSearchBar({ value, onChange, onSearch, onClear })
         value={value}
         onChange={(event) => onChange(event.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="Search prahok, kroeung, palm sugar…"
+        placeholder={t.placeholder}
         style={styles.input}
         className="search-input"
-        aria-label="Search the archive"
+        aria-label={t.search}
       />
 
       <span style={styles.clearSlot}>
@@ -100,7 +119,7 @@ export default function ArchiveSearchBar({ value, onChange, onSearch, onClear })
             onClick={onClear}
             style={styles.clear}
             className="search-clear"
-            aria-label="Clear search"
+            aria-label={t.clear}
           >
             ✕
           </button>
@@ -112,7 +131,7 @@ export default function ArchiveSearchBar({ value, onChange, onSearch, onClear })
         style={styles.submit}
         className="search-button search-button-primary"
       >
-        Search
+        <T en="Search" km="ស្វែងរក" />
       </button>
     </form>
   );

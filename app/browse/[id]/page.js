@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import entries from "../../../lib/entries.js";
 import collection from "../../../collection.config.js";
 import SiteFooter from "../../../components/SiteFooter.js";
+import T from "../../../components/T.js";
 import { colors, fonts, radii, maxWidth, lineHeights } from "../../../lib/theme.js";
 
 const s = {
@@ -74,7 +75,7 @@ export default async function EntryPage({ params }) {
   return (
     <main style={s.wrap}>
       <Link href="/browse" style={s.back} className="nav-link">
-        ← Back to Browse
+        <T en="← Back to Browse" km="← ត្រឡប់ទៅរុករក" />
       </Link>
 
       {photo ? (
@@ -98,7 +99,7 @@ export default async function EntryPage({ params }) {
 
       {flavorProfile && flavorProfile.length > 0 && (
         <div>
-          <p style={s.flavorLabel}>Flavor profile</p>
+          <p style={s.flavorLabel}><T en="Flavor profile" km="រសជាតិ" /></p>
           <div style={s.flavorChips}>
             {flavorProfile.map((note) => (
               <span key={note} style={s.flavorChip}>{note}</span>
@@ -109,21 +110,21 @@ export default async function EntryPage({ params }) {
 
       {howMade && (
         <section style={s.section}>
-          <h2 style={s.heading}>How it&rsquo;s made</h2>
+          <h2 style={s.heading}><T en="How it’s made" km="របៀបធ្វើ" /></h2>
           <p style={s.text}>{howMade}</p>
         </section>
       )}
 
       {whatUsedFor && (
         <section style={s.section}>
-          <h2 style={s.heading}>What it&rsquo;s used for</h2>
+          <h2 style={s.heading}><T en="What it’s used for" km="ការប្រើប្រាស់" /></h2>
           <p style={s.text}>{whatUsedFor}</p>
         </section>
       )}
 
       {howRecipesVary && (
         <section style={s.section}>
-          <h2 style={s.heading}>How recipes vary by family &amp; region</h2>
+          <h2 style={s.heading}><T en="How recipes vary by family & region" km="ភាពខុសគ្នាតាមគ្រួសារ និងតំបន់" /></h2>
           <p style={s.text}>{howRecipesVary}</p>
         </section>
       )}
