@@ -395,3 +395,30 @@ button:focus-visible {
     overflow-x: auto;
   }
 }
+
+/* ---------------------------------------------------------------
+   Auth forms — /login and /signup
+   The search field carries its focus ring on the wrapper, because the
+   input and its button share one border box there. A form field owns
+   its own border, so the ring goes on the input itself.
+   --------------------------------------------------------------- */
+.auth-input {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-input:focus,
+.auth-input:focus-visible {
+  outline: none;
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+/* While a submit is in flight the button must stop looking clickable —
+   .btn-primary:hover would otherwise still light it up. */
+.btn-primary:disabled,
+.btn-primary:disabled:hover {
+  background-color: var(--color-brand);
+  border-color: var(--color-brand);
+  opacity: 0.6;
+  cursor: default;
+}
