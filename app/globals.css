@@ -276,11 +276,94 @@ button:focus-visible {
 }
 
 /* ---------------------------------------------------------------
+   Photo loop
+   The homepage strip. No gradient edge fades this time: those existed to
+   hide the seam where the old radial body-tint met the flat page colour,
+   and that tint is gone, so the strip simply runs to the column edge.
+   --------------------------------------------------------------- */
+.photo-loop {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.photo-loop-track {
+  display: flex;
+  gap: 8px;
+  width: max-content;
+  /* 20 tiles at 248px means the track travels ~4960px per cycle. At 90s
+     that is a readable ~55px/s — slow enough to take a photograph in. */
+  animation: photo-loop 90s linear infinite;
+}
+
+/* The strip stops the moment you reach for it. Without this the links in
+   it would be unclickable: a target moving at 55px/s cannot be hit. */
+.photo-loop:hover .photo-loop-track,
+.photo-loop:focus-within .photo-loop-track {
+  animation-play-state: paused;
+}
+
+.photo-loop-tile {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.photo-loop-tile img {
+  transition: opacity 0.2s ease;
+}
+
+.photo-loop-tile:hover img,
+.photo-loop-tile:focus-visible img {
+  opacity: 0.72;
+}
+
+/* The name is painted over the foot of its own tile rather than under it,
+   so the strip stays one band of photographs and nothing shifts when a
+   name appears. It sets on the ink ground the photo gives it. */
+.photo-loop-name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px 12px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fffdf8;
+  background: rgba(20, 14, 9, 0.72);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.photo-loop-tile:hover .photo-loop-name,
+.photo-loop-tile:focus-visible .photo-loop-name {
+  opacity: 1;
+}
+
+@keyframes photo-loop {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 600px) {
+  .photo-loop-tile img {
+    height: 130px;
+    width: 174px;
+  }
+}
+
+/* ---------------------------------------------------------------
    Grids
-   One grid rule for the homepage plates and the browse results, so an
-   entry is the same size and shape wherever you meet it. The row gap is
-   wider than the column gap: it is what separates one plate from the one
-   below it now that the cards have no border to do that job.
+   One grid rule for the browse results, so an entry is the same size and
+   shape wherever you meet it. The row gap is wider than the column gap:
+   it is what separates one plate from the one below it now that the
+   cards have no border to do that job.
    --------------------------------------------------------------- */
 .entry-grid {
   display: grid;
@@ -298,7 +381,17 @@ button:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .entry-card-title,
   .entry-card-image,
-  .nav-link::after {
+  .nav-link::after,
+  .photo-loop-name,
+  .photo-loop-tile img {
     transition: none;
+  }
+
+  /* Without the animation the doubled track would overflow silently, so
+     let it be scrolled by hand instead. */
+  .photo-loop-track {
+    animation: none;
+    width: auto;
+    overflow-x: auto;
   }
 }

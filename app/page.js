@@ -2,13 +2,10 @@ import Link from "next/link";
 import collection from "../collection.config.js";
 import entries from "../lib/entries.js";
 import { toKhmerDigits } from "../lib/lang.js";
-import EntryCard from "../components/EntryCard.js";
+import PhotoLoop from "../components/PhotoLoop.js";
 import SiteFooter from "../components/SiteFooter.js";
 import T from "../components/T.js";
 import { colors, fonts, space, type, maxWidth, lineHeights } from "../lib/theme.js";
-
-// Six plates, not ten: the homepage shows the archive, Browse holds it.
-const featured = entries.slice(0, 6);
 
 const s = {
   wrap: { maxWidth: maxWidth.page, margin: "0 auto", padding: `${space.xl}px ${space.md}px ${space.xl}px` },
@@ -54,15 +51,12 @@ const s = {
     marginTop: space.lg,
   },
 
-  // The plates are the page. They get the full width and the widest gap
-  // above them of anything here.
-  plates: { marginBottom: space.xxl },
-  platesFoot: {
+  loopFoot: {
     fontFamily: fonts.sans,
     fontSize: type.small,
     color: colors.brand,
     display: "inline-block",
-    marginTop: space.lg,
+    marginTop: space.md,
   },
 
   // No heading over this. It is the only prose on the page, and a heading
@@ -97,21 +91,16 @@ export default function Home() {
         </Link>
       </section>
 
-      {/* The photographs are the navigation now. They used to slide past in a
-          90-second marquee that nothing could click and nothing could read. */}
-      <section style={s.plates}>
-        <div className="entry-grid">
-          {featured.map((entry) => (
-            <EntryCard key={entry.id} entry={entry} />
-          ))}
-        </div>
-        <Link href="/browse" style={s.platesFoot} className="text-link">
+      {/* The strip keeps running, but every tile is now a way into an entry
+          and the loop stops the moment you reach for one. */}
+      <PhotoLoop entries={entries}>
+        <Link href="/browse" style={s.loopFoot} className="text-link">
           <T
             en={`All ${entries.length} entries`}
             km={`ធាតុទាំង ${toKhmerDigits(entries.length)}`}
           />
         </Link>
-      </section>
+      </PhotoLoop>
 
       <section style={s.note}>
         <p style={s.noteText}>
