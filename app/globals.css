@@ -427,10 +427,40 @@ button:focus-visible {
   row-gap: 12px;
 }
 
+/* The photographs settle into the composition once, on load. This is a CSS
+   animation rather than anything scripted, so it runs with JavaScript off and
+   needs no observer — and because it is `both`-filled it starts from the
+   hidden keyframe, so there is no flash of the finished layout first. */
+@keyframes hero-settle {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .hero-figure {
   position: relative;
   min-width: 0;
   margin: 0;
+  animation: hero-settle 720ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* Source order is kroeung, prahok, trey ngeat — the anchor lands first and
+   the accent last, so the group assembles in its own visual hierarchy. */
+.hero-collage > .hero-figure:nth-child(1) {
+  animation-delay: 60ms;
+}
+
+.hero-collage > .hero-figure:nth-child(2) {
+  animation-delay: 190ms;
+}
+
+.hero-collage > .hero-figure:nth-child(3) {
+  animation-delay: 320ms;
 }
 
 /* No transition and no hover state anywhere in this block: these are not
@@ -582,6 +612,31 @@ button:focus-visible {
 }
 
 /* ---------------------------------------------------------------
+   Scroll reveals — homepage only
+   Both the hidden state and the transition hang off .js-reveal on <html>,
+   which only app/page.js sets. No other route carries the attributes or
+   the class, and a visitor without JavaScript never gets the class at all,
+   so the page renders exactly as it did before.
+
+   --reveal-delay is written per element by components/Reveal.js, which is
+   where the row stagger is worked out from the live grid.
+   --------------------------------------------------------------- */
+:root.js-reveal [data-reveal],
+:root.js-reveal [data-reveal-group] > * {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+:root.js-reveal [data-reveal].is-revealed,
+:root.js-reveal [data-reveal-group] > *.is-revealed {
+  opacity: 1;
+  transform: none;
+  transition: opacity 520ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 520ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+/* ---------------------------------------------------------------
    Homepage — narrow screens
    A separate composition, not the desktop one scaled down. The hero
    stacks title → Khmer → introduction → collage, and the collage drops
@@ -660,6 +715,26 @@ button:focus-visible {
   .home-view-all,
   .preservation-link {
     transition: none;
+  }
+
+  /* No entrance and no reveal: everything is simply present. These rules sit
+     after the ones they override and match their specificity exactly, so no
+     !important is needed. Reveal.js reaches the same conclusion in JS and
+     marks every target revealed at once, which covers the delay too. */
+  .hero-figure {
+    animation: none;
+  }
+
+  :root.js-reveal [data-reveal],
+  :root.js-reveal [data-reveal-group] > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  :root.js-reveal [data-reveal].is-revealed,
+  :root.js-reveal [data-reveal-group] > *.is-revealed {
+    transition: none;
+    transition-delay: 0ms;
   }
 
   /* Without the animation the doubled track would overflow silently, so

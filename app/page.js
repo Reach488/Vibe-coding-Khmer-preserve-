@@ -4,6 +4,7 @@ import entries from "../lib/entries.js";
 import preservation from "../lib/preservation.js";
 import { toKhmerDigits } from "../lib/lang.js";
 import EntryCard from "../components/EntryCard.js";
+import Reveal from "../components/Reveal.js";
 import SiteFooter from "../components/SiteFooter.js";
 import T from "../components/T.js";
 import { colors, fonts, space, type, maxWidth, lineHeights } from "../lib/theme.js";
@@ -13,6 +14,16 @@ import { colors, fonts, space, type, maxWidth, lineHeights } from "../lib/theme.
 // them. Three columns by two rows on desktop, so six is the number that
 // fills the grid exactly.
 const HOME_ENTRY_COUNT = 6;
+
+// Which records open the homepage. This is a curatorial running order for
+// this page only — lib/entries.js keeps its own order, and /browse still
+// reads the archive exactly as stored.
+//
+// Only ids are listed here. The entries themselves are looked up from the
+// archive, so nothing is copied, and editing an entry still changes it in
+// one place. An id that stops resolving is dropped rather than leaving a
+// hole, and the rest of the archive slides up to fill the six.
+const HOME_LEAD_IDS = ["trey-ngeat", "phaok", "sach-ko-ngeat"];
 
 // The three photographs that open the archive.
 //
@@ -32,7 +43,22 @@ const collage = COLLAGE_IDS.map((id) => entries.find((entry) => entry.id === id)
   Boolean
 );
 
-const featured = entries.slice(0, HOME_ENTRY_COUNT);
+// The lead records first, then the rest of the archive in its own order,
+// cut to the six the grid holds. Reordering here cannot reorder anything
+// else: `entries` is never mutated, only read.
+const featured = [
+  ...HOME_LEAD_IDS.map((id) => entries.find((entry) => entry.id === id)).filter(
+    Boolean
+  ),
+  ...entries.filter((entry) => !HOME_LEAD_IDS.includes(entry.id)),
+].slice(0, HOME_ENTRY_COUNT);
+
+// Runs while the document is still parsing, before anything below it paints,
+// which is what keeps the reveal targets from appearing and then hiding
+// themselves a frame later. It is also the whole of the no-JavaScript story:
+// the hidden state is scoped to this class in app/globals.css, so a visitor
+// without scripts never gets it and reads the page exactly as before.
+const revealBootstrap = `(function(){try{document.documentElement.classList.add('js-reveal')}catch(e){}})();`;
 
 const s = {
   // The exhibition canvas. Everything below sits inside it; prose narrows
@@ -110,6 +136,9 @@ export default function Home() {
 
   return (
     <main style={s.page}>
+      <script dangerouslySetInnerHTML={{ __html: revealBootstrap }} />
+      <Reveal />
+
       {/* --------------- Hero ---------------
           One composition in two halves on desktop, stacked deliberately on
           narrow screens: title, Khmer title, introduction, then the
@@ -167,7 +196,11 @@ export default function Home() {
           EntryCard is used exactly as /browse uses it; the homepage only
           changes how large its plates are printed, from .home-archive-grid
           in app/globals.css. */}
-      <div className="home-archive-grid">
+      {/* data-reveal-group marks the children as staggered reveal targets.
+          components/Reveal.js reads the column count off this grid at reveal
+          time, so a row of three staggers as a row of three on desktop and a
+          phone's single column reveals one card at a time. */}
+      <div className="home-archive-grid" data-reveal-group>
         {featured.map((entry) => (
           <EntryCard key={entry.id} entry={entry} />
         ))}
@@ -183,7 +216,7 @@ export default function Home() {
       {/* --------------- Preservation gateway ---------------
           The full text lives on /history now. What stands here is its
           opening sentence and the way through to it. */}
-      <section style={s.gateway}>
+      <section style={s.gateway} data-reveal>
         <p style={s.gatewayLabel}>{preservation.label}</p>
         <h2 style={s.gatewayHeading}>
           <T en={preservation.titleEn} km={preservation.titleKm} />
