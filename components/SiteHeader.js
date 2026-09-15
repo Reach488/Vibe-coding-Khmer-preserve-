@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle.js";
 import LanguageToggle from "./LanguageToggle.js";
+import KhmerFlag from "./KhmerFlag.js";
 import T from "./T.js";
 import useSession from "../lib/useSession.js";
 import getSupabaseClient from "../lib/supabase.js";
@@ -27,7 +28,14 @@ const styles = {
   // The wordmark, and one of the four places mono survives. It sets in ink
   // rather than gamboge: gold is the provenance mark now, not a text colour,
   // and the wordmark is not an interactive accent either.
+  //
+  // inline-flex rather than a plain inline box so the flag and the words sit
+  // on one baseline-centred row inside a single link — the whole mark is the
+  // home link, not a flag next to a link.
   brand: {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: space.xs,
     fontFamily: fonts.mono,
     fontSize: 13,
     letterSpacing: 1,
@@ -117,7 +125,8 @@ export default function SiteHeader() {
           style={styles.brand}
           className="nav-link site-header-brand"
         >
-          KHMER LIVING ARCHIVE
+          <KhmerFlag />
+          <span>KHMER LIVING ARCHIVE</span>
         </Link>
         <div style={styles.right}>
           <nav style={styles.nav}>

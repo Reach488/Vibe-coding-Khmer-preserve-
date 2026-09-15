@@ -32,6 +32,14 @@
   --color-border-soft: #eadfcd;
 
   --color-focus-ring: rgba(168, 67, 42, 0.18);
+
+  /* Cambodian flag accents — header mark and language switch only.
+     The red is the flag's red taken one step deeper (#e00025 → #d01f2e)
+     so it sits beside lac without the two reds fighting; it holds 5.26:1
+     against the cream below it, past AA for the switch's small type. */
+  --color-flag-blue: #032ea1;
+  --color-flag-red: #d01f2e;
+  --color-flag-cream: #fffdf8;
 }
 
 :root[data-theme="dark"] {
@@ -61,6 +69,14 @@
   --color-border-soft: #2f261e;
 
   --color-focus-ring: rgba(224, 122, 86, 0.3);
+
+  /* The flag's blue is near-black against a brown-black ground: as a 1px
+     frame it simply disappears, and as a focus ring it would fail 1.4.11.
+     It lifts here, the way brand and accent do. The red does not need to —
+     it is a fill, and cream on it reads the same in both themes. */
+  --color-flag-blue: #5b7fd9;
+  --color-flag-red: #d01f2e;
+  --color-flag-cream: #fffdf8;
 }
 
 * {
@@ -85,6 +101,25 @@ body {
    --------------------------------------------------------------- */
 .site-header {
   border-bottom: 1px solid var(--color-border);
+}
+
+/* The flag sizes from here rather than from the component so a rule can
+   reach it: the width/height attributes on the <svg> are presentational and
+   lose to any stylesheet, which an inline style would not. flex: none keeps
+   it from being squeezed when the header wraps to two rows.
+
+   One size at every viewport, deliberately: it is locked to the wordmark
+   beside it, and the wordmark does not shrink on a phone. (The
+   .site-header-brand font-size below never applies — the component sets 13px
+   inline, and inline wins — so the brand is 13px at 320px too. Left as found
+   rather than fixed here, since making it apply would change how the header
+   looks on every phone.) At 320px the mark and the words come to ~200px
+   against 272px of usable width, so nothing needs to give. */
+.khmer-flag {
+  display: block;
+  flex: none;
+  width: 18px;
+  height: 12px;
 }
 
 @media (max-width: 380px) {
@@ -245,23 +280,87 @@ button:focus-visible {
 }
 
 .lang-toggle {
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
+/* The segment widths and padding live here, not in the component: the two
+   buttons have to stay a comfortable target on a phone, and an inline style
+   cannot be overridden by the media query at the bottom of this block.
+
+   Khmer gets the wider of the two. ខ្មែរ is four glyphs deep with a
+   subscript hanging under the first, so the same box that suits "EN"
+   crowds it against the divider.
+
+   The background is here for a different reason: the active segment fills,
+   and a stylesheet rule cannot beat an inline `background-color`. Setting
+   the resting transparent here is what lets the aria-pressed rule below
+   actually paint. */
 .lang-option {
-  color: var(--color-ink-faint);
+  min-width: 46px;
+  padding: 0 10px;
+  background-color: transparent;
+  color: var(--color-ink);
   transition: color 0.15s ease, background-color 0.15s ease;
 }
 
+.lang-option-km {
+  min-width: 52px;
+  padding: 0 12px;
+}
+
+/* Inactive is full ink, not the faint grey it used to be: the language you
+   are *not* reading in still has to be legible enough to choose. */
 .lang-option:hover {
   color: var(--color-brand);
 }
 
 /* The active language is filled rather than merely coloured, so the pair
-   reads as one control with a current state instead of two buttons. */
+   reads as one control with a current state instead of two buttons — and
+   so the state survives without colour at all. The component sets the
+   heavier weight on the same segment; colour is the third cue, not the
+   only one. */
 .lang-option[aria-pressed="true"] {
-  color: var(--color-on-brand);
-  background-color: var(--color-brand);
+  color: var(--color-flag-cream);
+  background-color: var(--color-flag-red);
+}
+
+/* Hover must not bleach the filled segment back to brand red on red. */
+.lang-option[aria-pressed="true"]:hover {
+  color: var(--color-flag-cream);
+}
+
+/* The group clips to its own corners, so the site-wide focus ring — drawn
+   2px *outside* the button — is cut off by overflow: hidden on three sides
+   of each segment. It is drawn inside instead, in whichever colour has
+   contrast against the segment it lands on: blue on the empty half
+   (10.8:1 light, 4.5:1 dark), cream on the red one (5.26:1). The group
+   lights up as well, so the control reads as focused from across the bar. */
+.lang-option:focus-visible {
+  outline: 2px solid var(--color-flag-blue);
+  outline-offset: -4px;
+}
+
+.lang-option[aria-pressed="true"]:focus-visible {
+  outline-color: var(--color-flag-cream);
+}
+
+.lang-toggle:has(.lang-option:focus-visible) {
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+/* Below this the header is carrying the wordmark, three or five links, the
+   language switch and the theme button on a 320px-wide screen. The switch
+   gives back 12px rather than pushing the row wider than the viewport. */
+@media (max-width: 360px) {
+  .lang-option {
+    min-width: 40px;
+    padding: 0 8px;
+  }
+
+  .lang-option-km {
+    min-width: 46px;
+    padding: 0 9px;
+  }
 }
 
 .theme-toggle {
