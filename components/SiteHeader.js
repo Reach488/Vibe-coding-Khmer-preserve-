@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle.js";
 import LanguageToggle from "./LanguageToggle.js";
 import T from "./T.js";
-import { colors, fonts, maxWidth } from "../lib/theme.js";
+import { colors, fonts, space, type, maxWidth } from "../lib/theme.js";
 
 const styles = {
   // The rule lives on the outer element so it spans the viewport; the inner
@@ -16,26 +16,29 @@ const styles = {
     alignItems: "center",
     justifyContent: "space-between",
     flexWrap: "wrap",
-    gap: 12,
-    maxWidth: maxWidth.wide,
+    gap: space.sm,
+    maxWidth: maxWidth.page,
     margin: "0 auto",
-    padding: "20px 24px",
+    padding: `${space.md}px ${space.md}px`,
   },
+  // The wordmark, and one of the four places mono survives. It sets in ink
+  // rather than gamboge: gold is the provenance mark now, not a text colour,
+  // and the wordmark is not an interactive accent either.
   brand: {
     fontFamily: fonts.mono,
     fontSize: 13,
     letterSpacing: 1,
-    color: colors.accent,
+    color: colors.ink,
     textDecoration: "none",
   },
   // Links on one side, the two controls bound together on the other, so the
   // header reads as three groups rather than five loose items.
-  right: { display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap" },
-  nav: { display: "flex", alignItems: "center", gap: 20 },
-  controls: { display: "flex", alignItems: "center", gap: 8 },
+  right: { display: "flex", alignItems: "center", gap: space.md, flexWrap: "wrap" },
+  nav: { display: "flex", alignItems: "center", gap: space.md },
+  controls: { display: "flex", alignItems: "center", gap: space.xs },
   link: {
     fontFamily: fonts.sans,
-    fontSize: 15,
+    fontSize: type.small,
     color: colors.ink,
     textDecoration: "none",
   },

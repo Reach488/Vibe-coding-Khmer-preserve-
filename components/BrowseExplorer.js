@@ -4,43 +4,29 @@ import { useState } from "react";
 import ArchiveSearchBar from "./ArchiveSearchBar.js";
 import EntryCard from "./EntryCard.js";
 import { filterEntries, normalizeText } from "../lib/search.js";
+import { toKhmerDigits } from "../lib/lang.js";
 import useLang from "../lib/useLang.js";
-import { colors, fonts } from "../lib/theme.js";
+import { colors, fonts, space, type, maxWidth } from "../lib/theme.js";
 
 const styles = {
+  // One of the few places mono still earns its keep: this is a ledger count,
+  // and it reads as instrument output rather than as prose.
   count: {
     fontFamily: fonts.mono,
-    fontSize: 12,
+    fontSize: type.meta,
     letterSpacing: 1,
     textTransform: "uppercase",
     color: colors.inkFaint,
-    margin: "0 0 20px",
+    margin: `0 0 ${space.md}px`,
   },
   empty: {
-    padding: "40px 0",
-  },
-  emptyTitle: {
     fontFamily: fonts.serif,
-    fontSize: 20,
-    fontWeight: 600,
-    color: colors.ink,
-    margin: "0 0 8px",
-  },
-  emptyText: {
-    fontFamily: fonts.serif,
-    fontSize: 16,
+    fontSize: type.body,
     lineHeight: 1.7,
     color: colors.inkMuted,
     margin: 0,
-    maxWidth: 540,
-  },
-  // auto-fit rather than auto-fill: with ten entries the last row stretches
-  // to fill the width instead of stranding a single card beside empty space.
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-    gap: 20,
-    alignItems: "stretch",
+    maxWidth: maxWidth.prose,
+    paddingBottom: space.lg,
   },
 };
 
@@ -60,10 +46,10 @@ export default function BrowseExplorer({ entries }) {
   const isKm = useLang() === "km";
   const count = hasQuery
     ? isKm
-      ? `រកឃើញ ${results.length} ធាតុ`
+      ? `រកឃើញ ${toKhmerDigits(results.length)} ធាតុ`
       : `${results.length} ${results.length === 1 ? "entry" : "entries"} found`
     : isKm
-      ? `${results.length} ធាតុក្នុងបណ្ណសារ`
+      ? `${toKhmerDigits(results.length)} ធាតុក្នុងបណ្ណសារ`
       : `${results.length} entries in the archive`;
 
   const handleChange = (next) => {
@@ -92,15 +78,15 @@ export default function BrowseExplorer({ entries }) {
       <p style={styles.count}>{count}</p>
 
       {results.length === 0 ? (
-        <div style={styles.empty}>
-          <p style={styles.emptyTitle}>No entries found</p>
-          <p style={styles.emptyText}>
-            We couldn&rsquo;t find anything in the archive matching &ldquo;{searchInput}&rdquo;.
-            Try a different spelling, Khmer name, English name, or broader keyword.
-          </p>
-        </div>
+        // One line, not a heading over a paragraph. The count directly above
+        // already says nothing was found; this only has to say what to try.
+        <p style={styles.empty}>
+          {isKm
+            ? `គ្មានធាតុត្រូវនឹង “${searchInput}” ទេ — សាកល្បងឈ្មោះខ្មែរ ឈ្មោះអង់គ្លេស ឬ ពាក្យទូលាយជាង។`
+            : `Nothing matches “${searchInput}” — try the Khmer name, the English name, or a broader word.`}
+        </p>
       ) : (
-        <div className="entry-grid" style={styles.grid}>
+        <div className="entry-grid">
           {results.map((entry) => (
             <EntryCard key={entry.id} entry={entry} />
           ))}

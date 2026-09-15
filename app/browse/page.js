@@ -1,42 +1,32 @@
 import entries from "../../lib/entries.js";
-import collection from "../../collection.config.js";
 import BrowseExplorer from "../../components/BrowseExplorer.js";
 import SiteFooter from "../../components/SiteFooter.js";
 import T from "../../components/T.js";
-import { colors, fonts, maxWidth } from "../../lib/theme.js";
+import { colors, fonts, space, maxWidth } from "../../lib/theme.js";
 
+// This page is the search. It used to open with a mono kicker reading "Browse
+// the Archive", then the collection name again — the third time a visitor met
+// it, after the header brand and the homepage title — then three lines
+// explaining what search does, and only then the field itself. All that is
+// above the results now is a heading and the field.
 const styles = {
-  wrap: { maxWidth: maxWidth.wide, margin: "0 auto", padding: "32px 24px 56px" },
-  kicker: {
-    fontFamily: fonts.mono, fontSize: 12, letterSpacing: 2.5,
-    textTransform: "uppercase", color: colors.accent, margin: 0,
-  },
+  wrap: { maxWidth: maxWidth.page, margin: "0 auto", padding: `${space.lg}px ${space.md}px ${space.xl}px` },
   title: {
-    fontFamily: fonts.serif, fontSize: "clamp(28px, 5vw, 40px)", fontWeight: 600,
-    margin: "10px 0 8px", color: colors.ink, lineHeight: 1.2,
-    letterSpacing: "-0.01em",
-  },
-  // The homepage already prints the full collection description. Repeating it
-  // here, directly above the ten cards that list the same ten items, was
-  // dead weight — this says what the page is for instead.
-  intro: {
-    fontFamily: fonts.serif, fontSize: 17, lineHeight: 1.7,
-    color: colors.inkMuted, maxWidth: 560, margin: 0,
+    fontFamily: fonts.serif,
+    fontSize: 28,
+    fontWeight: 600,
+    margin: 0,
+    color: colors.ink,
+    lineHeight: 1.2,
   },
 };
 
 export default function BrowsePage() {
   return (
     <main style={styles.wrap}>
-      <p style={styles.kicker}>
-        <T en="Browse the Archive" km="រុករកបណ្ណសារ" />
-      </p>
-      <h1 style={styles.title}>{collection.name}</h1>
-      <p style={styles.intro}>
-        Search by name, Khmer term, or category — in either script. Every
-        entry records how it&rsquo;s made, what it&rsquo;s used for, and how
-        recipes vary between families and regions.
-      </p>
+      <h1 style={styles.title}>
+        <T en="The archive" km="បណ្ណសារ" />
+      </h1>
 
       <BrowseExplorer entries={entries} />
 
