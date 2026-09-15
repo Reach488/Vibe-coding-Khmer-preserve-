@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle.js";
+import LanguageToggle from "./LanguageToggle.js";
+import T from "./T.js";
 import { colors, fonts, maxWidth } from "../lib/theme.js";
 
 const styles = {
@@ -26,10 +28,11 @@ const styles = {
     color: colors.accent,
     textDecoration: "none",
   },
-  // The nav links and the theme control sit in one group so the row stays a
-  // clean two-part header once the language toggle joins them.
-  right: { display: "flex", alignItems: "center", gap: 20 },
-  nav: { display: "flex", gap: 24 },
+  // Links on one side, the two controls bound together on the other, so the
+  // header reads as three groups rather than five loose items.
+  right: { display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap" },
+  nav: { display: "flex", alignItems: "center", gap: 20 },
+  controls: { display: "flex", alignItems: "center", gap: 8 },
   link: {
     fontFamily: fonts.sans,
     fontSize: 15,
@@ -39,8 +42,8 @@ const styles = {
 };
 
 const links = [
-  { href: "/", label: "Home" },
-  { href: "/browse", label: "Browse" },
+  { href: "/", en: "Home", km: "ទំព័រដើម" },
+  { href: "/browse", en: "Browse", km: "រុករក" },
 ];
 
 export default function SiteHeader() {
@@ -63,7 +66,7 @@ export default function SiteHeader() {
         </Link>
         <div style={styles.right}>
           <nav style={styles.nav}>
-            {links.map(({ href, label }) => (
+            {links.map(({ href, en, km }) => (
               <Link
                 key={href}
                 href={href}
@@ -71,11 +74,14 @@ export default function SiteHeader() {
                 className="nav-link"
                 aria-current={isCurrent(href) ? "page" : undefined}
               >
-                {label}
+                <T en={en} km={km} />
               </Link>
             ))}
           </nav>
-          <ThemeToggle />
+          <div style={styles.controls}>
+            <LanguageToggle />
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </header>

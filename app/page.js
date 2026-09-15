@@ -1,6 +1,7 @@
 import collection from "../collection.config.js";
 import entries from "../lib/entries.js";
 import SiteFooter from "../components/SiteFooter.js";
+import T from "../components/T.js";
 import { colors, fonts, radii, maxWidth, lineHeights } from "../lib/theme.js";
 
 const categories = [...new Set(entries.map((entry) => entry.category))];
@@ -97,7 +98,9 @@ export default function Home() {
     <main style={s.wrap}>
       {/* Hero */}
       <section style={s.hero}>
-        <p style={s.kicker}>The Khmer Living Archive</p>
+        <p style={s.kicker}>
+          <T en="The Khmer Living Archive" km="បណ្ណសាររស់ខ្មែរ" />
+        </p>
         <h1 style={s.title}>
           {collection.name}
           <span style={s.titleKhmer}>អាហារសម្ងួត និង គ្រឿងផ្សំ</span>
@@ -110,7 +113,7 @@ export default function Home() {
         <div className="hero-divider" style={{ margin: "30px auto 0" }} />
         <div style={s.heroCta}>
           <a href="/browse" style={s.btnPrimary} className="btn-primary">
-            Browse the Archive
+            <T en="Browse the Archive" km="រុករកបណ្ណសារ" />
           </a>
         </div>
         {entryPhotos.length > 0 && (
@@ -135,15 +138,15 @@ export default function Home() {
       <section className="stat-strip" style={s.strip}>
         <div>
           <p style={s.val}>{entries.length}</p>
-          <p style={s.lab}>Preserves</p>
+          <p style={s.lab}><T en="Preserves" km="អាហារសម្ងួត" /></p>
         </div>
         <div>
           <p style={s.val}>{techniques.length}</p>
-          <p style={s.lab}>Techniques</p>
+          <p style={s.lab}><T en="Techniques" km="បច្ចេកទេស" /></p>
         </div>
         <div>
           <p style={s.val}>1</p>
-          <p style={s.lab}>Kitchen</p>
+          <p style={s.lab}><T en="Kitchen" km="ផ្ទះបាយ" /></p>
         </div>
       </section>
 
@@ -190,8 +193,10 @@ export default function Home() {
       {/* Curator intro feature */}
       <section style={s.introBox}>
         <p style={s.susadei}>សួស្តី</p>
-        <p style={s.noteLabel}>A note from the curator</p>
-        <p style={s.cardL}>Curated by</p>
+        <p style={s.noteLabel}>
+          <T en="A note from the curator" km="សារពីអ្នកចងក្រង" />
+        </p>
+        <p style={s.cardL}><T en="Curated by" km="ចងក្រងដោយ" /></p>
         <p style={s.cardV}>{collection.curator}</p>
         <p style={{ ...s.stxt, margin: "12px 0 0" }}>
           Knowledge gathered from {collection.source} and the kitchens
