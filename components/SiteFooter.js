@@ -1,53 +1,33 @@
-import collection from "../collection.config.js";
-import T from "./T.js";
-import { colors, fonts, space, type } from "../lib/theme.js";
+import { colors, fonts, space } from "../lib/theme.js";
 
-// Every page ends here, and this is now the only place the curator and the
-// source are named. The homepage used to repeat both inside a bordered panel
-// — a Khmer greeting, a label, a second label, the name, and a sentence, five
-// stacked elements to carry two facts the footer was already carrying.
+// A rule and a wordmark. Nothing else.
 //
-// Gamboge gold appears exactly here and on the entry source credit. It is the
-// provenance mark; nothing else on the site is allowed to use it.
+// This used to carry two lines: "✦ Source: My grandmother" and a curation
+// and course credit. Both are gone. The source line was the wrong claim in
+// the wrong place — provenance belongs to the individual archive record
+// that has it, not to every page of the site, and `sourceCredit` is already
+// held per entry in lib/entries.js for that purpose. Nothing has replaced
+// them, because an archive footer does not need copy.
 const styles = {
   footer: {
     marginTop: space.xxl,
     paddingTop: space.md,
     borderTop: `1px solid ${colors.border}`,
-    display: "flex",
-    flexWrap: "wrap",
-    gap: space.sm,
-    alignItems: "baseline",
-    justifyContent: "space-between",
   },
-  source: {
+  mark: {
     fontFamily: fonts.mono,
-    fontSize: type.meta,
-    letterSpacing: 1,
+    fontSize: 11,
+    letterSpacing: 1.5,
     textTransform: "uppercase",
-    color: colors.accent,
-    margin: 0,
-  },
-  note: {
-    fontFamily: fonts.sans,
-    fontSize: 13,
-    lineHeight: 1.6,
     color: colors.inkFaint,
     margin: 0,
-    maxWidth: 460,
   },
 };
 
 export default function SiteFooter() {
   return (
     <footer style={styles.footer}>
-      <p style={styles.source}>
-        ✦ <T en="Source" km="ប្រភព" />: {collection.source}
-      </p>
-      <p style={styles.note}>
-        Curated by {collection.curator}. Built in ICT 340 — Vibe Coding,
-        American University of Phnom Penh, Fall 2026.
-      </p>
+      <p style={styles.mark}>Khmer Living Archive</p>
     </footer>
   );
 }

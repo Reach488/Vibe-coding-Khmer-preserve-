@@ -37,7 +37,13 @@ const styles = {
   // Links on one side, account state and controls bound together on the
   // other, so the header reads as three groups rather than a scattered row.
   right: { display: "flex", alignItems: "center", gap: space.md, flexWrap: "wrap" },
-  nav: { display: "flex", alignItems: "center", gap: space.md },
+  // The row wraps. Without this the five links (Home, Browse, History, and
+  // the two signed-out auth links) are one unbreakable 326px run, which is
+  // wider than a 320px viewport can hold — the nav then forces the whole
+  // document wider than the screen and the page scrolls sideways. The
+  // parent wraps too, but that only moves this block as a unit; the links
+  // inside it have to be allowed to break as well.
+  nav: { display: "flex", alignItems: "center", gap: space.md, flexWrap: "wrap" },
   account: { display: "flex", alignItems: "center", gap: space.xs },
   controls: { display: "flex", alignItems: "center", gap: space.xs },
   link: {
@@ -66,6 +72,7 @@ const styles = {
 const links = [
   { href: "/", en: "Home", km: "ទំព័រដើម" },
   { href: "/browse", en: "Browse", km: "រុករក" },
+  { href: "/history", en: "History", km: "ប្រវត្តិសាស្រ្ត" },
 ];
 
 // Kept here rather than in lib/authCopy.js — that file is the two auth
