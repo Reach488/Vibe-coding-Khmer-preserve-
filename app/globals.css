@@ -1,14 +1,15 @@
 * {
   box-sizing: border-box;
 }
+
 /* Paper ground. Set here rather than inline in layout.js so the grain overlay
    and the radial warm-tint can layer on top of the base cream. */
 body {
-  background-color: #F7F0E4;
+  background-color: #f7f3ea;
   background-image: radial-gradient(
     1100px 560px at 50% -140px,
-    #FDF8EE 0%,
-    rgba(253, 248, 238, 0) 70%
+    #fdfaf3 0%,
+    rgba(253, 250, 243, 0) 70%
   );
   background-repeat: no-repeat;
 }
@@ -27,17 +28,40 @@ body::before {
   background-size: 200px 200px;
 }
 
+/* ---------------------------------------------------------------
+   Header
+   The bar's content is centred like the page, but its rule spans the
+   full viewport — a divider that stops at 1000px reads as a stray line.
+   --------------------------------------------------------------- */
+.site-header {
+  border-bottom: 1px solid #e0d5c2;
+}
 
+@media (max-width: 380px) {
+  .site-header-inner {
+    gap: 8px;
+  }
 
+  .site-header-brand {
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Cards
+   Archives read as documents: depth comes from a hairline border and a
+   small lift, never from a drop shadow.
+   --------------------------------------------------------------- */
 .entry-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-  cursor: default;
+  transition: transform 0.2s ease, border-color 0.2s ease,
+    background-color 0.2s ease;
+  cursor: pointer;
 }
 
 .entry-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(43, 31, 20, 0.12);
-  border-color: #b5502f;
+  transform: translateY(-2px);
+  border-color: #a8432a;
 }
 
 .entry-card .card-image {
@@ -48,6 +72,9 @@ body::before {
   transform: scale(1.03);
 }
 
+/* ---------------------------------------------------------------
+   Links and navigation
+   --------------------------------------------------------------- */
 .nav-link {
   transition: color 0.15s ease;
   position: relative;
@@ -55,78 +82,146 @@ body::before {
 }
 
 .nav-link:hover {
-  color: #b5502f;
+  color: #a8432a;
 }
 
+/* Absolute so the rule never adds height to the link box. The old version
+   was display:block and permanently padded whatever it sat inside. */
 .nav-link::after {
   content: "";
-  display: block;
+  position: absolute;
+  left: 0;
+  bottom: -4px;
   width: 0;
   height: 2px;
-  background: #b5502f;
+  background: #a8432a;
   transition: width 0.2s ease;
-  margin-top: 2px;
 }
 
-.nav-link:hover::after {
+.nav-link:hover::after,
+.nav-link[aria-current="page"]::after {
   width: 100%;
 }
 
+.nav-link[aria-current="page"] {
+  color: #a8432a;
+}
+
+/* ---------------------------------------------------------------
+   Buttons — squared, flat, no pill and no shadow
+   --------------------------------------------------------------- */
+.btn-primary {
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-primary:hover {
+  background-color: #8a3520;
+  border-color: #8a3520;
+}
+
 .search-button {
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .search-button-primary:hover {
-  background-color: #93401f;
-  border-color: #93401f;
+  background-color: #8a3520;
+  border-color: #8a3520;
 }
 
-.search-button-secondary:hover {
-  color: #b5502f;
-  border-color: #b5502f;
+/* Clear sits inside the field, so it only needs a quiet colour shift. */
+.search-clear {
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.search-clear:hover {
+  color: #a8432a;
+  background-color: #f3e7d1;
+}
+
+/* The field and its submit share one border box; focus lights the whole
+   group rather than drawing a ring around half of it. */
+.search-field:focus-within {
+  border-color: #a8432a;
+  box-shadow: 0 0 0 2px rgba(168, 67, 42, 0.18);
+}
+
+.search-input:focus,
+.search-input:focus-visible {
+  outline: none;
 }
 
 .search-button:focus-visible,
-.search-input:focus-visible,
-a:focus-visible {
-  outline: 2px solid #b5502f;
+.search-clear:focus-visible,
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #a8432a;
   outline-offset: 2px;
 }
 
+/* ---------------------------------------------------------------
+   Rules and marks
+   --------------------------------------------------------------- */
 .hero-divider {
   width: 48px;
-  height: 3px;
-  background: #b5502f;
-  border-radius: 2px;
-  margin: 20px 0;
+  height: 2px;
+  background: #a8432a;
+}
+
+/* This class was referenced by the homepage but never defined, so the motif
+   rendered as a stray left-aligned glyph. */
+.archive-motif {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #8f5c0e;
+}
+
+.archive-motif::before,
+.archive-motif::after {
+  content: "";
+  flex: 1 1 0;
+  height: 1px;
+  max-width: 160px;
+  background: #e0d5c2;
 }
 
 .category-chip {
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
-  cursor: default;
+  transition: background-color 0.2s ease, color 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.category-chip:hover {
-  background-color: #b5502f !important;
-  color: #ffffff !important;
-  transform: translateY(-1px);
+/* Only chips that actually go somewhere get a hover state. Static tags
+   (flavour notes, the homepage category list) must not imply a click. */
+a > .category-chip:hover,
+.category-chip-interactive:hover {
+  background-color: #a8432a;
+  border-color: #a8432a;
+  color: #fffdf8;
 }
 
-.fade-in {
-  animation: fadeIn 0.5s ease forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 480px) {
+/* ---------------------------------------------------------------
+   Grids
+   --------------------------------------------------------------- */
+@media (max-width: 560px) {
   .entry-grid {
     grid-template-columns: 1fr !important;
   }
 }
 
+/* Three stats in a two-column grid leaves the third stranded half-width.
+   Below the breakpoint, run them as one row of three narrow columns. */
+@media (max-width: 460px) {
+  .stat-strip {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Photo marquee
+   --------------------------------------------------------------- */
 .photo-strip {
   position: relative;
   width: 100%;
@@ -145,21 +240,26 @@ a:focus-visible {
   pointer-events: none;
 }
 
+/* The hero sits under a radial warm-tint, so these fades match that lighter
+   value rather than the flat page colour — otherwise they paint a band. */
 .photo-strip::before {
   left: 0;
-  background: linear-gradient(to right, #F7F0E4, transparent);
+  background: linear-gradient(to right, #fbf7ef, rgba(251, 247, 239, 0));
 }
 
 .photo-strip::after {
   right: 0;
-  background: linear-gradient(to left, #F7F0E4, transparent);
+  background: linear-gradient(to left, #fbf7ef, rgba(251, 247, 239, 0));
 }
 
 .photo-strip-track {
   display: flex;
   gap: 8px;
   width: max-content;
-  animation: marquee 20s linear infinite;
+  /* 20 tiles at 248px each means the track travels ~4960px per cycle.
+     The old 20s duration was set when there were four photos; at ten it
+     smeared past. 90s puts it back to a readable ~55px/s. */
+  animation: marquee 90s linear infinite;
 }
 
 .photo-strip-track img {
@@ -168,11 +268,16 @@ a:focus-visible {
   object-fit: cover;
   flex-shrink: 0;
   display: block;
+  background-color: #f1eadc;
 }
 
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 @media (max-width: 600px) {
@@ -184,5 +289,29 @@ a:focus-visible {
   .photo-strip-track img {
     height: 120px;
     width: 160px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-strip-track {
+    animation: none;
+    /* Without the animation the doubled track would overflow silently;
+       let it scroll by hand instead. */
+    width: auto;
+    overflow-x: auto;
+  }
+
+  .entry-card,
+  .entry-card .card-image,
+  .nav-link::after {
+    transition: none;
+  }
+
+  .entry-card:hover {
+    transform: none;
+  }
+
+  .entry-card:hover .card-image {
+    transform: none;
   }
 }

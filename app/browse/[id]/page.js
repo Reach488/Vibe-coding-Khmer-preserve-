@@ -1,127 +1,90 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import entries from "../../../lib/entries.js";
 import collection from "../../../collection.config.js";
-import { colors, fonts, radii, maxWidth } from "../../../lib/theme.js";
+import SiteFooter from "../../../components/SiteFooter.js";
+import { colors, fonts, radii, maxWidth, lineHeights } from "../../../lib/theme.js";
 
 const s = {
-  wrap: {
-    maxWidth: maxWidth.narrow,
-    margin: "0 auto",
-    padding: "48px 24px 80px",
-  },
+  wrap: { maxWidth: maxWidth.narrow, margin: "0 auto", padding: "32px 24px 56px" },
   back: {
-    display: "inline-block",
-    fontFamily: fonts.mono,
-    fontSize: 12,
-    letterSpacing: 1,
-    color: colors.accent,
-    textDecoration: "none",
-    marginBottom: 32,
+    display: "inline-block", fontFamily: fonts.mono, fontSize: 12,
+    letterSpacing: 1, textTransform: "uppercase", color: colors.accent,
+    textDecoration: "none", marginBottom: 28,
   },
+  // Five of the ten source photos are under 560px wide, so a 360px-tall
+  // full-bleed hero upscaled them into mush. A 3:2 box at the column width
+  // asks far less of them and keeps every entry's header the same shape.
+  figure: { margin: "0 0 32px" },
   photo: {
-    width: "100%",
-    height: 360,
-    objectFit: "cover",
-    borderRadius: radii.md,
-    border: `1px solid ${colors.border}`,
-    marginBottom: 32,
+    width: "100%", aspectRatio: "3 / 2", height: "auto", objectFit: "cover",
+    display: "block", borderRadius: radii.md,
+    border: `1px solid ${colors.border}`, backgroundColor: colors.surfaceMuted,
   },
   category: {
-    fontFamily: fonts.mono,
-    fontSize: 12,
-    letterSpacing: 1,
-    color: colors.accent,
-    margin: "0 0 12px",
-    textTransform: "uppercase",
+    display: "inline-block", fontFamily: fonts.mono, fontSize: 11,
+    letterSpacing: 0.8, textTransform: "uppercase", color: colors.accent,
+    backgroundColor: colors.accentBg, border: `1px solid ${colors.borderSoft}`,
+    borderRadius: radii.sm, padding: "4px 8px", margin: "0 0 14px",
   },
   title: {
-    fontFamily: fonts.serif,
-    fontSize: "clamp(32px, 5vw, 44px)",
-    fontWeight: 700,
-    margin: "0 0 8px",
-    color: colors.ink,
-    lineHeight: 1.2,
+    fontFamily: fonts.serif, fontSize: "clamp(30px, 5vw, 42px)",
+    fontWeight: 600, margin: "0 0 8px", color: colors.ink,
+    lineHeight: 1.18, letterSpacing: "-0.01em",
   },
   khmer: {
-    display: "block",
-    fontFamily: fonts.khmer,
-    fontSize: "0.55em",
-    fontWeight: 400,
-    color: colors.accent,
-    marginTop: 8,
+    display: "block", fontFamily: fonts.khmer, fontSize: "0.52em",
+    fontWeight: 400, color: colors.accent, marginTop: 10,
+    lineHeight: lineHeights.khmer,
   },
   meta: {
-    fontFamily: fonts.mono,
-    fontSize: 12,
-    color: colors.inkFaint,
-    margin: "0 0 40px",
-    letterSpacing: 0.5,
+    fontFamily: fonts.mono, fontSize: 12, letterSpacing: 0.5,
+    color: colors.inkFaint, margin: "0 0 36px",
   },
-  section: {
-    marginTop: 40,
-  },
+  section: { marginTop: 36 },
   heading: {
-    fontFamily: fonts.serif,
-    fontSize: 22,
-    fontWeight: 700,
-    color: colors.ink,
-    margin: "0 0 10px",
+    fontFamily: fonts.serif, fontSize: 22, fontWeight: 600,
+    color: colors.ink, margin: "0 0 10px", lineHeight: 1.3,
   },
-  text: {
-    fontSize: 17,
-    lineHeight: 1.8,
-    color: colors.inkMuted,
-    fontFamily: fonts.serif,
-    margin: 0,
-  },
+  text: { fontFamily: fonts.serif, fontSize: 17, lineHeight: 1.8, color: colors.inkMuted, margin: 0 },
   flavorLabel: {
-    fontFamily: fonts.mono,
-    fontSize: 12,
-    letterSpacing: 1,
-    textTransform: "uppercase",
-    color: colors.inkFaint,
-    margin: "0 0 10px",
+    fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1.5,
+    textTransform: "uppercase", color: colors.inkFaint, margin: "0 0 10px",
   },
-  flavorChips: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: 8,
-  },
+  flavorChips: { display: "flex", flexWrap: "wrap", gap: 8 },
   flavorChip: {
-    fontFamily: fonts.mono,
-    fontSize: 12,
-    color: colors.accent,
-    backgroundColor: colors.accentBg,
-    border: `1px solid ${colors.border}`,
-    borderRadius: radii.pill,
-    padding: "6px 14px",
+    fontFamily: fonts.mono, fontSize: 11, letterSpacing: 0.5,
+    textTransform: "uppercase", color: colors.accent,
+    backgroundColor: colors.accentBg, border: `1px solid ${colors.borderSoft}`,
+    borderRadius: radii.sm, padding: "5px 10px",
   },
+  note: { fontFamily: fonts.serif, fontSize: 17, lineHeight: 1.7, color: colors.inkMuted, margin: 0 },
 };
 
 export default async function EntryPage({ params }) {
   const { id } = await params;
   const entry = entries.find((e) => e.id === id);
 
-  if (!entry) {
-    return (
-      <main style={s.wrap}>
-        <Link href="/browse" style={s.back}>← Back to Browse</Link>
-        <h1>Entry not found</h1>
-        <p>No entry with id &ldquo;{id}&rdquo; exists.</p>
-      </main>
-    );
-  }
+  // Hand back a real 404 rather than a 200 page that says "not found", and
+  // let app/not-found.js render it so there is one missing-page design.
+  if (!entry) notFound();
 
   const { title, khmerTerm, category, photo, photoNote, howMade, whatUsedFor, howRecipesVary, flavorProfile } = entry;
 
   return (
     <main style={s.wrap}>
-      <Link href="/browse" style={s.back}>← Back to Browse</Link>
+      <Link href="/browse" style={s.back} className="nav-link">
+        ← Back to Browse
+      </Link>
 
       {photo ? (
-        <img src={photo} alt={title} style={s.photo} />
+        <figure style={s.figure}>
+          <img src={photo} alt={title} width={720} height={480} style={s.photo} />
+        </figure>
       ) : photoNote ? (
-        <p style={{ fontStyle: "italic", color: colors.inkFaint, marginBottom: 32 }}>{photoNote}</p>
+        <p style={{ ...s.note, fontStyle: "italic", color: colors.inkFaint, marginBottom: 32 }}>
+          {photoNote}
+        </p>
       ) : null}
 
       {category ? <p style={s.category}>{category}</p> : null}
@@ -138,9 +101,7 @@ export default async function EntryPage({ params }) {
           <p style={s.flavorLabel}>Flavor profile</p>
           <div style={s.flavorChips}>
             {flavorProfile.map((note) => (
-              <span key={note} style={s.flavorChip} className="category-chip">
-                {note}
-              </span>
+              <span key={note} style={s.flavorChip}>{note}</span>
             ))}
           </div>
         </div>
@@ -166,6 +127,8 @@ export default async function EntryPage({ params }) {
           <p style={s.text}>{howRecipesVary}</p>
         </section>
       )}
+
+      <SiteFooter />
     </main>
   );
 }

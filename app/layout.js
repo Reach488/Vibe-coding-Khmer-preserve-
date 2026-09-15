@@ -1,13 +1,36 @@
-import { Noto_Serif_Khmer } from "next/font/google";
+import { Fraunces, Kantumruy_Pro, Courier_Prime } from "next/font/google";
 import "./globals.css";
 import collection from "../collection.config.js";
 import SiteHeader from "../components/SiteHeader.js";
 import { colors, fonts } from "../lib/theme.js";
 
-const notoSerifKhmer = Noto_Serif_Khmer({
-  subsets: ["khmer"],
-  weight: ["400", "600", "700"],
-  variable: "--font-khmer",
+// Three faces, one job each.
+//
+// Fraunces — warm old-style serif with organic curves that sit naturally
+// beside Khmer's loops. Optical sizing (opsz) means the same family handles
+// a 44px entry title and 17px body copy correctly.
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  axes: ["SOFT", "opsz"],
+  variable: "--font-serif",
+  display: "swap",
+});
+
+// Kantumruy Pro — Khmer face by Sovichet Tep, the one Cambodian Living Arts
+// uses. Its Latin set derives from Work Sans, so loading the khmer *and*
+// latin subsets lets one family set both scripts at matching weight.
+const kantumruyPro = Kantumruy_Pro({
+  subsets: ["khmer", "latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+// Courier Prime — a properly drawn typewriter mono for kickers and labels,
+// replacing the 'Courier New' system fallback.
+const courierPrime = Courier_Prime({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -18,7 +41,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={notoSerifKhmer.variable}>
+    <html
+      lang="en"
+      className={`${fraunces.variable} ${kantumruyPro.variable} ${courierPrime.variable}`}
+    >
       <body
         style={{
           margin: 0,
