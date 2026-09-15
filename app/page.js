@@ -39,11 +39,7 @@ const s = {
     fontWeight: 400, color: colors.accent, marginTop: 18,
     lineHeight: lineHeights.khmer,
   },
-  description: {
-    fontFamily: fonts.serif, fontSize: 18, color: colors.inkMuted,
-    lineHeight: 1.7, margin: "18px auto 0", maxWidth: 540,
-  },
-  heroCta: { display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", marginTop: 26 },
+  heroCta: { display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", marginTop: 28 },
   // No pill, no shadow, and no .nav-link class — that underline pseudo-element
   // was padding the button and pushing its label off centre.
   btnPrimary: {
@@ -106,8 +102,12 @@ export default function Home() {
           {collection.name}
           <span style={s.titleKhmer}>អាហារសម្ងួត និង គ្រឿងផ្សំ</span>
         </h1>
-        <p style={s.description}>{collection.description}</p>
-        <div className="hero-divider" style={{ margin: "26px auto" }} />
+        {/* The collection description used to sit here. It is a 40-word
+            sentence naming all ten preserves, directly above a photo strip
+            of those same ten — it crowded the hero without adding anything
+            the photos and the "Why this archive exists" section below do not
+            already say. It still ships as the page's meta description. */}
+        <div className="hero-divider" style={{ margin: "30px auto 0" }} />
         <div style={s.heroCta}>
           <a href="/browse" style={s.btnPrimary} className="btn-primary">
             Browse the Archive
