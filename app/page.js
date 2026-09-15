@@ -1,115 +1,99 @@
 import collection from "../collection.config.js";
 import entries from "../lib/entries.js";
-import { colors, fonts, radii, maxWidth, shadows } from "../lib/theme.js";
+import SiteFooter from "../components/SiteFooter.js";
+import { colors, fonts, radii, maxWidth, lineHeights } from "../lib/theme.js";
 
 const categories = [...new Set(entries.map((entry) => entry.category))];
 
 const entryPhotos = entries.filter((e) => e.photo);
 
+// Techniques, not categories: the categories list is one-per-entry, so
+// counting it just restated the entry count. Group by preserving method
+// instead, which is the thing the archive is actually organised around.
+const techniques = [...new Set(entries.map((entry) => techniqueOf(entry)))];
+
+function techniqueOf(entry) {
+  const text = `${entry.category} ${entry.title}`.toLowerCase();
+  if (text.includes("ferment")) return "Fermenting";
+  if (text.includes("smok")) return "Smoking";
+  if (text.includes("dried") || text.includes("cured")) return "Sun-drying";
+  if (text.includes("sugar")) return "Rendering";
+  if (text.includes("preserved")) return "Salt-curing";
+  return "Pounding";
+}
+
 const s = {
-  wrap: {
-    maxWidth: maxWidth.narrow,
-    margin: "0 auto",
-    padding: "48px 24px 64px",
-  },
-  hero: { textAlign: "center", padding: "32px 0 24px" },
+  wrap: { maxWidth: maxWidth.narrow, margin: "0 auto", padding: "32px 24px 56px" },
+  hero: { textAlign: "center", padding: "8px 0 24px" },
   kicker: {
-    fontFamily: fonts.mono, fontSize: 13, letterSpacing: 2.5,
+    fontFamily: fonts.mono, fontSize: 12, letterSpacing: 2.5,
     textTransform: "uppercase", color: colors.accent, margin: "0 0 20px",
   },
   title: {
-    fontFamily: fonts.serif, fontSize: "clamp(40px, 8vw, 60px)",
-    fontWeight: 700, margin: "0", lineHeight: 1.15, color: colors.ink,
-    letterSpacing: "-0.01em",
+    fontFamily: fonts.serif, fontSize: "clamp(34px, 7vw, 58px)",
+    fontWeight: 600, margin: 0, lineHeight: 1.12, color: colors.ink,
+    letterSpacing: "-0.015em",
   },
   titleKhmer: {
-    display: "block", fontFamily: fonts.khmer, fontSize: "0.45em",
-    fontWeight: 400, color: colors.accent, marginTop: 16, lineHeight: 1.4,
+    display: "block", fontFamily: fonts.khmer, fontSize: "0.4em",
+    fontWeight: 400, color: colors.accent, marginTop: 18,
+    lineHeight: lineHeights.khmer,
   },
   description: {
-    fontSize: 18, color: colors.inkMuted, lineHeight: 1.7,
-    margin: "16px auto 0", maxWidth: 540,
+    fontFamily: fonts.serif, fontSize: 18, color: colors.inkMuted,
+    lineHeight: 1.7, margin: "18px auto 0", maxWidth: 540,
   },
-  heroCta: {
-    display: "flex", flexWrap: "wrap", gap: 12,
-    justifyContent: "center", marginTop: 24,
-  },
+  heroCta: { display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", marginTop: 26 },
+  // No pill, no shadow, and no .nav-link class — that underline pseudo-element
+  // was padding the button and pushing its label off centre.
   btnPrimary: {
-    display: "inline-block", fontSize: 15, fontWeight: 600,
-    color: "#FFF", backgroundColor: colors.brand,
-    padding: "14px 32px", borderRadius: radii.pill,
-    textDecoration: "none", boxShadow: shadows.md,
-    transition: "background-color 0.2s ease, transform 0.15s ease",
+    display: "inline-block", fontFamily: fonts.sans, fontSize: 15, fontWeight: 600,
+    color: "#FFFFFF", backgroundColor: colors.brand,
+    border: `1px solid ${colors.brand}`, padding: "13px 28px",
+    borderRadius: radii.sm, textDecoration: "none",
   },
   strip: {
     display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
-    gap: 16, margin: "32px 0 40px", padding: "20px 0",
+    gap: 16, margin: "40px 0", padding: "20px 0",
     borderTop: `1px solid ${colors.border}`,
     borderBottom: `1px solid ${colors.border}`,
     textAlign: "center",
   },
-  val: {
-    fontFamily: fonts.serif, fontSize: 30, fontWeight: 700,
-    color: colors.brand, margin: 0,
-  },
+  val: { fontFamily: fonts.serif, fontSize: 30, fontWeight: 600, color: colors.brand, margin: 0 },
   lab: {
-    fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1,
-    textTransform: "uppercase", color: colors.inkMuted, margin: "4px 0 0",
+    fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1,
+    textTransform: "uppercase", color: colors.inkFaint, margin: "4px 0 0",
   },
-  section: { marginTop: 48 },
+  section: { marginTop: 44 },
   st2: {
-    fontFamily: fonts.serif, fontSize: 28, fontWeight: 700,
-    margin: "0 0 10px", color: colors.ink,
+    fontFamily: fonts.serif, fontSize: 27, fontWeight: 600,
+    margin: "0 0 12px", color: colors.ink, lineHeight: 1.25,
   },
-  stxt: {
-    fontSize: 17, lineHeight: 1.7, color: colors.inkMuted, margin: "0 0 14px",
-  },
-  chips: { display: "flex", flexWrap: "wrap", gap: 10, marginTop: 10 },
+  stxt: { fontFamily: fonts.serif, fontSize: 17, lineHeight: 1.75, color: colors.inkMuted, margin: "0 0 14px" },
+  chips: { display: "flex", flexWrap: "wrap", gap: 8, marginTop: 14 },
   chip: {
-    fontFamily: fonts.mono, fontSize: 12, color: colors.accent,
-    backgroundColor: colors.accentBg, border: `1px solid ${colors.border}`,
-    borderRadius: radii.pill, padding: "8px 16px",
+    fontFamily: fonts.mono, fontSize: 11, letterSpacing: 0.5,
+    textTransform: "uppercase", color: colors.accent,
+    backgroundColor: colors.accentBg, border: `1px solid ${colors.borderSoft}`,
+    borderRadius: radii.sm, padding: "5px 10px",
   },
   introBox: {
-    marginTop: 48, padding: "32px", backgroundColor: colors.bgAlt,
+    marginTop: 44, padding: 28, backgroundColor: colors.bgAlt,
     border: `1px solid ${colors.border}`, borderRadius: radii.lg,
   },
   susadei: {
-    fontFamily: fonts.khmer, fontSize: 40, textAlign: "center",
-    color: colors.brand, margin: "0 0 6px", lineHeight: 1.2,
+    fontFamily: fonts.khmer, fontSize: 34, color: colors.brand,
+    margin: "0 0 4px", lineHeight: lineHeights.khmer,
   },
   noteLabel: {
-    fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1.5,
-    textTransform: "uppercase", textAlign: "center",
-    color: colors.inkFaint, margin: "0 0 16px",
-  },
-  card: {
-    padding: 20, backgroundColor: colors.surface,
-    border: `1px solid ${colors.border}`,
-    borderRadius: radii.md, boxShadow: shadows.sm,
+    fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1.5,
+    textTransform: "uppercase", color: colors.inkFaint, margin: "0 0 16px",
   },
   cardL: {
     fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1.5,
     color: colors.accent, margin: 0, textTransform: "uppercase",
   },
-  cardV: {
-    fontFamily: fonts.serif, fontSize: 20, margin: "6px 0 0", color: colors.ink,
-  },
-  count: {
-    fontFamily: fonts.mono, fontSize: 13, color: colors.inkFaint,
-    marginTop: 32, textAlign: "center", letterSpacing: 1,
-    textTransform: "uppercase",
-  },
-  source: {
-    display: "flex", alignItems: "center", justifyContent: "center",
-    gap: 16, marginTop: 32, color: colors.inkFaint,
-    fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1,
-    textTransform: "uppercase",
-  },
-  footer: {
-    marginTop: 48, paddingTop: 20, borderTop: `1px solid ${colors.border}`,
-    fontSize: 13, textAlign: "center", color: colors.inkFaint,
-  },
+  cardV: { fontFamily: fonts.serif, fontSize: 20, fontWeight: 600, margin: "6px 0 0", color: colors.ink },
 };
 
 export default function Home() {
@@ -117,15 +101,15 @@ export default function Home() {
     <main style={s.wrap}>
       {/* Hero */}
       <section style={s.hero}>
-        <p style={s.kicker}>THE KHMER LIVING ARCHIVE</p>
+        <p style={s.kicker}>The Khmer Living Archive</p>
         <h1 style={s.title}>
           {collection.name}
           <span style={s.titleKhmer}>អាហារសម្ងួត និង គ្រឿងផ្សំ</span>
         </h1>
         <p style={s.description}>{collection.description}</p>
-        <div className="hero-divider" style={{ margin: "24px auto" }} />
+        <div className="hero-divider" style={{ margin: "26px auto" }} />
         <div style={s.heroCta}>
-          <a href="/browse" style={s.btnPrimary} className="nav-link">
+          <a href="/browse" style={s.btnPrimary} className="btn-primary">
             Browse the Archive
           </a>
         </div>
@@ -133,7 +117,14 @@ export default function Home() {
           <div className="photo-strip">
             <div className="photo-strip-track">
               {[...entryPhotos, ...entryPhotos].map((entry, i) => (
-                <img key={`${entry.id}-${i}`} src={entry.photo} alt={entry.title} />
+                <img
+                  key={`${entry.id}-${i}`}
+                  src={entry.photo}
+                  alt={i < entryPhotos.length ? entry.title : ""}
+                  aria-hidden={i >= entryPhotos.length ? "true" : undefined}
+                  width={240}
+                  height={180}
+                />
               ))}
             </div>
           </div>
@@ -141,18 +132,18 @@ export default function Home() {
       </section>
 
       {/* Stats strip */}
-      <section style={s.strip}>
+      <section className="stat-strip" style={s.strip}>
         <div>
           <p style={s.val}>{entries.length}</p>
           <p style={s.lab}>Preserves</p>
         </div>
         <div>
-          <p style={s.val}>{categories.length}</p>
+          <p style={s.val}>{techniques.length}</p>
           <p style={s.lab}>Techniques</p>
         </div>
         <div>
-          <p style={s.val}>100%</p>
-          <p style={s.lab}>Real Knowledge</p>
+          <p style={s.val}>1</p>
+          <p style={s.lab}>Kitchen</p>
         </div>
       </section>
 
@@ -168,15 +159,15 @@ export default function Home() {
           someone keeps making it and someone else keeps asking how.
         </p>
         <p style={s.stxt}>
-          This archive records that knowledge while it's still spoken
-          knowledge: what an ingredient is called, how it's made, what it's
-          used for, and whose kitchen it came from.
+          This archive records that knowledge while it&rsquo;s still spoken
+          knowledge: what an ingredient is called, how it&rsquo;s made, what
+          it&rsquo;s used for, and whose kitchen it came from.
         </p>
       </section>
 
       {/* Motif divider */}
-      <div className="archive-motif" style={{ margin: "32px 0" }}>
-        <span style={{ color: colors.brand, fontSize: 18 }}>✷</span>
+      <div className="archive-motif" style={{ margin: "40px 0" }}>
+        <span style={{ fontSize: 16 }}>✷</span>
       </div>
 
       {/* What's preserved here */}
@@ -200,29 +191,15 @@ export default function Home() {
       <section style={s.introBox}>
         <p style={s.susadei}>សួស្តី</p>
         <p style={s.noteLabel}>A note from the curator</p>
-        <div style={s.card}>
-          <p style={s.cardL}>CURATED BY</p>
-          <p style={s.cardV}>{collection.curator}</p>
-          <p style={{ ...s.stxt, margin: "12px 0 0" }}>
-            Knowledge gathered from {collection.source} and the kitchens
-            of families across the country, recorded to be passed on.
-          </p>
-        </div>
+        <p style={s.cardL}>Curated by</p>
+        <p style={s.cardV}>{collection.curator}</p>
+        <p style={{ ...s.stxt, margin: "12px 0 0" }}>
+          Knowledge gathered from {collection.source} and the kitchens
+          of families across the country, recorded to be passed on.
+        </p>
       </section>
 
-      <p style={s.count}>
-        {entries.length} entries preserved in this archive
-      </p>
-
-      <p style={s.source}>
-        <span>✦</span> Source: {collection.source} <span>✦</span>
-      </p>
-
-      <footer style={s.footer}>
-        Built in ICT 340 — Vibe Coding, American University of Phnom Penh, Fall
-        2026. This archive is under construction all semester. Come back in
-        December.
-      </footer>
+      <SiteFooter />
     </main>
   );
 }
