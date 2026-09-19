@@ -2,7 +2,7 @@ import Link from "next/link";
 import preservation from "../../lib/preservation.js";
 import SiteFooter from "../../components/SiteFooter.js";
 import T from "../../components/T.js";
-import { colors, fonts, space, maxWidth, lineHeights } from "../../lib/theme.js";
+import { colors, fonts, space, type, maxWidth, lineHeights } from "../../lib/theme.js";
 
 export const metadata = {
   title: "History & Preservation — Khmer Living Archive",
@@ -67,6 +67,34 @@ const s = {
     margin: 0,
     maxWidth: maxWidth.prose,
   },
+  // The one photograph on the page, and deliberately the largest thing on
+  // it. The prose keeps the reading measure beneath; the image takes the
+  // full catalogue width. This is the homepage lesson applied here — a page
+  // about how food was kept should not make the photograph of it the
+  // smallest element in view.
+  //
+  // No hover state and no link: it is the subject, not a control.
+  figure: {
+    margin: `${space.lg}px 0 ${space.lg}px`,
+  },
+  image: {
+    display: "block",
+    width: "100%",
+    height: "auto",
+    backgroundColor: colors.surfaceMuted,
+    border: `1px solid ${colors.borderSoft}`,
+  },
+  // The caption describes only what is visible in the frame. It does not say
+  // where or when, because the archive has no source for either, and a
+  // caption that guessed would be a historical claim dressed as a label.
+  caption: {
+    fontFamily: fonts.sans,
+    fontSize: type.meta,
+    lineHeight: 1.6,
+    color: colors.inkFaint,
+    margin: `${space.sm}px 0 0`,
+    maxWidth: maxWidth.prose,
+  },
   back: {
     display: "inline-block",
     fontFamily: fonts.sans,
@@ -93,6 +121,22 @@ export default function HistoryPage() {
       </h1>
 
       <hr style={s.rule} />
+
+      <figure style={s.figure}>
+        <img
+          src="/images/history.jpg"
+          alt="A woman cooking over a wood fire in an open kitchen: a steamer sits in the flame, pans hang from a rail above, and firewood is stacked behind her."
+          width={1800}
+          height={1200}
+          style={s.image}
+        />
+        <figcaption style={s.caption}>
+          <T
+            en="An open household kitchen, cooking over wood fire."
+            km="ផ្ទះបាយគ្រួសារបើកចំហ ចម្អិនលើភ្លើងឧស។"
+          />
+        </figcaption>
+      </figure>
 
       <p style={s.text}>
         <T en={preservation.en} km={preservation.km} />
