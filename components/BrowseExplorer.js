@@ -82,7 +82,8 @@ export default function BrowseExplorer({ entries }) {
         // already says nothing was found; this only has to say what to try.
         <p style={styles.empty}>
           {isKm
-            ? `គ្មានធាតុត្រូវនឹង “${searchInput}” ទេ — សាកល្បងឈ្មោះខ្មែរ ឈ្មោះអង់គ្លេស ឬ ពាក្យទូលាយជាង។`
+            ? `គ្មានធាតុត្រូវនឹង “${searchInput}” ទេ — សាកល្បងឈ្មោះខ្មែរ ឈ្មោះអង់គ្លេស ឬ ពាក្យទូលាយជាងនេះ
+            ។`
             : `Nothing matches “${searchInput}” — try the Khmer name, the English name, or a broader word.`}
         </p>
       ) : (
