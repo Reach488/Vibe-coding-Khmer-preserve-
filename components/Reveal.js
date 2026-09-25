@@ -27,6 +27,8 @@ const STAGGER_MS = 80;
 // the threshold goes to 0 so any pixel crossing the expanded edge counts.
 const PRELOAD_PX = 200;
 
+const SELECTOR = "[data-reveal], [data-reveal-group] > *";
+
 // The hidden state is painted from the server HTML (see the bootstrap script
 // in app/page.js), so on a fresh load there is nothing to do before paint.
 // This only matters on a client-side navigation into the homepage, where the
@@ -61,12 +63,6 @@ export default function Reveal() {
     const root = document.documentElement;
     root.classList.add("js-reveal");
 
-    const targets = [
-      ...document.querySelectorAll("[data-reveal]"),
-      ...document.querySelectorAll("[data-reveal-group] > *"),
-    ];
-    if (targets.length === 0) return undefined;
-
     const show = (element, delay) => {
       element.style.setProperty("--reveal-delay", `${delay}ms`);
       element.classList.add("is-revealed");
@@ -79,28 +75,57 @@ export default function Reveal() {
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
+    // Sprint 1 could sweep the document once and be finished, because the six
+    // homepage cards were compiled into the page. They come from a Supabase
+    // query now, which resolves after this effect has already run — the cards
+    // simply are not in the document yet at first sweep. Anything that arrives
+    // later and is never picked up keeps the hidden state .js-reveal gives it,
+    // permanently. So the sweep repeats whenever the page gains nodes.
+    let sweep;
+    let cleanUpObserver;
+
     if (reducedMotion || !("IntersectionObserver" in window)) {
-      targets.forEach((element) => show(element, 0));
-      return () => root.classList.remove("js-reveal");
+      sweep = () => {
+        for (const element of document.querySelectorAll(SELECTOR)) {
+          show(element, 0);
+        }
+      };
+      cleanUpObserver = () => {};
+    } else {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const columnCache = new Map();
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            show(entry.target, staggerFor(entry.target, columnCache));
+            // Once only: scrolling back up and down again must not replay it.
+            observer.unobserve(entry.target);
+          }
+        },
+        { threshold: 0, rootMargin: `0px 0px ${PRELOAD_PX}px 0px` }
+      );
+
+      // Observing the same element twice is harmless, but the WeakSet keeps
+      // each repeat sweep to the nodes it has not already handed over.
+      const claimed = new WeakSet();
+      sweep = () => {
+        for (const element of document.querySelectorAll(SELECTOR)) {
+          if (claimed.has(element)) continue;
+          claimed.add(element);
+          observer.observe(element);
+        }
+      };
+      cleanUpObserver = () => observer.disconnect();
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const columnCache = new Map();
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          show(entry.target, staggerFor(entry.target, columnCache));
-          // Once only: scrolling back up and down again must not replay it.
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0, rootMargin: `0px 0px ${PRELOAD_PX}px 0px` }
-    );
+    sweep();
 
-    targets.forEach((element) => observer.observe(element));
+    const mutations = new MutationObserver(sweep);
+    mutations.observe(document.body, { childList: true, subtree: true });
 
     return () => {
-      observer.disconnect();
+      mutations.disconnect();
+      cleanUpObserver();
       root.classList.remove("js-reveal");
     };
   }, []);

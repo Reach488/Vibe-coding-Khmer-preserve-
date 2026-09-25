@@ -1,9 +1,21 @@
+"use client";
+
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import entries from "../../../lib/entries.js";
+import { notFound, useParams } from "next/navigation";
+import useEntry from "../../../lib/useEntry.js";
+import ArchiveNotice from "../../../components/ArchiveNotice.js";
 import SiteFooter from "../../../components/SiteFooter.js";
 import T from "../../../components/T.js";
 import { colors, fonts, radii, space, type, maxWidth, lineHeights } from "../../../lib/theme.js";
+
+// One entry, read from Supabase by its slug. The URL still carries the
+// readable id — /browse/prahok — even though the row's primary key is a uuid
+// now; lib/archive.js is where those two meet.
+//
+// The page is a client component for the same reason the others are: the one
+// configured Supabase client is the browser one. The cost is that "no such
+// entry" can only be known after the query answers, so the 404 is raised then
+// rather than while rendering on the server.
 
 const s = {
   wrap: { maxWidth: maxWidth.prose, margin: "0 auto", padding: `${space.lg}px ${space.md}px ${space.xl}px` },
@@ -49,13 +61,32 @@ const s = {
   note: { fontFamily: fonts.serif, fontSize: type.body, lineHeight: 1.7, color: colors.inkFaint, fontStyle: "italic", margin: 0 },
 };
 
-export default async function EntryPage({ params }) {
-  const { id } = await params;
-  const entry = entries.find((e) => e.id === id);
+export default function EntryPage() {
+  const { id } = useParams();
+  const { entry, loading, error } = useEntry(id);
 
-  // Hand back a real 404 rather than a 200 page that says "not found", and
-  // let app/not-found.js render it so there is one missing-page design.
-  if (!entry) notFound();
+  // The database answered and there is no such entry: hand back a real 404
+  // rather than a 200 page that says "not found", and let app/not-found.js
+  // render it so there is one missing-page design. A failed query is a
+  // different thing and must not be mistaken for a missing entry — the
+  // archive going quiet does not mean prahok stopped existing.
+  if (!loading && !error && !entry) notFound();
+
+  const backLink = (
+    <Link href="/browse" style={s.back} className="text-link">
+      <T en="← Back to the archive" km="← ត្រឡប់ទៅបណ្ណសារ" />
+    </Link>
+  );
+
+  if (!entry) {
+    return (
+      <main style={s.wrap}>
+        {backLink}
+        <ArchiveNotice state={error ? "error" : "loading"} />
+        <SiteFooter />
+      </main>
+    );
+  }
 
   const { title, khmerTerm, category, photo, photoNote, howMade, whatUsedFor, howRecipesVary, flavorProfile } = entry;
 
@@ -63,9 +94,7 @@ export default async function EntryPage({ params }) {
 
   return (
     <main style={s.wrap}>
-      <Link href="/browse" style={s.back} className="text-link">
-        <T en="← Back to the archive" km="← ត្រឡប់ទៅបណ្ណសារ" />
-      </Link>
+      {backLink}
 
       {photo ? (
         <figure style={s.figure}>

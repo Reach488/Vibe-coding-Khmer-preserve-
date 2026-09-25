@@ -1,13 +1,22 @@
+"use client";
+
 import Link from "next/link";
 import collection from "../collection.config.js";
-import entries from "../lib/entries.js";
 import preservation from "../lib/preservation.js";
+import useEntries from "../lib/useEntries.js";
 import { toKhmerDigits } from "../lib/lang.js";
+import ArchiveNotice from "../components/ArchiveNotice.js";
 import EntryCard from "../components/EntryCard.js";
 import Reveal from "../components/Reveal.js";
 import SiteFooter from "../components/SiteFooter.js";
 import T from "../components/T.js";
 import { colors, fonts, space, type, maxWidth, lineHeights } from "../lib/theme.js";
+
+// This page reads the archive from Supabase now, which is why it is a client
+// component: the one configured client (lib/supabase.js) is the browser one.
+// Nothing about how the page looks has changed — what changed is that the
+// collection arrives over a network instead of out of the bundle, so all three
+// outcomes of that request have to be drawn, not just the happy one.
 
 // How many records the homepage shows, whatever the archive grows to.
 // Home is discovery and stops here; /browse is retrieval and holds all of
@@ -16,7 +25,7 @@ import { colors, fonts, space, type, maxWidth, lineHeights } from "../lib/theme.
 const HOME_ENTRY_COUNT = 6;
 
 // Which records open the homepage. This is a curatorial running order for
-// this page only — lib/entries.js keeps its own order, and /browse still
+// this page only — the database keeps its own order, and /browse still
 // reads the archive exactly as stored.
 //
 // Only ids are listed here. The entries themselves are looked up from the
@@ -39,26 +48,15 @@ const COLLAGE_SLOTS = [
   "hero-figure--accent",
 ];
 
-const collage = COLLAGE_IDS.map((id) => entries.find((entry) => entry.id === id)).filter(
-  Boolean
-);
-
-// The lead records first, then the rest of the archive in its own order,
-// cut to the six the grid holds. Reordering here cannot reorder anything
-// else: `entries` is never mutated, only read.
-const featured = [
-  ...HOME_LEAD_IDS.map((id) => entries.find((entry) => entry.id === id)).filter(
-    Boolean
-  ),
-  ...entries.filter((entry) => !HOME_LEAD_IDS.includes(entry.id)),
-].slice(0, HOME_ENTRY_COUNT);
+const byId = (entries, id) => entries.find((entry) => entry.id === id);
 
 // Runs while the document is still parsing, before anything below it paints,
 // which is what keeps the reveal targets from appearing and then hiding
 // themselves a frame later. It is also the whole of the no-JavaScript story:
 // the hidden state is scoped to this class in app/globals.css, so a visitor
 // without scripts never gets it and reads the page exactly as before.
-const revealBootstrap = `(function(){try{document.documentElement.classList.add('js-reveal')}catch(e){}})();`;
+const revealBootstrap =
+  "(function(){try{document.documentElement.classList.add('js-reveal')}catch(e){}})();";
 
 const s = {
   // The exhibition canvas. Everything below sits inside it; prose narrows
@@ -132,7 +130,29 @@ const s = {
 };
 
 export default function Home() {
+  const { entries, loading, error } = useEntries();
+
+  const collage = COLLAGE_IDS.map((id) => byId(entries, id)).filter(Boolean);
+
+  // The lead records first, then the rest of the archive in its own order,
+  // cut to the six the grid holds. Reordering here cannot reorder anything
+  // else: `entries` is never mutated, only read.
+  const featured = [
+    ...HOME_LEAD_IDS.map((id) => byId(entries, id)).filter(Boolean),
+    ...entries.filter((entry) => !HOME_LEAD_IDS.includes(entry.id)),
+  ].slice(0, HOME_ENTRY_COUNT);
+
   const total = entries.length;
+
+  // One of "loading" | "error" | "empty", or null when there is an archive to
+  // show. Null is the only state that renders the collection.
+  const notice = error
+    ? "error"
+    : loading
+      ? "loading"
+      : total === 0
+        ? "empty"
+        : null;
 
   return (
     <main style={s.page}>
@@ -163,7 +183,12 @@ export default function Home() {
             frame, no hover state. alt is empty because these three
             photographs appear again a screen below as named, linked
             records with their own descriptions — announcing them twice
-            would be noise, not information. */}
+            would be noise, not information.
+
+            Empty until the query answers. The slots are sized by
+            .hero-collage in app/globals.css rather than by their contents,
+            so the composition holds its shape and nothing below it jumps
+            when the photographs arrive. */}
         <div className="hero-collage">
           {collage.map((entry, i) => (
             <div key={entry.id} className={`hero-figure ${COLLAGE_SLOTS[i]}`}>
@@ -175,18 +200,22 @@ export default function Home() {
 
       {/* --------------- From the collection ---------------
           A catalogue control row, not a toolbar. No category filters:
-          every category in lib/entries.js belongs to exactly one entry, so
+          every category in the archive belongs to exactly one entry, so
           a filter built on them would return one result each time. Search
           is the one that already exists, on /browse — the homepage does
-          not carry a second implementation of it. Both counts below come
-          from the archive, so they follow it as it grows. */}
+          not carry a second implementation of it. The count comes from the
+          archive, so it follows it as it grows, and it stays out of the row
+          entirely until there is a real number to print rather than
+          announcing "0 entries" while the query is still in flight. */}
       <nav className="archive-strip" aria-label="Collection">
         <span className="archive-strip-item">
           <T en="From the collection" km="ពីបណ្ណសារ" />
         </span>
-        <span className="archive-strip-item">
-          <T en={`${total} entries`} km={`${toKhmerDigits(total)} ធាតុ`} />
-        </span>
+        {notice ? null : (
+          <span className="archive-strip-item">
+            <T en={`${total} entries`} km={`${toKhmerDigits(total)} ធាតុ`} />
+          </span>
+        )}
         <Link href="/browse" className="archive-strip-item archive-strip-link">
           <T en="Search →" km="ស្វែងរក →" />
         </Link>
@@ -199,19 +228,27 @@ export default function Home() {
       {/* data-reveal-group marks the children as staggered reveal targets.
           components/Reveal.js reads the column count off this grid at reveal
           time, so a row of three staggers as a row of three on desktop and a
-          phone's single column reveals one card at a time. */}
-      <div className="home-archive-grid" data-reveal-group>
-        {featured.map((entry) => (
-          <EntryCard key={entry.id} entry={entry} />
-        ))}
-      </div>
+          phone's single column reveals one card at a time. The cards arrive
+          after the query resolves, which is why Reveal keeps watching the
+          document for them instead of sweeping it once. */}
+      {notice ? (
+        <ArchiveNotice state={notice} />
+      ) : (
+        <>
+          <div className="home-archive-grid" data-reveal-group>
+            {featured.map((entry) => (
+              <EntryCard key={entry.id} entry={entry} />
+            ))}
+          </div>
 
-      <Link href="/browse" className="home-view-all">
-        <T
-          en={`View all ${total} entries →`}
-          km={`មើលធាតុទាំង ${toKhmerDigits(total)} →`}
-        />
-      </Link>
+          <Link href="/browse" className="home-view-all">
+            <T
+              en={`View all ${total} entries →`}
+              km={`មើលធាតុទាំង ${toKhmerDigits(total)} →`}
+            />
+          </Link>
+        </>
+      )}
 
       {/* --------------- Preservation gateway ---------------
           The full text lives on /history now. What stands here is its
