@@ -8,15 +8,12 @@
 
 ## STILL TO DO (only you can do these)
 
-1. **Eyeball the live site.** Home, `/browse`, one entry page, both languages,
-   both themes. Everything below was verified from the server and the API; the
-   one thing a terminal cannot check is whether it *looks* the same.
-2. **Phone test on mobile data.** Browse, search, log in, log out.
-3. **Confirm the owner account.** Every row is owned by
+1. **Phone test on mobile data.** Browse, search, log in, log out.
+2. **Confirm the owner account.** Every row is owned by
    `57631f4a-b195-4522-93af-91e94f2eb3e2` (makdine@gmail.com), chosen because
    it is the real address of the three and was created minutes after the Lab 5
    client setup. To move them: `update entries set owner = '<other-uuid>';`
-4. Submit the URL + the three write-ups at the bottom of this file.
+3. Submit the URL + the three write-ups at the bottom of this file.
 
 ---
 
