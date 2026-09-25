@@ -39,3 +39,17 @@ Everything else in the hard rules stands, especially rule 3:
 no keys, tokens, or passwords in any committed file, ever.
 Auth configuration lives in .env.local and in Vercel
 environment variables.
+
+## Sprint 2 amendment (added week 6)
+
+The archive is a Postgres table in Supabase, not a file. `lib/archive.js`
+is the only module that queries it; every component still receives entries
+as plain data and knows nothing about the database. Do not re-create
+`lib/entries.js`, and do not import a data file that no longer exists.
+
+Row-level security does the enforcing, not the interface: read is public,
+write is owner-only. A missing button is politeness; the policy is the lock.
+
+Raw SQL lives in `supabase/` and is run by hand in the Supabase SQL Editor.
+Application code never builds a SQL statement out of strings — supabase-js
+parameterises everything it sends, and that is the only way queries are made.
