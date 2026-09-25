@@ -252,17 +252,12 @@ database instead.
 
 # DRAFT — assignment submission text
 
-> The ten entries moved out of `lib/entries.js` and into a Postgres table in
-> Supabase, behind four row-level security policies: anyone can read, only the
-> owner can write. The home page, the search page and the entry page now query
-> the database instead of importing a file, and the file is retired in its own
-> commit. Nothing a visitor sees changed.
->
-> The assumption I had to fix was in the schema: the generated `CREATE TABLE`
-> made `id` a uuid primary key and stopped there, which would have silently
-> broken every URL in the archive — the entries were keyed by readable slugs
-> like `/browse/prahok`, and those slugs are in every link. I added a `slug`
-> column with a uniqueness constraint and kept the uuid as the internal key.
+> The ten entries moved out of `lib/entries.js` into a Supabase Postgres table
+> behind row-level security (anyone reads, only the owner writes), and the
+> home, search and entry pages now query it. The AI assumed "newest first" was
+> harmless, but rows seeded in file order would have come back reversed,
+> dropping prahok from the top of the archive to the bottom. I seeded
+> `created_at` in descending order so the query reproduces the curated order.
 
 ---
 
@@ -302,8 +297,8 @@ and only someone who knows the whole page can see that.
 
 # DRAFT — prompt journal entry
 
-**Best prompt of the day** — the insert generation, because it refused to do
-the obvious thing:
+**Best prompt of the day** — the insert generation, because what came back
+was correct and still not right:
 
 > Read my entries data file and generate Postgres INSERT statements for the
 > entries table, one per entry, mapping the fields to my columns. Set owner to
