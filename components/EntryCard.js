@@ -51,21 +51,27 @@ const styles = {
   },
 };
 
-export default function EntryCard({ entry }) {
+// `from` tells the entry page where its back link should lead. Only the
+// homepage passes it; a card on /browse leaves it off and the entry page
+// points back to the archive as it always has.
+export default function EntryCard({ entry, from }) {
   const { title, khmerTerm, photo } = entry;
+  const href = `/browse/${entry.id}${from ? `?from=${from}` : ""}`;
 
   return (
-    <Link href={`/browse/${entry.id}`} style={styles.link} className="entry-card">
+    <Link href={href} style={styles.link} className="entry-card">
       <article>
         {photo ? (
-          <img
-            src={photo}
-            alt={title}
-            width={320}
-            height={240}
-            style={styles.image}
-            className="entry-card-image"
-          />
+          <div className="entry-card-frame">
+            <img
+              src={photo}
+              alt={title}
+              width={320}
+              height={240}
+              style={styles.image}
+              className="entry-card-image"
+            />
+          </div>
         ) : (
           <div style={styles.placeholder} />
         )}

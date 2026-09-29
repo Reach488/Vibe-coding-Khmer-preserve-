@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import { Suspense } from "react";
 import { notFound, useParams } from "next/navigation";
 import useEntry from "../../../lib/useEntry.js";
 import ArchiveNotice from "../../../components/ArchiveNotice.js";
+import BackLink from "../../../components/BackLink.js";
 import SiteFooter from "../../../components/SiteFooter.js";
 import T from "../../../components/T.js";
 import { colors, fonts, radii, space, type, maxWidth, lineHeights } from "../../../lib/theme.js";
@@ -73,9 +74,9 @@ export default function EntryPage() {
   if (!loading && !error && !entry) notFound();
 
   const backLink = (
-    <Link href="/browse" style={s.back} className="text-link">
-      <T en="← Back to the archive" km="← ត្រឡប់ទៅបណ្ណសារ" />
-    </Link>
+    <Suspense fallback={<span style={s.back}>&nbsp;</span>}>
+      <BackLink style={s.back} />
+    </Suspense>
   );
 
   if (!entry) {

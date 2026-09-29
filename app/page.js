@@ -237,7 +237,7 @@ export default function Home() {
         <>
           <div className="home-archive-grid" data-reveal-group>
             {featured.map((entry) => (
-              <EntryCard key={entry.id} entry={entry} />
+              <EntryCard key={entry.id} entry={entry} from="home" />
             ))}
           </div>
 

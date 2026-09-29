@@ -138,24 +138,57 @@ body {
    A museum catalogue plate: photograph, then the name under it. No
    surface fill, no border box, no radius, no drop shadow, and no hover
    lift — the card used to rise 2px while its photo scaled to 1.03, two
-   animations for one hover. The photograph is the card; hovering only
-   names it in terracotta.
+   animations for one hover. The card itself still never moves: the
+   photograph leans in inside its own frame, and the name turns terracotta
+   and underlines. The photo used to dim to 0.88 on hover, which made the
+   thing being pointed at look worse.
    --------------------------------------------------------------- */
-.entry-card-title {
-  transition: color 0.15s ease;
+.entry-card {
+  transition: transform 0.1s ease;
 }
 
-.entry-card:hover .entry-card-title,
-.entry-card:focus-visible .entry-card-title {
-  color: var(--color-brand);
+/* A press, so a click visibly lands before the entry page arrives. */
+.entry-card:active {
+  transform: scale(0.98);
+}
+
+/* The frame clips the zoom, so the grid around the card never shifts. */
+.entry-card-frame {
+  overflow: hidden;
 }
 
 .entry-card-image {
-  transition: opacity 0.2s ease;
+  transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-.entry-card:hover .entry-card-image {
-  opacity: 0.88;
+.entry-card-title {
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.entry-card:focus-visible .entry-card-title {
+  color: var(--color-brand);
+  text-decoration-color: currentColor;
+}
+
+.entry-card:focus-visible .entry-card-image {
+  transform: scale(1.04);
+}
+
+/* Hover only where there is a real pointer. On a phone a tap would
+   otherwise leave the card stuck zoomed after the finger lifts. */
+@media (hover: hover) {
+  .entry-card:hover .entry-card-title {
+    color: var(--color-brand);
+    text-decoration-color: currentColor;
+  }
+
+  .entry-card:hover .entry-card-image {
+    transform: scale(1.04);
+  }
 }
 
 /* ---------------------------------------------------------------
@@ -834,6 +867,7 @@ button:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .entry-card,
   .entry-card-title,
   .entry-card-image,
   .nav-link::after,
@@ -854,6 +888,13 @@ button:focus-visible {
   .home-hero-text .hero-line .hero-line,
   .home-hero-text > p.hero-line {
     animation: none;
+  }
+
+  /* The card keeps its colour and underline, but nothing zooms or presses. */
+  .entry-card:active,
+  .entry-card:focus-visible .entry-card-image,
+  .entry-card:hover .entry-card-image {
+    transform: none;
   }
 
   :root.js-reveal [data-reveal],
