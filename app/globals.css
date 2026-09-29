@@ -548,18 +548,47 @@ button:focus-visible {
   animation: hero-settle 720ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
+/* The words arrive first, as one short wave — title, Khmer title, then the
+   introduction — and the photographs continue it. Shorter and smaller than
+   the photographs' settle: text is there to be read, so it is fully legible
+   in about half a second. The Khmer line sits inside the h1, so its delay
+   counts from the page load like the others, not from the h1 finishing. */
+@keyframes hero-line {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-line {
+  animation: hero-line 500ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.home-hero-text .hero-line .hero-line {
+  animation-delay: 90ms;
+}
+
+.home-hero-text > p.hero-line {
+  animation-delay: 180ms;
+}
+
 /* Source order is kroeung, prahok, trey ngeat — the anchor lands first and
-   the accent last, so the group assembles in its own visual hierarchy. */
+   the accent last, so the group assembles in its own visual hierarchy. The
+   first photograph waits for the text to finish its wave. */
 .hero-collage > .hero-figure:nth-child(1) {
-  animation-delay: 60ms;
+  animation-delay: 300ms;
 }
 
 .hero-collage > .hero-figure:nth-child(2) {
-  animation-delay: 190ms;
+  animation-delay: 420ms;
 }
 
 .hero-collage > .hero-figure:nth-child(3) {
-  animation-delay: 320ms;
+  animation-delay: 540ms;
 }
 
 /* No transition and no hover state anywhere in this block: these are not
@@ -820,7 +849,10 @@ button:focus-visible {
      after the ones they override and match their specificity exactly, so no
      !important is needed. Reveal.js reaches the same conclusion in JS and
      marks every target revealed at once, which covers the delay too. */
-  .hero-figure {
+  .hero-figure,
+  .hero-line,
+  .home-hero-text .hero-line .hero-line,
+  .home-hero-text > p.hero-line {
     animation: none;
   }
 
