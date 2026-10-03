@@ -5,6 +5,7 @@ import { notFound, useParams } from "next/navigation";
 import useEntry from "../../../lib/useEntry.js";
 import ArchiveNotice from "../../../components/ArchiveNotice.js";
 import BackLink from "../../../components/BackLink.js";
+import OwnerActions from "../../../components/OwnerActions.js";
 import SiteFooter from "../../../components/SiteFooter.js";
 import T from "../../../components/T.js";
 import { colors, fonts, radii, space, type, maxWidth, lineHeights } from "../../../lib/theme.js";
@@ -111,6 +112,8 @@ export default function EntryPage() {
       </h1>
 
       {meta ? <p style={s.meta}>{meta}</p> : null}
+
+      <OwnerActions entry={entry} />
 
       {howMade && (
         <section style={s.section}>

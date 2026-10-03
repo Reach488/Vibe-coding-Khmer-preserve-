@@ -81,6 +81,7 @@ const links = [
   { href: "/", en: "Home", km: "ទំព័រដើម" },
   { href: "/browse", en: "Browse", km: "រុករក" },
   { href: "/history", en: "History", km: "ប្រវត្តិសាស្រ្ត" },
+  { href: "/contribute", en: "Contribute" },
 ];
 
 // Kept here rather than in lib/authCopy.js — that file is the two auth
