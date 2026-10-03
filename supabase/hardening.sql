@@ -1,5 +1,5 @@
--- Lab 7 follow-up: three gaps the write tests found. Run once, by hand, in the
--- Supabase SQL Editor.
+-- Lab 7 follow-up: four gaps found by testing the rules against the table.
+-- Run once, by hand, in the Supabase SQL Editor.
 --
 -- 1. status and created_at were settable from the console. The form never
 --    sends them, but "the contributor cannot set it" has to hold for requests
@@ -63,3 +63,14 @@ $$;
 create trigger entries_lock_slug
   before update on entries
   for each row execute function entries_lock_slug();
+
+-- 4. photo. The rules say a photo is required, and until now only the form
+--    said so: the column was nullable. NOT NULL closes the direct-request route
+--    (an insert with no photo, or an update that sets it to null), and the check
+--    rejects an empty or whitespace-only value, which NOT NULL alone lets
+--    through. All ten existing entries already had a photo. Together with
+--    entries_photo_note_length, every entry now needs a photo and a 10-300
+--    character note describing it.
+alter table entries
+  alter column photo set not null,
+  add constraint entries_photo_present check (char_length(trim(photo)) > 0);
