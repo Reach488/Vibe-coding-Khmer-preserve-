@@ -207,7 +207,7 @@ export default function Home() {
           archive, so it follows it as it grows, and it stays out of the row
           entirely until there is a real number to print rather than
           announcing "0 entries" while the query is still in flight. */}
-      <nav className="archive-strip" aria-label="Collection">
+      <nav className="archive-strip" aria-label="Collection" data-reveal>
         <span className="archive-strip-item">
           <T en="From the collection" km="ពីបណ្ណសារ" />
         </span>
@@ -241,12 +241,16 @@ export default function Home() {
             ))}
           </div>
 
-          <Link href="/browse" className="home-view-all">
-            <T
-              en={`View all ${total} entries →`}
-              km={`មើលធាតុទាំង ${toKhmerDigits(total)} →`}
-            />
-          </Link>
+          {/* Wrapped so the reveal's transition does not replace the link's
+              own hover transition. */}
+          <div data-reveal>
+            <Link href="/browse" className="home-view-all">
+              <T
+                en={`View all ${total} entries →`}
+                km={`មើលធាតុទាំង ${toKhmerDigits(total)} →`}
+              />
+            </Link>
+          </div>
         </>
       )}
 
@@ -266,7 +270,9 @@ export default function Home() {
         </Link>
       </section>
 
-      <SiteFooter />
+      <div data-reveal>
+        <SiteFooter />
+      </div>
     </main>
   );
 }
