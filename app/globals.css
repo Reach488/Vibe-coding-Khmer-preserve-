@@ -578,7 +578,7 @@ button:focus-visible {
   position: relative;
   min-width: 0;
   margin: 0;
-  animation: hero-settle 720ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: hero-settle 720ms cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
 }
 
 /* The words arrive first, as one short wave — title, Khmer title, then the
@@ -598,7 +598,7 @@ button:focus-visible {
 }
 
 .hero-line {
-  animation: hero-line 500ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: hero-line 500ms cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
 }
 
 .home-hero-text .hero-line .hero-line {
@@ -863,6 +863,58 @@ button:focus-visible {
   .home-archive-grid {
     grid-template-columns: minmax(0, 1fr);
     gap: 40px;
+  }
+}
+
+/* Phones: the same motion, scaled to the screen. Shorter travel so nothing
+   swoops across a narrow viewport, shorter stagger so the stacked collage
+   (which sits below the text, often near the fold) is not left waiting
+   behind a delay sized for the side-by-side desktop layout. */
+@media (max-width: 1099px) {
+  .hero-collage > .hero-figure:nth-child(1) {
+    animation-delay: 240ms;
+  }
+
+  .hero-collage > .hero-figure:nth-child(2) {
+    animation-delay: 320ms;
+  }
+
+  .hero-collage > .hero-figure:nth-child(3) {
+    animation-delay: 400ms;
+  }
+}
+
+@media (max-width: 600px) {
+  @keyframes hero-settle {
+    from {
+      opacity: 0;
+      transform: translateY(14px) scale(0.99);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes hero-line {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  :root.js-reveal [data-reveal],
+  :root.js-reveal [data-reveal-group] > * {
+    transform: translateY(12px);
+  }
+
+  :root.js-reveal [data-reveal].is-revealed,
+  :root.js-reveal [data-reveal-group] > *.is-revealed {
+    transition-duration: 420ms;
   }
 }
 
