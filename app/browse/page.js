@@ -3,6 +3,7 @@
 import useEntries from "../../lib/useEntries.js";
 import ArchiveNotice from "../../components/ArchiveNotice.js";
 import BrowseExplorer from "../../components/BrowseExplorer.js";
+import Reveal from "../../components/Reveal.js";
 import SiteFooter from "../../components/SiteFooter.js";
 import T from "../../components/T.js";
 import { colors, fonts, space, maxWidth } from "../../lib/theme.js";
@@ -17,6 +18,12 @@ import { colors, fonts, space, maxWidth } from "../../lib/theme.js";
 // field only appears once there is something to search. Showing an empty
 // search box over a loading archive would let someone type a query that
 // silently matches nothing.
+// Same bootstrap the homepage uses: puts the reveal's hidden state on the
+// document while it is still parsing, so the footer does not show and then
+// hide itself once the page hydrates.
+const revealBootstrap =
+  "(function(){try{document.documentElement.classList.add('js-reveal')}catch(e){}})();";
+
 const styles = {
   wrap: { maxWidth: maxWidth.page, margin: "0 auto", padding: `${space.lg}px ${space.md}px ${space.xl}px` },
   title: {
@@ -42,7 +49,10 @@ export default function BrowsePage() {
 
   return (
     <main style={styles.wrap}>
-      <h1 style={styles.title}>
+      <script dangerouslySetInnerHTML={{ __html: revealBootstrap }} />
+      <Reveal />
+
+      <h1 style={{ ...styles.title, "--i": 0 }} className="page-enter">
         <T en="The archive" km="បណ្ណសារ" />
       </h1>
 
@@ -52,7 +62,9 @@ export default function BrowsePage() {
         <BrowseExplorer entries={entries} />
       )}
 
-      <SiteFooter />
+      <div data-reveal>
+        <SiteFooter />
+      </div>
     </main>
   );
 }

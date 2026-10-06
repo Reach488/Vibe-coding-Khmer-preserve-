@@ -68,14 +68,18 @@ export default function BrowseExplorer({ entries }) {
 
   return (
     <>
-      <ArchiveSearchBar
-        value={searchInput}
-        onChange={handleChange}
-        onSearch={handleSearch}
-        onClear={handleClear}
-      />
+      <div className="page-enter" style={{ "--i": 1 }}>
+        <ArchiveSearchBar
+          value={searchInput}
+          onChange={handleChange}
+          onSearch={handleSearch}
+          onClear={handleClear}
+        />
+      </div>
 
-      <p style={styles.count}>{count}</p>
+      <p style={{ ...styles.count, "--i": 2 }} className="page-enter">
+        {count}
+      </p>
 
       {results.length === 0 ? (
         // One line, not a heading over a paragraph. The count directly above
@@ -87,7 +91,7 @@ export default function BrowseExplorer({ entries }) {
             : `Nothing matches “${searchInput}” — try the Khmer name, the English name, or a broader word.`}
         </p>
       ) : (
-        <div className="entry-grid">
+        <div className="entry-grid" data-reveal-group>
           {results.map((entry) => (
             <EntryCard key={entry.id} entry={entry} />
           ))}
