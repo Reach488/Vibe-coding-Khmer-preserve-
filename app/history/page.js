@@ -81,6 +81,8 @@ const s = {
     display: "block",
     width: "100%",
     height: "auto",
+    aspectRatio: "3 / 2",
+    objectFit: "cover",
     backgroundColor: colors.surfaceMuted,
     border: `1px solid ${colors.borderSoft}`,
   },
@@ -108,21 +110,26 @@ const s = {
 export default function HistoryPage() {
   return (
     <main style={s.wrap}>
-      <p style={s.label}>{preservation.label}</p>
+      <p style={{ ...s.label, "--i": 0 }} className="page-enter">
+        {preservation.label}
+      </p>
 
       {/* Both scripts stand in the title, the way the homepage h1 and the
           entry titles do — Khmer here is the name, not a translation that
           swaps in and out with the language toggle. */}
-      <h1 style={s.title}>
+      <h1 style={{ ...s.title, "--i": 1 }} className="page-enter">
         {preservation.titleEn}
         <span style={s.titleKhmer} lang="km">
           {preservation.titleKm}
         </span>
       </h1>
 
-      <hr style={s.rule} />
+      <hr style={{ ...s.rule, "--i": 2 }} className="page-enter page-enter--rule" />
 
-      <figure style={s.figure}>
+      <figure
+        style={{ ...s.figure, "--i": 3 }}
+        className="page-enter page-enter--figure"
+      >
         <img
           src="/images/history.jpg"
           alt="A woman cooking over a wood fire in an open kitchen: a steamer sits in the flame, pans hang from a rail above, and firewood is stacked behind her."
@@ -138,11 +145,15 @@ export default function HistoryPage() {
         </figcaption>
       </figure>
 
-      <p style={s.text}>
+      <p style={{ ...s.text, "--i": 5 }} className="page-enter">
         <T en={preservation.en} km={preservation.km} />
       </p>
 
-      <Link href="/browse" style={s.back} className="text-link">
+      <Link
+        href="/browse"
+        style={{ ...s.back, "--i": 6 }}
+        className="text-link page-enter"
+      >
         <T en="Browse the archive →" km="រុករកបណ្ណសារ →" />
       </Link>
 

@@ -866,6 +866,41 @@ button:focus-visible {
   }
 }
 
+/* ---------------------------------------------------------------
+   Page entrance — /history
+   One short wave on arrival: each block rises into place in reading order.
+   Pure CSS, so it plays on a client-side navigation as well as a fresh load,
+   with no observer and no flash of the finished page first. --i is the
+   block's place in the order, set inline by the page.
+   --------------------------------------------------------------- */
+.page-enter {
+  animation: hero-line 560ms cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+
+/* The photograph is the subject, so it gets the larger settle. */
+.page-enter--figure {
+  animation-name: hero-settle;
+  animation-duration: 760ms;
+}
+
+/* The rule draws across rather than rising. */
+@keyframes rule-draw {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+.page-enter--rule {
+  transform-origin: left center;
+  animation-name: rule-draw;
+}
+
 /* Phones: the same motion, scaled to the screen. Shorter travel so nothing
    swoops across a narrow viewport, shorter stagger so the stacked collage
    (which sits below the text, often near the fold) is not left waiting
@@ -935,6 +970,7 @@ button:focus-visible {
      after the ones they override and match their specificity exactly, so no
      !important is needed. Reveal.js reaches the same conclusion in JS and
      marks every target revealed at once, which covers the delay too. */
+  .page-enter,
   .hero-figure,
   .hero-line,
   .home-hero-text .hero-line .hero-line,
