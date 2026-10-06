@@ -7,6 +7,7 @@ import SignedInOnly from "../../../../components/SignedInOnly.js";
 import SiteFooter from "../../../../components/SiteFooter.js";
 import useEntry from "../../../../lib/useEntry.js";
 import useSession from "../../../../lib/useSession.js";
+import useIsAdmin from "../../../../lib/useIsAdmin.js";
 import { colors, fonts, space, type, maxWidth } from "../../../../lib/theme.js";
 
 // The same form as /contribute, pre-filled. The owner check below only decides
@@ -22,11 +23,12 @@ const s = {
 
 function Editor({ id }) {
   const user = useSession();
+  const isAdmin = useIsAdmin(user);
   const { entry, loading, error } = useEntry(id);
 
   if (!loading && !error && !entry) notFound();
   if (!entry) return <ArchiveNotice state={error ? "error" : "loading"} />;
-  if (user?.id !== entry.owner) {
+  if (user?.id !== entry.owner && !isAdmin) {
     return <p style={s.note}>Only the person who added this entry can edit it.</p>;
   }
   return <EntryForm key={entry.uuid} entry={entry} />;
