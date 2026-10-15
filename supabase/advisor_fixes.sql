@@ -21,7 +21,18 @@ $$;
 -- lets it be called directly over the REST API by anyone, signed in or not —
 -- not just invoked inside a policy. It still only ever answers true/false
 -- about the caller's own auth.uid(), so an anonymous caller just gets false,
--- but there is no reason the function needs to be public. Revoking execute
--- does not touch the policies: a policy evaluates the function from inside
--- the database, not through a grant.
+-- but there is no reason the function needs to be public.
+--
+-- First attempt revoked execute from authenticated too, on the theory that a
+-- policy evaluates the function from inside the database, not through a
+-- grant. Wrong: SECURITY DEFINER changes who a function runs as once it is
+-- called, not whether the caller is allowed to call it, and the admin
+-- policies run "to authenticated" — so every entries update and delete,
+-- including an owner's own, started failing with "permission denied for
+-- function is_admin" the moment authenticated lost execute. Caught by
+-- re-running the live two-account attack test and watching the owner's own
+-- delete 403 instead of succeeding. Fixed by granting execute back to
+-- authenticated; anon and public stay revoked, which is the part the
+-- advisor actually meant.
 revoke execute on function is_admin() from public, anon, authenticated;
+grant execute on function is_admin() to authenticated;
