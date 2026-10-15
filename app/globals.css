@@ -958,8 +958,6 @@ button:focus-visible {
   .entry-card-title,
   .entry-card-image,
   .nav-link::after,
-  .photo-loop-name,
-  .photo-loop-tile img,
   .archive-strip-link,
   .home-view-all,
   .preservation-link {
@@ -995,14 +993,6 @@ button:focus-visible {
   :root.js-reveal [data-reveal-group] > *.is-revealed {
     transition: none;
     transition-delay: 0ms;
-  }
-
-  /* Without the animation the doubled track would overflow silently, so
-     let it be scrolled by hand instead. */
-  .photo-loop-track {
-    animation: none;
-    width: auto;
-    overflow-x: auto;
   }
 }
 
