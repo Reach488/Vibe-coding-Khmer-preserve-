@@ -1,0 +1,156 @@
+KHMER LIVING ARCHIVE — INPUT & ACCESS RULES  (DRAFT, under review)
+====================================================================
+Every value a contributor can send, what the app accepts, and what
+"wrong" looks like. Rules marked [?] are still being decided.
+
+Where each rule is enforced:
+  DB   = Postgres constraint or row-level security policy (the real lock)
+  SRV  = checked on the server before the write
+  UI   = checked in the form (a courtesy only, never the only check)
+
+
+--------------------------------------------------------------------
+1. ENTRY FIELDS
+--------------------------------------------------------------------
+Column           Rule                               Wrong looks like
+---------------  ---------------------------------  -------------------------
+title            Required. 1-100 characters.        ""  (empty)
+                 Plain text, shown as text.         <b>Prahok</b>
+                                                    a 5,000-character title
+
+khmer_term       Required. Must contain Khmer       "Prahok"  (Latin only)
+                 script (U+1780-U+17FF). Stored     ""  (empty)
+                 exactly as typed: no trimming      ប្រហុក with the vowel
+                 inside words, no normalising,      sign stripped off
+                 no transliteration.
+
+slug             Made by the app from the title.    ../admin
+                 Lowercase a-z, 0-9, hyphen only.   Prahok Paste
+                 Unique. Contributor cannot type    prahok  (already taken)
+                 it or change it later.             %00
+
+category         Required. [?] Free text, or pick   ""  (empty)
+                 from the existing list?            FERMENTED FISH PASTE!!!
+                                                    <script>...</script>
+
+story            Required. 20-3,000 characters.     {{7*7}}
+(description,    Any language: Khmer, English,      <script>alert(1)</script>
+ how_made,       numbers, punctuation, Khmer        <img src=x onerror=...>
+ what_used_for,  numerals ១២៣, Khmer punctuation   lorem ipsum dolor sit
+ how_recipes_    ។ ៕ all allowed. Never rendered    text the agent wrote
+ vary)           as HTML, never run as code or      instead of the student
+                 template: it shows up on the
+                 page exactly as typed.
+                 [?] see note A below.
+
+flavor_profile   0-8 tags. Each tag 1-20            one 5,000-character tag
+                 characters, plain text.            200 tags
+                                                    "salty,salty,salty"
+
+province         Required. Must be one of the 25    Phnom Pen
+                 in list B below. Picked from a     Bangkok
+                 dropdown, checked again on the     Siem Reap Province
+                 server.                            ""  (empty)
+
+photo            Required for new entries.          200mb.html
+                 JPEG, PNG or WebP only, checked    evil.jpg.html
+                 by the file's real content, not    photo.svg  (SVG can
+                 its name. Max [?] 5 MB. Stored     carry script)
+                 under the owner's own folder.      photo.jpg that is a PDF
+                                                    a 40 MB camera RAW
+
+photo_note       Required when there is a photo.    ""  (empty)
+                 10-300 characters describing       "img"
+                 what the photo shows.              "photo1"
+
+source_credit    Required. Names where the          ""  (empty)
+                 knowledge came from: a person,     "internet"
+                 a family, a place, a website.      "trust me"
+                 Kept as the student wrote it.      a source the agent made up
+
+status           Always 'published' until Sprint    status = 'featured'
+                 3. The contributor cannot set it.  status = 'approved'
+                                                    sent in the request body
+
+created_at       Set by the database. The           created_at = 2099-01-01
+                 contributor cannot set it.         sent in the request body
+
+owner            Set from the signed-in session     owner = someone else's
+                 on the server. Never from a        uuid, typed into the
+                 form field, URL or request body.   form or the request
+
+
+--------------------------------------------------------------------
+2. ACCOUNTS & ACCESS
+--------------------------------------------------------------------
+Thing            Rule                               Wrong looks like
+---------------  ---------------------------------  -------------------------
+a user account   A user can only do what their      user -> root
+                 permission allows. Read: anyone.   user edits another
+                 Insert/update/delete: only rows    person's entry by
+                 where owner = themselves. RLS      changing the id in
+                 enforces it, not the interface.    the URL or request
+
+signed-out       Can browse and search. Cannot      a signed-out request
+visitor          add, edit or delete anything.      that inserts a row
+
+email            Valid email format. One account    "abc"
+                 per email.                         "a@b"
+
+password         At least [?] 8 characters. Never   "123456"
+                 logged, never written to a file,   password printed in
+                 never shown back.                  console.log
+
+keys             Browser only ever holds the        NEXT_PUBLIC_SUPABASE_
+                 anon/publishable key. The          SERVICE_ROLE_KEY
+                 service-role key never appears     a key pasted into a
+                 in app code or a committed file.   committed file
+
+
+--------------------------------------------------------------------
+3. FORMS, SEARCH & URLS
+--------------------------------------------------------------------
+Thing            Rule                               Wrong looks like
+---------------  ---------------------------------  -------------------------
+form entries     Input is data, never code. Never   script for a reverse
+(any field)      reaches a shell, eval(), a SQL     shell pasted into story
+                 string or dangerouslySetInnerHTML. bash -i >& /dev/tcp/...
+                 Every field has a max length.      '; DROP TABLE entries;--
+
+search box       Max 100 characters. Sent through   ' OR 1=1 --
+                 supabase-js (parameterised).       %%%%%%%%  matching
+                 % and _ are searched as normal     every row
+                 characters, not wildcards.         a 1 MB query
+
+/browse/[slug]   Unknown or malformed slug shows    /browse/<script>
+                 the 404 page. Never crashes,       /browse/../../etc/passwd
+                 never echoes raw input as HTML.    error page showing a
+                                                    stack trace
+
+
+--------------------------------------------------------------------
+NOTE A — why story is not "letters only"
+--------------------------------------------------------------------
+"Letters only" would reject real entries: Khmer vowel signs and the
+coeng sign are combining marks, not letters, so ប្រហុក itself fails a
+letters-only check. It would also reject numbers ("2-3 weeks"),
+Khmer punctuation (។), and names like "Tonlé Sap". AGENTS.md rule 6
+says Khmer is never stripped. So the rule is: accept all text, and
+make sure it is always shown as text and never run.
+{{7*7}} and <script> are then harmless, they appear on the page as
+those literal characters.
+
+
+--------------------------------------------------------------------
+LIST B — the 25 provinces (24 provinces + Phnom Penh capital)
+--------------------------------------------------------------------
+Banteay Meanchey    Kampot              Pailin              Siem Reap
+Battambang          Kandal              Phnom Penh          Stung Treng
+Kampong Cham        Kep                 Preah Sihanouk      Svay Rieng
+Kampong Chhnang     Koh Kong            Preah Vihear        Takeo
+Kampong Speu        Kratie              Prey Veng           Tbong Khmum
+Kampong Thom        Mondulkiri          Pursat
+                    Oddar Meanchey      Ratanakiri
+
+[?] Khmer names for each province: to be supplied by the student,
+not written by the agent.
