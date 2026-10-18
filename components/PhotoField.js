@@ -1,4 +1,5 @@
 import { colors, fonts, space, type } from "../lib/theme.js";
+import T from "./T.js";
 
 // The file picker. `accept` only filters the picker's dialog; lib/photo.js is
 // what actually checks the file when the form is submitted.
@@ -21,11 +22,14 @@ export default function PhotoField({ error, hasCurrent, onChange }) {
   return (
     <div style={styles.row}>
       <label htmlFor="field-photo" style={styles.label}>
-        Photo
+        <T en="Photo" km="រូបថត" />
         <span style={styles.hint}>
-          {hasCurrent
-            ? " — leave empty to keep the current photo"
-            : " — JPEG, PNG or WebP, up to 5 MB"}
+          {" — "}
+          {hasCurrent ? (
+            <T en="leave empty to keep the current photo" km="ទុកចន្លោះទទេ ដើម្បីរក្សារូបថតបច្ចុប្បន្ន" />
+          ) : (
+            <T en="JPEG, PNG or WebP, up to 5 MB" km="JPEG, PNG ឬ WebP មិនឱ្យលើស ៥ MB" />
+          )}
         </span>
       </label>
       <input
@@ -40,7 +44,7 @@ export default function PhotoField({ error, hasCurrent, onChange }) {
       />
       {error ? (
         <p id="field-photo-error" style={styles.error} role="alert">
-          {error}
+          <T en={error.en} km={error.km} />
         </p>
       ) : null}
     </div>

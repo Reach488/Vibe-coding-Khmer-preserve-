@@ -1,4 +1,5 @@
 import { colors, fonts, radii, space, type } from "../lib/theme.js";
+import T from "./T.js";
 
 // One labelled text field or textarea, with its problem written beside it.
 // The box is AuthField's; this one also takes a long (textarea) variant and an
@@ -42,8 +43,13 @@ export default function FormField({ field, value, error, onChange }) {
   return (
     <div style={styles.row}>
       <label htmlFor={id} style={styles.label}>
-        {field.label}
-        {field.hint ? <span style={styles.hint}> — {field.hint}</span> : null}
+        <T en={field.labelEn} km={field.labelKm} />
+        {field.hintEn ? (
+          <span style={styles.hint}>
+            {" — "}
+            <T en={field.hintEn} km={field.hintKm} />
+          </span>
+        ) : null}
       </label>
       <Control
         id={id}
@@ -58,7 +64,7 @@ export default function FormField({ field, value, error, onChange }) {
       />
       {error ? (
         <p id={`${id}-error`} style={styles.error} role="alert">
-          {error}
+          <T en={error.en} km={error.km} />
         </p>
       ) : null}
     </div>

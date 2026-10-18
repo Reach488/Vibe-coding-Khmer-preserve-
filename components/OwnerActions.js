@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import useSession from "../lib/useSession.js";
 import useIsAdmin from "../lib/useIsAdmin.js";
 import { deleteEntry } from "../lib/archive.js";
+import T from "./T.js";
 import { colors, fonts, radii, space, type } from "../lib/theme.js";
 
 // Edit and Delete, for the entry's owner and for admins. Hiding them is
@@ -31,7 +32,10 @@ export default function OwnerActions({ entry }) {
   if (!user || (user.id !== entry.owner && !isAdmin)) return null;
 
   const handleDelete = async () => {
-    if (!window.confirm(`Delete “${entry.title}”? This cannot be undone.`)) return;
+    // window.confirm is a native dialog — it can't render <T>'s two <span>s,
+    // so both languages go in the one string it does take.
+    const prompt = `Delete "${entry.title}"? This cannot be undone. / លុប "${entry.title}"? សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។`;
+    if (!window.confirm(prompt)) return;
     setFailed(false);
     setBusy(true);
     try {
@@ -46,11 +50,17 @@ export default function OwnerActions({ entry }) {
 
   return (
     <div style={styles.row}>
-      <Link href={`/browse/${entry.id}/edit`} style={button} className="nav-link">Edit</Link>
+      <Link href={`/browse/${entry.id}/edit`} style={button} className="nav-link">
+        <T en="Edit" km="កែសម្រួល" />
+      </Link>
       <button type="button" onClick={handleDelete} disabled={busy} style={button}>
-        {busy ? "Deleting…" : "Delete"}
+        {busy ? <T en="Deleting…" km="កំពុងលុប…" /> : <T en="Delete" km="លុប" />}
       </button>
-      {failed ? <span style={styles.failed} role="alert">That change wasn’t saved.</span> : null}
+      {failed ? (
+        <span style={styles.failed} role="alert">
+          <T en="That change wasn’t saved." km="ការផ្លាស់ប្ដូរនោះមិនបានរក្សាទុកទេ។" />
+        </span>
+      ) : null}
     </div>
   );
 }
