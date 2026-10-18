@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import useSession from "../lib/useSession.js";
+import T from "./T.js";
 import { colors, fonts, space, type } from "../lib/theme.js";
 
 // Shows its children to a signed-in visitor and a login link to everyone else.
@@ -19,10 +20,18 @@ export default function SignedInOnly({ children }) {
   if (user === null) {
     return (
       <p style={styles.note}>
-        Adding and editing entries needs an account.{" "}
-        <Link href="/login" style={styles.link} className="text-link">Log in</Link>
-        {" "}or{" "}
-        <Link href="/signup" style={styles.link} className="text-link">create one</Link>.
+        <T en="Adding and editing entries needs an account." km="ការបញ្ចូល និងកែសម្រួលធាតុ ត្រូវការគណនី។" />
+        {" "}
+        <Link href="/login" style={styles.link} className="text-link">
+          <T en="Log in" km="ចូលគណនី" />
+        </Link>
+        {" "}
+        <T en="or" km="ឬ" />
+        {" "}
+        <Link href="/signup" style={styles.link} className="text-link">
+          <T en="create one" km="បង្កើតគណនី" />
+        </Link>
+        .
       </p>
     );
   }

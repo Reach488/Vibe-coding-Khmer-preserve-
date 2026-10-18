@@ -1,6 +1,7 @@
 import EntryForm from "../../components/EntryForm.js";
 import SignedInOnly from "../../components/SignedInOnly.js";
 import SiteFooter from "../../components/SiteFooter.js";
+import T from "../../components/T.js";
 import { colors, fonts, space, type, maxWidth } from "../../lib/theme.js";
 
 export const metadata = {
@@ -21,10 +22,14 @@ const s = {
 export default function Contribute() {
   return (
     <main style={s.wrap}>
-      <h1 style={s.title}>Add an entry</h1>
+      <h1 style={s.title}>
+        <T en="Add an entry" km="បញ្ចូលធាតុថ្មី" />
+      </h1>
       <p style={s.lede}>
-        Write about a Khmer paste or preserve you know first-hand, in your own
-        words, and say where the knowledge came from.
+        <T
+          en="Write about a Khmer paste or preserve you know first-hand, in your own words, and say where the knowledge came from."
+          km="សរសេរអំពីជ្រក់ ឬអាហារសម្ងួតខ្មែរដែលអ្នកស្គាល់ដោយផ្ទាល់ ជាពាក្យរបស់អ្នកផ្ទាល់ ហើយប្រាប់ថាចំណេះដឹងនេះមកពីណា។"
+        />
       </p>
       <SignedInOnly>
         <EntryForm />
