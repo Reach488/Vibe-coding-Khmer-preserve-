@@ -90,3 +90,18 @@ revoke execute on function public.review_entry(uuid, text) from public, anon;
 grant execute on function public.review_entry(uuid, text) to authenticated;
 
 commit;
+
+-- Follow-up, run separately after the block above: close the admin side door.
+-- "admins edit any entry" (admin.sql) had no with check, so it fell back to
+-- its using clause, is_admin(). Postgres ORs permissive policies together, so
+-- an admin could set any entry to 'published' with a plain update and never
+-- go through review_entry. Now an admin's edit goes back to review too, the
+-- same rule as an owner's, unless the admin is also a reviewer.
+alter policy "admins edit any entry" on entries
+  with check ((select public.is_admin()) and (status = 'pending' or (select public.is_reviewer())));
+
+-- Do NOT revoke execute on is_reviewer() from anon, even though the advisor
+-- flags it. "anyone can read published entries" calls it for logged-out
+-- visitors too; without execute, every logged-out page load would fail with
+-- "permission denied for function is_reviewer". Same trap as is_admin() in
+-- advisor_fixes.sql.
