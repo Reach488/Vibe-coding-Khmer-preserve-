@@ -21,10 +21,19 @@ const styles = {
     color: colors.onBrand, backgroundColor: colors.brand, border: `1px solid ${colors.brand}`,
     borderRadius: radii.sm, cursor: "pointer",
   },
+  submitted: { fontFamily: fonts.serif, fontSize: type.body, lineHeight: 1.7, color: colors.inkMuted, maxWidth: maxWidth.prose, marginTop: space.lg },
 };
 
 export default function EntryForm({ entry }) {
-  const { values, errors, failed, busy, change, setFile, handleSubmit } = useEntryForm(entry);
+  const { values, errors, failed, submitted, busy, change, setFile, handleSubmit } = useEntryForm(entry);
+
+  if (submitted) {
+    return (
+      <p style={styles.submitted} role="status">
+        <T en={submitted.en} km={submitted.km} />
+      </p>
+    );
+  }
 
   return (
     <form style={styles.form} onSubmit={handleSubmit} noValidate>

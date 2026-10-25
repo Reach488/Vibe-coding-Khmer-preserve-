@@ -142,7 +142,11 @@ export default function SiteHeader() {
                 <T en={en} km={km} />
               </Link>
             ))}
-            {user === undefined ? null : isSignedIn ? null : (
+            {user === undefined ? null : isSignedIn ? (
+              <Link href="/my-entries" style={styles.link} className="nav-link" aria-current={isCurrent("/my-entries") ? "page" : undefined}>
+                <T en="My entries" km="ធាតុរបស់ខ្ញុំ" />
+              </Link>
+            ) : (
               <>
                 <Link href="/login" style={styles.link} className="nav-link">
                   <T en={authLinks.signIn.en} km={authLinks.signIn.km} />
