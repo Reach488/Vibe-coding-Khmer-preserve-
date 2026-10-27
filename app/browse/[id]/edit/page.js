@@ -5,6 +5,7 @@ import EntryForm from "../../../../components/EntryForm.js";
 import ArchiveNotice from "../../../../components/ArchiveNotice.js";
 import SignedInOnly from "../../../../components/SignedInOnly.js";
 import SiteFooter from "../../../../components/SiteFooter.js";
+import T from "../../../../components/T.js";
 import useEntry from "../../../../lib/useEntry.js";
 import useSession from "../../../../lib/useSession.js";
 import useIsAdmin from "../../../../lib/useIsAdmin.js";
@@ -29,7 +30,11 @@ function Editor({ id }) {
   if (!loading && !error && !entry) notFound();
   if (!entry) return <ArchiveNotice state={error ? "error" : "loading"} />;
   if (user?.id !== entry.owner && !isAdmin) {
-    return <p style={s.note}>Only the person who added this entry can edit it.</p>;
+    return (
+      <p style={s.note}>
+        <T en="Only the person who added this entry can edit it." km="មានតែអ្នកដែលបានបញ្ចូលធាតុនេះទេ ដែលអាចកែសម្រួលវាបាន។" />
+      </p>
+    );
   }
   return <EntryForm key={entry.uuid} entry={entry} />;
 }
@@ -39,7 +44,9 @@ export default function EditEntry() {
 
   return (
     <main style={s.wrap}>
-      <h1 style={s.title}>Edit entry</h1>
+      <h1 style={s.title}>
+        <T en="Edit entry" km="កែសម្រួលធាតុ" />
+      </h1>
       <SignedInOnly>
         <Editor id={id} />
       </SignedInOnly>

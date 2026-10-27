@@ -90,7 +90,7 @@ export default function AuthForm({ mode }) {
         onChange={setPassword}
         labelEn="Password"
         labelKm="ពាក្យសម្ងាត់"
-        minLength={6}
+        minLength={8}
       />
 
       <div style={styles.captcha}>

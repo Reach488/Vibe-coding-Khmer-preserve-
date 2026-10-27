@@ -71,8 +71,8 @@ export default function SignUp() {
       </p>
       <p style={s.hint}>
         <T
-          en="Passwords must be at least 6 characters."
-          km="ពាក្យសម្ងាត់ត្រូវមានយ៉ាងតិច ៦ តួអក្សរ។"
+          en="Passwords must be at least 8 characters."
+          km="ពាក្យសម្ងាត់ត្រូវមានយ៉ាងតិច ៨ តួអក្សរ។"
         />
       </p>
 

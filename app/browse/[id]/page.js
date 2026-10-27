@@ -8,6 +8,7 @@ import BackLink from "../../../components/BackLink.js";
 import OwnerActions from "../../../components/OwnerActions.js";
 import SiteFooter from "../../../components/SiteFooter.js";
 import T from "../../../components/T.js";
+import { STATUS_LABELS } from "../../../lib/entryStatus.js";
 import { colors, fonts, radii, space, type, maxWidth, lineHeights } from "../../../lib/theme.js";
 
 // One entry, read from Supabase by its slug. The URL still carries the
@@ -61,6 +62,12 @@ const s = {
   },
   text: { fontFamily: fonts.serif, fontSize: 19, lineHeight: 1.8, color: colors.inkMuted, margin: 0 },
   note: { fontFamily: fonts.serif, fontSize: type.body, lineHeight: 1.7, color: colors.inkFaint, fontStyle: "italic", margin: 0 },
+  lead: { fontFamily: fonts.serif, fontSize: 19, lineHeight: 1.8, color: colors.ink, margin: `${space.lg}px 0 0` },
+  // Only the owner or a reviewer can load an unpublished entry; this tells
+  // them it isn't on the public archive yet.
+  status: { fontFamily: fonts.mono, fontSize: type.meta, letterSpacing: 0.5, textTransform: "uppercase", color: colors.brand, margin: `${space.sm}px 0 0` },
+  // Provenance mark: the one place on the entry the accent colour belongs.
+  credit: { fontFamily: fonts.sans, fontSize: type.small, lineHeight: 1.6, color: colors.accent, margin: `${space.lg}px 0 0` },
 };
 
 export default function EntryPage() {
@@ -90,9 +97,13 @@ export default function EntryPage() {
     );
   }
 
-  const { title, khmerTerm, category, photo, photoNote, howMade, whatUsedFor, howRecipesVary, flavorProfile } = entry;
+  const {
+    title, khmerTerm, category, description, photo, photoNote,
+    howMade, whatUsedFor, howRecipesVary, flavorProfile, sourceCredit, status,
+  } = entry;
 
   const meta = [category, ...(flavorProfile || [])].filter(Boolean).join(" · ");
+  const unpublished = status && status !== "published" ? STATUS_LABELS[status] ?? STATUS_LABELS.pending : null;
 
   return (
     <main style={s.wrap}>
@@ -100,7 +111,7 @@ export default function EntryPage() {
 
       {photo ? (
         <figure style={s.figure}>
-          <img src={photo} alt={title} width={640} height={427} style={s.photo} />
+          <img src={photo} alt={photoNote || title} width={640} height={427} style={s.photo} />
         </figure>
       ) : photoNote ? (
         <p style={{ ...s.note, marginBottom: space.lg }}>{photoNote}</p>
@@ -113,7 +124,15 @@ export default function EntryPage() {
 
       {meta ? <p style={s.meta}>{meta}</p> : null}
 
+      {unpublished ? (
+        <p style={s.status} role="status">
+          <T en={unpublished.en} km={unpublished.km} />
+        </p>
+      ) : null}
+
       <OwnerActions entry={entry} />
+
+      {description ? <p style={s.lead}>{description}</p> : null}
 
       {howMade && (
         <section style={s.section}>
@@ -135,6 +154,13 @@ export default function EntryPage() {
           <p style={s.text}>{howRecipesVary}</p>
         </section>
       )}
+
+      {sourceCredit ? (
+        <p style={s.credit}>
+          <T en="Source: " km="ប្រភព៖ " />
+          {sourceCredit}
+        </p>
+      ) : null}
 
       <SiteFooter />
     </main>
