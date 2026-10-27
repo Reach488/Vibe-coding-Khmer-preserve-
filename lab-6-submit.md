@@ -10,7 +10,7 @@
 
 1. **Phone test on mobile data.** Browse, search, log in, log out.
 2. **Confirm the owner account.** Every row is owned by
-   `57631f4a-b195-4522-93af-91e94f2eb3e2` (makdine@gmail.com), chosen because
+   `57631f4a-b195-4522-93af-91e94f2eb3e2` (the curator's account), chosen because
    it is the real address of the three and was created minutes after the Lab 5
    client setup. To move them: `update entries set owner = '<other-uuid>';`
 3. Submit the URL + the three write-ups at the bottom of this file.
