@@ -29,10 +29,10 @@ export default function ReviewQueue() {
     };
   }, []);
 
-  const decide = async (entry, decision) => {
+  const decide = async (entry, decision, note) => {
     setBusyId(entry.uuid);
     setFailedId(null);
-    const done = await reviewEntry(entry, decision);
+    const done = await reviewEntry(entry, decision, note);
     if (done) {
       setState((s) => ({ ...s, entries: s.entries.filter((e) => e.uuid !== entry.uuid) }));
     } else {
