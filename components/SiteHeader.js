@@ -8,6 +8,7 @@ import LanguageToggle from "./LanguageToggle.js";
 import KhmerFlag from "./KhmerFlag.js";
 import T from "./T.js";
 import useSession from "../lib/useSession.js";
+import useIsReviewer from "../lib/useIsReviewer.js";
 import getSupabaseClient from "../lib/supabase.js";
 import { colors, fonts, space, type, maxWidth } from "../lib/theme.js";
 
@@ -106,6 +107,8 @@ export default function SiteHeader() {
   // button is clicked, rather than waiting on the network round-trip to
   // Supabase — the old, signed-in view must never linger on screen.
   const isSignedIn = Boolean(user) && !signingOut;
+  // Only decides whether the Review link is drawn; /review checks again.
+  const isReviewer = useIsReviewer(isSignedIn ? user : null);
 
   const handleSignOut = async () => {
     setSigningOut(true);
@@ -143,9 +146,16 @@ export default function SiteHeader() {
               </Link>
             ))}
             {user === undefined ? null : isSignedIn ? (
-              <Link href="/my-entries" style={styles.link} className="nav-link" aria-current={isCurrent("/my-entries") ? "page" : undefined}>
-                <T en="My entries" km="ធាតុរបស់ខ្ញុំ" />
-              </Link>
+              <>
+                <Link href="/my-entries" style={styles.link} className="nav-link" aria-current={isCurrent("/my-entries") ? "page" : undefined}>
+                  <T en="My entries" km="ធាតុរបស់ខ្ញុំ" />
+                </Link>
+                {isReviewer ? (
+                  <Link href="/review" style={styles.link} className="nav-link" aria-current={isCurrent("/review") ? "page" : undefined}>
+                    <T en="Review" km="ត្រួតពិនិត្យ" />
+                  </Link>
+                ) : null}
+              </>
             ) : (
               <>
                 <Link href="/login" style={styles.link} className="nav-link">
