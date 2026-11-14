@@ -40,6 +40,16 @@ export default function MyEntryRow({ entry }) {
           <T en="Reviewer’s note:" km="កំណត់ចំណាំពីអ្នកត្រួតពិនិត្យ៖" /> {entry.reviewNote}
         </p>
       ) : null}
+      {/* Saving an edit sets the entry back to pending (lib/archive.js), so
+          editing is how a returned entry gets resent. Say so, or the
+          contributor is left guessing. */}
+      {entry.status === "returned" ? (
+        <p style={styles.note}>
+          <Link href={`/browse/${entry.id}/edit`} className="text-link">
+            <T en="Edit and resend for review →" km="កែសម្រួល ហើយផ្ញើម្ដងទៀតដើម្បីត្រួតពិនិត្យ →" />
+          </Link>
+        </p>
+      ) : null}
     </li>
   );
 }
