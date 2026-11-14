@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import FormField from "./FormField.js";
 import PhotoField from "./PhotoField.js";
 import T from "./T.js";
@@ -27,10 +28,15 @@ const styles = {
 export default function EntryForm({ entry }) {
   const { values, errors, failed, submitted, busy, change, setFile, handleSubmit } = useEntryForm(entry);
 
+  // The entry isn't public yet, so point to the one place its contributor
+  // can see it while it waits.
   if (submitted) {
     return (
       <p style={styles.submitted} role="status">
-        <T en={submitted.en} km={submitted.km} />
+        <T en={submitted.en} km={submitted.km} />{" "}
+        <Link href="/my-entries" className="text-link">
+          <T en="See it in My entries →" km="មើលវានៅក្នុង ធាតុរបស់ខ្ញុំ →" />
+        </Link>
       </p>
     );
   }
