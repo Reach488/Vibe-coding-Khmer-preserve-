@@ -58,7 +58,7 @@ export default function OwnerActions({ entry }) {
       </button>
       {failed ? (
         <span style={styles.failed} role="alert">
-          <T en="That change wasn’t saved." km="ការផ្លាស់ប្ដូរនោះមិនបានរក្សាទុកទេ។" />
+          <T en="That entry wasn’t deleted. Try again in a moment." km="ធាតុនោះមិនត្រូវបានលុបទេ។ សូមសាកល្បងម្ដងទៀតបន្តិចក្រោយ។" />
         </span>
       ) : null}
     </div>
