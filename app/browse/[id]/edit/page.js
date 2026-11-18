@@ -9,6 +9,7 @@ import T from "../../../../components/T.js";
 import useEntry from "../../../../lib/useEntry.js";
 import useSession from "../../../../lib/useSession.js";
 import useIsAdmin from "../../../../lib/useIsAdmin.js";
+import useIsReviewer from "../../../../lib/useIsReviewer.js";
 import { colors, fonts, space, type, maxWidth } from "../../../../lib/theme.js";
 
 // The same form as /contribute, pre-filled. The owner check below only decides
@@ -22,9 +23,24 @@ const s = {
   note: { fontFamily: fonts.serif, fontSize: type.body, lineHeight: 1.7, color: colors.inkMuted, margin: `${space.lg}px 0 0` },
 };
 
+// Saving an edit sets the entry back to pending unless the editor is a
+// reviewer (lib/archive.js, enforced by supabase/gate.sql). Say so before the
+// save, so a published entry leaving the public archive is no surprise.
+const RESEND = {
+  published: {
+    en: "Saving sends this entry back for review. It leaves the public archive until a reviewer approves it again.",
+    km: "ការរក្សាទុកនឹងបញ្ជូនធាតុនេះទៅត្រួតពិនិត្យម្ដងទៀត។ វានឹងចេញពីបណ្ណសារសាធារណៈ រហូតដល់អ្នកត្រួតពិនិត្យយល់ព្រមម្ដងទៀត។",
+  },
+  other: {
+    en: "Saving sends this entry to the review queue.",
+    km: "ការរក្សាទុកនឹងបញ្ជូនធាតុនេះទៅបញ្ជីរង់ចាំការត្រួតពិនិត្យ។",
+  },
+};
+
 function Editor({ id }) {
   const user = useSession();
   const isAdmin = useIsAdmin(user);
+  const isReviewer = useIsReviewer(user);
   const { entry, loading, error } = useEntry(id);
 
   if (!loading && !error && !entry) notFound();
@@ -36,7 +52,17 @@ function Editor({ id }) {
       </p>
     );
   }
-  return <EntryForm key={entry.uuid} entry={entry} />;
+  const resend = entry.status === "published" ? RESEND.published : RESEND.other;
+  return (
+    <>
+      {isReviewer ? null : (
+        <p style={s.note}>
+          <T en={resend.en} km={resend.km} />
+        </p>
+      )}
+      <EntryForm key={entry.uuid} entry={entry} />
+    </>
+  );
 }
 
 export default function EditEntry() {
