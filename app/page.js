@@ -173,8 +173,8 @@ export default function Home() {
           </h1>
           <p style={s.lede} className="hero-line">
             <T
-              en="Ten traditional Khmer pastes and preserves — how each one is made, what it is used for, and how it changes from kitchen to kitchen."
-              km="គ្រឿងផ្សំ និង អាហារសម្ងួតខ្មែរ ១០ មុខ — របៀបធ្វើ ការប្រើប្រាស់ និង ភាពខុសគ្នាពីផ្ទះបាយមួយទៅមួយ។"
+              en="Traditional Khmer pastes and preserves — how each one is made, what it is used for, and how it changes from kitchen to kitchen."
+              km="គ្រឿងផ្សំ និង អាហារសម្ងួតខ្មែរ — របៀបធ្វើ ការប្រើប្រាស់ និង ភាពខុសគ្នាពីផ្ទះបាយមួយទៅមួយ។"
             />
           </p>
         </div>
