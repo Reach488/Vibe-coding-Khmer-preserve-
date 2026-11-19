@@ -3,6 +3,7 @@
 import { Suspense } from "react";
 import { notFound, useParams } from "next/navigation";
 import useEntry from "../../../lib/useEntry.js";
+import useLang from "../../../lib/useLang.js";
 import ArchiveNotice from "../../../components/ArchiveNotice.js";
 import BackLink from "../../../components/BackLink.js";
 import OwnerActions from "../../../components/OwnerActions.js";
@@ -68,11 +69,38 @@ const s = {
   status: { fontFamily: fonts.mono, fontSize: type.meta, letterSpacing: 0.5, textTransform: "uppercase", color: colors.brand, margin: `${space.sm}px 0 0` },
   // Provenance mark: the one place on the entry the accent colour belongs.
   credit: { fontFamily: fonts.sans, fontSize: type.small, lineHeight: 1.6, color: colors.accent, margin: `${space.lg}px 0 0` },
+  langNote: { fontFamily: fonts.sans, fontSize: type.small, color: colors.inkFaint, margin: `${space.md}px 0 0` },
+  langNoteKm: { fontFamily: fonts.khmer, lineHeight: lineHeights.khmer },
 };
+
+// An entry's text is stored once, in the language the contributor wrote it
+// in, so the language switch cannot translate it. When the reader's language
+// and the text's language differ, say so, so the mismatch reads as intended.
+const LANGUAGE_NOTES = {
+  en: { km: "This entry is written in Khmer.", mixed: "Parts of this entry are written in Khmer." },
+  km: { en: "ធាតុនេះសរសេរជាភាសាអង់គ្លេស។", mixed: "ផ្នែកខ្លះនៃធាតុនេះសរសេរជាភាសាអង់គ្លេស។" },
+};
+
+// A section counts as Khmer when it has more Khmer letters than Latin ones,
+// so an English paragraph that quotes one Khmer word stays English.
+function isKhmer(text) {
+  const khmer = (text.match(/[ក-៿]/g) || []).length;
+  const latin = (text.match(/[A-Za-z]/g) || []).length;
+  return khmer > latin;
+}
+
+// "km" if every written section is Khmer, "en" if none is, "mixed" otherwise.
+function textLanguage(sections) {
+  const written = sections.filter(Boolean);
+  const inKhmer = written.filter(isKhmer).length;
+  if (inKhmer === 0) return "en";
+  return inKhmer === written.length ? "km" : "mixed";
+}
 
 export default function EntryPage() {
   const { id } = useParams();
   const { entry, loading, error } = useEntry(id);
+  const lang = useLang();
 
   // The database answered and there is no such entry: hand back a real 404
   // rather than a 200 page that says "not found", and let app/not-found.js
@@ -104,6 +132,7 @@ export default function EntryPage() {
 
   const meta = [category, ...(flavorProfile || [])].filter(Boolean).join(" · ");
   const unpublished = status && status !== "published" ? STATUS_LABELS[status] ?? STATUS_LABELS.pending : null;
+  const languageNote = LANGUAGE_NOTES[lang]?.[textLanguage([description, howMade, whatUsedFor, howRecipesVary])];
 
   return (
     <main style={s.wrap}>
@@ -135,6 +164,12 @@ export default function EntryPage() {
       ) : null}
 
       <OwnerActions entry={entry} />
+
+      {languageNote ? (
+        <p lang={lang} style={lang === "km" ? { ...s.langNote, ...s.langNoteKm } : s.langNote}>
+          {languageNote}
+        </p>
+      ) : null}
 
       {description ? <p style={s.lead}>{description}</p> : null}
 
