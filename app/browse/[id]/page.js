@@ -117,9 +117,13 @@ export default function EntryPage() {
         <p style={{ ...s.note, marginBottom: space.lg }}>{photoNote}</p>
       ) : null}
 
+      {/* The entry's text is stored once, in the language it was written in,
+          so the language switch can't translate it. The name is the one part
+          that exists in both: in Khmer the Khmer term leads and the English
+          title drops underneath. */}
       <h1 style={s.title}>
-        {title}
-        {khmerTerm ? <span style={s.khmer}>{khmerTerm}</span> : null}
+        <T en={title} km={khmerTerm} />
+        {khmerTerm ? <span style={s.khmer}><T en={khmerTerm} km={title} /></span> : null}
       </h1>
 
       {meta ? <p style={s.meta}>{meta}</p> : null}

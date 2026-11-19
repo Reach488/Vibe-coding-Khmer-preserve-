@@ -1,4 +1,5 @@
 import Link from "next/link";
+import T from "./T.js";
 import { colors, fonts, space, type, lineHeights } from "../lib/theme.js";
 
 // A catalogue plate: the photograph, the name, the Khmer term. Nothing else.
@@ -78,9 +79,9 @@ export default function EntryCard({ entry, from }) {
 
         <div style={styles.body}>
           <h3 style={styles.title} className="entry-card-title">
-            {title}
+            <T en={title} km={khmerTerm} />
           </h3>
-          {khmerTerm ? <span style={styles.khmer}>{khmerTerm}</span> : null}
+          {khmerTerm ? <span style={styles.khmer}><T en={khmerTerm} km={title} /></span> : null}
         </div>
       </article>
     </Link>
