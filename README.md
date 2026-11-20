@@ -197,5 +197,5 @@ publishable key is public by design, and row-level security does the guarding.
 - [x] No keys, tokens or passwords anywhere in the history
 - [x] AI-assisted commits are marked
 - [x] README has all eight sections
-- [ ] Reflection pasted in the Canvas text box under the links
-- [ ] Demo video recorded, unlisted, plays in a private window, submitted in *Demo Video*
+- [x] Reflection pasted in the Canvas text box under the links
+- [x] Demo video recorded, unlisted, plays in a private window, submitted in *Demo Video*
