@@ -37,6 +37,7 @@ shown on the entry page. The founding entries:
 | Trey Chaar | ត្រីឆ្អើរ | My grandmother |
 | Kwa Ko | ខ្វាគោ | My grandmother |
 | Traditional Khmer Fish Sauce | ទឹកត្រី | Grandmother (added through the contribute form and published through review) |
+| Salted Duck Eggs | ពងទាប្រៃ | My grandmother (added through the contribute form and published through review) |
 
 Contributors add more. A new entry appears here only after a reviewer
 publishes it. Photos for the first ten are in `public/images/`; photos for
